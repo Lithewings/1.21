@@ -7,6 +7,7 @@ import com.equilibrium.item.ModItemGroup;
 import com.equilibrium.item.ModItems;
 import com.equilibrium.item.Tools;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,4 +57,5 @@ public class MITEequilibrium implements ModInitializer {
 
 		LOGGER.info("Hello Fabric world!");
 	}
+
 }
