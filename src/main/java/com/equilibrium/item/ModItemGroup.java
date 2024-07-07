@@ -1,7 +1,8 @@
 package com.equilibrium.item;
 
 import com.equilibrium.MITEequilibrium;
-import com.equilibrium.block.ModBlocksTest;
+
+import com.equilibrium.block.ModBlocks;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -22,7 +23,7 @@ public class ModItemGroup {
                             {
                                 entries.add(ModItems.test);
                                 entries.add(Items.BOOK);//可以加原版物品
-                                entries.add(ModBlocksTest.EXAMPLE_BLOCK);
+                                entries.add(ModBlocks.EXAMPLE_BLOCK);
 
                             }
                     ).build());
