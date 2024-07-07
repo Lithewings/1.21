@@ -1,11 +1,21 @@
 {
-	"required": true,
-	"package": "com.equilibrium.mixin",
-	"compatibilityLevel": "JAVA_21",
-	"mixins": [
-      "MITEequilibriumMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
-	}
+  "required": true,
+  "package": "com.equilibrium.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "AbstractFireBlockMixin",
+    "ConcentricRingsStructurePlacementMixin",
+    "EnderEyeItemMixin",
+    "IdentifierMixin",
+    "MITEequilibriumMixin",
+    "NetherPortalBlockMixin",
+    "NetherPortalMixin",
+    "PlayerEntityMixin",
+    "PortalForcerMixin",
+    "StrongholdGeneratorMixin",
+    "StrongholdGeneratorStartMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

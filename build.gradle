@@ -17,6 +17,9 @@ repositories {
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
 }
+loom {
+	accessWidenerPath = file("src/main/resources/name.accesswidener")
+}
 
 fabricApi {
 	configureDataGeneration()
