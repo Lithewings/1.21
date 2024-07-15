@@ -2,21 +2,20 @@ package com.equilibrium;
 
 import com.equilibrium.block.ModBlocks;
 
-import com.equilibrium.entity.ModEntities;
-import com.equilibrium.entity.mob.TestZombieEntity;
-import com.equilibrium.item.Ingots;
+import com.equilibrium.event.BreakBlockEvent;
+import com.equilibrium.item.Metal;
 import com.equilibrium.item.ModItemGroup;
 import com.equilibrium.item.ModItems;
 import com.equilibrium.item.Tools;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.minecraft.util.Identifier;
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.equilibrium.entity.ModEntities.TEST_ZOMBIE;
 import static com.equilibrium.entity.ModEntities.registerModEntities;
-import static com.equilibrium.worldgen.ModOreGenerator.registerModOre;
+import static com.equilibrium.util.LootTableModifier.modifierLootTables;
+
+import static com.equilibrium.worldgen.ModPlacementGenerator.registerModOre;
 
 
 public class MITEequilibrium implements ModInitializer {
@@ -45,20 +44,23 @@ public class MITEequilibrium implements ModInitializer {
 		//添加工具物品
 		Tools.registerModItemTools();
 		//添加锭
-		Ingots.registerModItemIngots();
+		Metal.registerModItemIngots();
+		//添加金属颗粒
+		Metal.registerModItemNuggets();
 
 		//注册矿物
 
 		registerModOre();
 
-
-
+		//注册实体
 		registerModEntities();
 
 
+		//修改战利品表
+		modifierLootTables();
 
-
-
+		//注册事件
+		PlayerBlockBreakEvents.AFTER.register(new BreakBlockEvent());
 
 		LOGGER.info("Hello Fabric world!");
 	}

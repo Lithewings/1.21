@@ -1,24 +1,41 @@
 package com.equilibrium.worldgen;
 
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
-import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.dimension.DimensionOptions;
 
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.PlacedFeature;
 
-public class ModOreGenerator {
+public class ModPlacementGenerator {
         //为主世界添加的矿物
         public static final RegistryKey<PlacedFeature> CUSTOM_ORE_OVERWORLD = RegistryKey.of(RegistryKeys.PLACED_FEATURE,
                 Identifier.of("miteequilibrium","ore_custom_overworld"));
+
+
+
+
+
         //为地下世界添加的矿物
         public static final RegistryKey<PlacedFeature> CUSTOM_ORE_UNDERWORLD = RegistryKey.of(RegistryKeys.PLACED_FEATURE,
                 Identifier.of("miteequilibrium","ore_custom_underworld"));
+
+        public static final RegistryKey<PlacedFeature> ADAMANTIUM_ORE = RegistryKey.of(RegistryKeys.PLACED_FEATURE,
+                Identifier.of("miteequilibrium","adamantium_ore_underworld"));
+
+        //为地下世界添加的地物
+
+        public static final RegistryKey<PlacedFeature> HUGE_BROWN_MUSHROOM = RegistryKey.of(RegistryKeys.PLACED_FEATURE,
+                Identifier.of("miteequilibrium","mushroom_island_vegetation"));
+
+        public static final RegistryKey<PlacedFeature> TINY_BROWN_MUSHROOM = RegistryKey.of(RegistryKeys.PLACED_FEATURE,
+                Identifier.of("miteequilibrium","brown_mushroom_normal"));
+
+
+
+
+
 
         //为下界添加的矿物
         public static final RegistryKey<PlacedFeature> CUSTOM_ORE_NETHER = RegistryKey.of(RegistryKeys.PLACED_FEATURE,
@@ -37,8 +54,17 @@ public class ModOreGenerator {
             BiomeModifications.addFeature(context -> context.canGenerateIn(UnderWorldDimensionOptions.OVERWORLD), GenerationStep.Feature.UNDERGROUND_ORES, CUSTOM_ORE_OVERWORLD);
 
 
+
+
             //地下世界添加矿物
             BiomeModifications.addFeature(context -> context.canGenerateIn(UnderWorldDimensionOptions.UNDERWORLD), GenerationStep.Feature.UNDERGROUND_ORES, CUSTOM_ORE_UNDERWORLD);
+            BiomeModifications.addFeature(context -> context.canGenerateIn(UnderWorldDimensionOptions.UNDERWORLD), GenerationStep.Feature.UNDERGROUND_ORES, ADAMANTIUM_ORE);
+
+            //地下世界添加蘑菇,注意选对Feather标签,见生物群系数据格式
+            BiomeModifications.addFeature(context -> context.canGenerateIn(UnderWorldDimensionOptions.UNDERWORLD), GenerationStep.Feature.SURFACE_STRUCTURES, HUGE_BROWN_MUSHROOM);
+            BiomeModifications.addFeature(context -> context.canGenerateIn(UnderWorldDimensionOptions.UNDERWORLD), GenerationStep.Feature.SURFACE_STRUCTURES, TINY_BROWN_MUSHROOM);
+
+
 
 
             //下界添加矿物

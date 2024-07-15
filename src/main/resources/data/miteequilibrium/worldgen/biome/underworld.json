@@ -11,5 +11,26 @@
   "spawners": {},
   "spawn_costs": {},
   "carvers": {},
-  "features": []
+  "features": [
+    [],
+    [
+    ],
+    [
+    ],
+    [
+    ],
+    [],
+    [],
+    [
+    ],
+    [],
+    [
+      "minecraft:spring_water",
+      "minecraft:spring_lava"
+    ],
+    [
+    ],
+    [
+    ]
+  ]
 }

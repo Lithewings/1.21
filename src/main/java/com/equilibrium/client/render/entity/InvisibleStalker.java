@@ -1,14 +1,13 @@
 package com.equilibrium.client.render.entity;
 
-import com.equilibrium.client.render.entity.model.SZombieEntityModel;
+import com.equilibrium.client.render.entity.model.TransparentZombieEntityModelAbstractZombieModel;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.client.render.entity.model.ZombieEntityModel;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.util.Identifier;
 
-public class InvisibleStalker extends TransparentZombieEntityRenderer<ZombieEntity, ZombieEntityModel<ZombieEntity>> {
+public class InvisibleStalker extends AbstractZombieEntityRenderer<ZombieEntity, TransparentZombieEntityModelAbstractZombieModel<ZombieEntity>> {
     private static final Identifier TEXTURE = Identifier.of("miteequilibrium","textures/entity/invisible_stalker.png");
 
     public Identifier getTexture(ZombieEntity zombieEntity) {
@@ -21,7 +20,7 @@ public class InvisibleStalker extends TransparentZombieEntityRenderer<ZombieEnti
 
     public InvisibleStalker(EntityRendererFactory.Context ctx, EntityModelLayer layer, EntityModelLayer legsArmorLayer, EntityModelLayer bodyArmorLayer) {
         super(
-                ctx, new ZombieEntityModel<>(ctx.getPart(layer)), new ZombieEntityModel<>(ctx.getPart(legsArmorLayer)), new ZombieEntityModel<>(ctx.getPart(bodyArmorLayer))
+                ctx, new TransparentZombieEntityModelAbstractZombieModel<>(ctx.getPart(layer)),new TransparentZombieEntityModelAbstractZombieModel<>(ctx.getPart(layer)), new TransparentZombieEntityModelAbstractZombieModel<>(ctx.getPart(layer))
         );
 
     }

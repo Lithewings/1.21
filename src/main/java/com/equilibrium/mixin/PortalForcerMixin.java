@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Comparator;
 import java.util.Optional;
 
-import static com.equilibrium.block.ModBlocks.UNDERWORLD_PORTAL;
+
 import static net.minecraft.world.poi.PointOfInterestType.*;
 
 @Mixin(PortalForcer.class)

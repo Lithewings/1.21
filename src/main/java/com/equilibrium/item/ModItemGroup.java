@@ -37,19 +37,42 @@ public class ModItemGroup {
                             }
                     ).build());
 
-    //锭栏
-    public static final ItemGroup modIngots = Registry.register(Registries.ITEM_GROUP, Identifier.of(MITEequilibrium.MOD_ID,"ingotsgroup"),
-            FabricItemGroup.builder().displayName(Text.translatable("itemgroup.ingotsgroup"))
-                    .icon(()->new ItemStack(Ingots.adamantium)).entries((displayContext, entries) ->
+    //金属栏
+    public static final ItemGroup modIngots = Registry.register(Registries.ITEM_GROUP, Identifier.of(MITEequilibrium.MOD_ID,"metalgroup"),
+            FabricItemGroup.builder().displayName(Text.translatable("itemgroup.metalgroup"))
+                    .icon(()->new ItemStack(Metal.adamantium)).entries((displayContext, entries) ->
                             {
-                                entries.add(Ingots.adamantium);
-                                entries.add(Ingots.copper);
-                                entries.add(Ingots.ancient_metal);
-                                entries.add(Ingots.gold);
-                                entries.add(Ingots.mithril);
-                                entries.add(Ingots.silver);
+                                entries.add(Metal.adamantium);
+                                entries.add(Metal.copper);
+                                entries.add(Metal.ancient_metal);
+                                entries.add(Metal.gold);
+                                entries.add(Metal.mithril);
+                                entries.add(Metal.silver);
+
+                                entries.add(Metal.adamantium_nugget);
+                                entries.add(Metal.ancient_metal_nugget);
+                                entries.add(Metal.copper_nugget);
+                                entries.add(Metal.gold_nugget);
+                                entries.add(Metal.silver_nugget);
+                                entries.add(Metal.mithril_nugget);
+
+                                entries.add(ModBlocks.SILVER_BLOCK);
+                                entries.add(ModBlocks.COPPER_BLOCK);
+                                entries.add(ModBlocks.ADAMANTIUM_BLOCK);
+                                entries.add(ModBlocks.ANCIENT_METAL_BLOCK);
+                                entries.add(ModBlocks.MITHRIL_BLOCK);
+                                entries.add(ModBlocks.GOLD_BLOCK);
+
+                                entries.add(ModBlocks.GOLD_ORE);
+                                entries.add(ModBlocks.ADAMANTIUM_ORE);
+                                entries.add(ModBlocks.COPPER_ORE);
+                                entries.add(ModBlocks.MITHRIL_ORE);
+                                entries.add(ModBlocks.SILVER_ORE);
+
+
                             }
                     ).build());
+
 
 
 
