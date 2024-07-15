@@ -4,8 +4,10 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "AbstractFireBlockMixin",
+    "BiomeMixin",
     "ConcentricRingsStructurePlacementMixin",
     "EnderEyeItemMixin",
+    "GrassColorsMixin",
     "IdentifierMixin",
     "MITEequilibriumMixin",
     "NetherPortalBlockMixin",
@@ -17,5 +19,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "WorldRendererMixin"
+  ]
 }

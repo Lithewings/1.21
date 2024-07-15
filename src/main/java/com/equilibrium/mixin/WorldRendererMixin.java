@@ -16,6 +16,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeEffects;
 import org.joml.Matrix4f;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
@@ -62,6 +64,9 @@ public abstract class WorldRendererMixin {
     @Shadow @Final private static Logger LOGGER;
 
     @Shadow public abstract ChunkBuilder getChunkBuilder();
+
+
+
 
     private void renderEndSkyMixin(MatrixStack matrices) {
         RenderSystem.enableBlend();
@@ -185,7 +190,7 @@ public abstract class WorldRendererMixin {
 
                     //获取世界时间
                     float time = this.world.getTimeOfDay();
-                    //LOGGER.info("The time is "+time);
+//                    LOGGER.info("The time is "+time);
                     //发送时间,获取月相
                     setMoonType(time);
                     String moonType =getMoonType();
