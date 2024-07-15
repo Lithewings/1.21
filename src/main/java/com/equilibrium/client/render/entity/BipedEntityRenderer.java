@@ -8,16 +8,15 @@ import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.render.entity.feature.ElytraFeatureRenderer;
 import net.minecraft.client.render.entity.feature.HeadFeatureRenderer;
 import net.minecraft.client.render.entity.feature.HeldItemFeatureRenderer;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.entity.mob.MobEntity;
 
 @Environment(EnvType.CLIENT)
-public abstract class TransparentBipedEntityRenderer<T extends MobEntity, M extends TransparentBipedEntityModel<T>> extends MobEntityRenderer<T, M> {
-    public TransparentBipedEntityRenderer(EntityRendererFactory.Context ctx, M model, float shadowRadius) {
+public abstract class BipedEntityRenderer<T extends MobEntity, M extends TransparentBipedEntityModel<T>> extends MobEntityRenderer<T, M> {
+    public BipedEntityRenderer(EntityRendererFactory.Context ctx, M model, float shadowRadius) {
         this(ctx, model, shadowRadius, 1.0F, 1.0F, 1.0F);
     }
 
-    public TransparentBipedEntityRenderer(EntityRendererFactory.Context ctx, M model, float shadowRadius, float scaleX, float scaleY, float scaleZ) {
+    public BipedEntityRenderer(EntityRendererFactory.Context ctx, M model, float shadowRadius, float scaleX, float scaleY, float scaleZ) {
         super(ctx, model, shadowRadius);
         this.addFeature(new HeadFeatureRenderer<>(this, ctx.getModelLoader(), scaleX, scaleY, scaleZ, ctx.getHeldItemRenderer()));
         this.addFeature(new ElytraFeatureRenderer<>(this, ctx.getModelLoader()));

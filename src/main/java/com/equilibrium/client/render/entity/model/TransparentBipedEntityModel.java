@@ -1,15 +1,8 @@
 package com.equilibrium.client.render.entity.model;
 
 import com.google.common.collect.ImmutableList;
-import java.util.function.Function;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.model.Dilation;
-import net.minecraft.client.model.ModelData;
-import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.model.ModelPartBuilder;
-import net.minecraft.client.model.ModelPartData;
-import net.minecraft.client.model.ModelTransform;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.*;
 import net.minecraft.client.util.math.MatrixStack;
@@ -18,23 +11,14 @@ import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import com.google.common.collect.ImmutableList;
+
 import java.util.function.Function;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.model.Dilation;
 import net.minecraft.client.model.ModelData;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.model.ModelPartBuilder;
 import net.minecraft.client.model.ModelPartData;
 import net.minecraft.client.model.ModelTransform;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Arm;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 
 /**
  * Represents the model of a biped living entity.
@@ -90,13 +74,13 @@ public class TransparentBipedEntityModel<T extends LivingEntity> extends AnimalM
     public final ModelPart leftArm;
     public final ModelPart rightLeg;
     public final ModelPart leftLeg;
-    public BipedEntityModel.ArmPose leftArmPose = BipedEntityModel.ArmPose.EMPTY;
-    public BipedEntityModel.ArmPose rightArmPose = BipedEntityModel.ArmPose.EMPTY;
+    public net.minecraft.client.render.entity.model.BipedEntityModel.ArmPose leftArmPose = net.minecraft.client.render.entity.model.BipedEntityModel.ArmPose.EMPTY;
+    public net.minecraft.client.render.entity.model.BipedEntityModel.ArmPose rightArmPose = net.minecraft.client.render.entity.model.BipedEntityModel.ArmPose.EMPTY;
     public boolean sneaking;
     public float leaningPitch;
 
     public TransparentBipedEntityModel(ModelPart root) {
-        this(root, RenderLayer::getEntityCutout);
+        this(root, RenderLayer::getEntityTranslucentCull);
     }
 
     public TransparentBipedEntityModel(ModelPart root, Function<Identifier, RenderLayer> renderLayerFactory) {
@@ -265,11 +249,11 @@ public class TransparentBipedEntityModel<T extends LivingEntity> extends AnimalM
             this.rightArm.pivotY = 2.0F;
         }
 
-        if (this.rightArmPose != BipedEntityModel.ArmPose.SPYGLASS) {
+        if (this.rightArmPose != net.minecraft.client.render.entity.model.BipedEntityModel.ArmPose.SPYGLASS) {
             CrossbowPosing.swingArm(this.rightArm, h, 1.0F);
         }
 
-        if (this.leftArmPose != BipedEntityModel.ArmPose.SPYGLASS) {
+        if (this.leftArmPose != net.minecraft.client.render.entity.model.BipedEntityModel.ArmPose.SPYGLASS) {
             CrossbowPosing.swingArm(this.leftArm, h, -1.0F);
         }
 
@@ -449,7 +433,7 @@ public class TransparentBipedEntityModel<T extends LivingEntity> extends AnimalM
         return -65.0F * f + f * f;
     }
 
-    public void copyBipedStateTo(BipedEntityModel<T> model) {
+    public void copyBipedStateTo(net.minecraft.client.render.entity.model.BipedEntityModel<T> model) {
         super.copyStateTo(model);
         model.leftArmPose = this.leftArmPose;
         model.rightArmPose = this.rightArmPose;
