@@ -1,5 +1,6 @@
 accessWidener v1 named
 
+accessible field net/minecraft/entity/LivingEntity HEALTH Lnet/minecraft/entity/data/TrackedData;
 accessible method net/minecraft/block/NetherPortalBlock getOrCreateExitPortalTarget (Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;ZLnet/minecraft/world/border/WorldBorder;)Lnet/minecraft/world/TeleportTarget;
 accessible method net/minecraft/world/dimension/NetherPortal validStateInsidePortal (Lnet/minecraft/block/BlockState;)Z
 accessible field net/minecraft/world/dimension/NetherPortal width I
