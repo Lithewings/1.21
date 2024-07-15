@@ -7,6 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.*;
+import net.minecraft.client.render.chunk.ChunkBuilder;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
@@ -24,6 +25,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Objects;
+
+import static com.equilibrium.util.WorldMoonPhasesSelector.getMoonType;
+import static com.equilibrium.util.WorldMoonPhasesSelector.setMoonType;
+
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin {
 
@@ -31,8 +37,9 @@ public abstract class WorldRendererMixin {
     private static final Identifier END_SKY = Identifier.of("miteequilibrium","textures/environment/end_sky.png");
 
     private static final Identifier BLOOD_MOON = Identifier.of("miteequilibrium","textures/environment/blood_moon.png");
+    private static final Identifier BLUE_MOON = Identifier.of("miteequilibrium","textures/environment/blue_moon.png");
     private static final Identifier HARVEST_MOON = Identifier.of("miteequilibrium","textures/environment/harvest_moon.png");
-
+    private static final Identifier HALO_MOON = Identifier.of("miteequilibrium","textures/environment/halo_moon.png");
 
 
 
@@ -53,6 +60,8 @@ public abstract class WorldRendererMixin {
     private VertexBuffer darkSkyBuffer;
 
     @Shadow @Final private static Logger LOGGER;
+
+    @Shadow public abstract ChunkBuilder getChunkBuilder();
 
     private void renderEndSkyMixin(MatrixStack matrices) {
         RenderSystem.enableBlend();
@@ -173,44 +182,177 @@ public abstract class WorldRendererMixin {
                     bufferBuilder2.vertex(matrix4f3, k, 100.0F, k).texture(1.0F, 1.0F);
                     bufferBuilder2.vertex(matrix4f3, -k, 100.0F, k).texture(0.0F, 1.0F);
                     BufferRenderer.drawWithGlobalProgram(bufferBuilder2.end());
-                    //尺寸大小
-                    k = 128.0F;
-                    RenderSystem.setShaderTexture(0, MOON_PHASES);
+
+                    //获取世界时间
                     float time = this.world.getTimeOfDay();
-                    LOGGER.info("The time is "+time);
-;
+                    //LOGGER.info("The time is "+time);
+                    //发送时间,获取月相
+                    setMoonType(time);
+                    String moonType =getMoonType();
+//                    LOGGER.info(moonType);
 
-                    int r =(int)(time / 24000L) % 128;
-                    //用来确定行和列
-                    int s = 0;
-                    int m = 0;
-                    //左右比例,取得左侧
-                    float t = (float)(s + 0) / 1.0F;
+                    //非特殊材质的月相时:
+                    if(!Objects.equals(moonType, "harvestMoon") && !Objects.equals(moonType, "haloMoon") && !Objects.equals(moonType, "bloodMoon") && !Objects.equals(moonType, "blueMoon"))
+                    { //尺寸大小
+//                        LOGGER.info("Not special moon!");
+                        k=20.0F;
+                        //一般的月相图
+                        RenderSystem.setShaderTexture(0,MOON_PHASES);
+                        //用自带的函数获取即可
+                        int r = this.world.getMoonPhase();
+                        int s = r % 4;
+                        int m = r / 4 % 2;
+                        float t = (float)(s + 0) / 4.0F;
+                        float o = (float)(m + 0) / 2.0F;
+                        float p = (float)(s + 1) / 4.0F;
+                        float q = (float)(m + 1) / 2.0F;
+                        bufferBuilder2 = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+                        bufferBuilder2.vertex(matrix4f3, -k, -100.0F, k).texture(p, q);
+                        bufferBuilder2.vertex(matrix4f3, k, -100.0F, k).texture(t, q);
+                        bufferBuilder2.vertex(matrix4f3, k, -100.0F, -k).texture(t, o);
+                        bufferBuilder2.vertex(matrix4f3, -k, -100.0F, -k).texture(p, o);
+                        BufferRenderer.drawWithGlobalProgram(bufferBuilder2.end());
+                    }else if(moonType.equals("bloodMoon")){
+                        //尺寸大小
+                        k=160.0F;
+                        RenderSystem.setShaderTexture(0,BLOOD_MOON);
+                        setMoonType(time);
 
-                    //上下比例,取得上侧
-                    float o = (float)(m + 0) / 1.0F;
+                        //用来确定行和列
+                        int s = 0;
+                        int m = 0;
+                        //左右比例,取得左侧
+                        float t = (float)(s + 0) / 1.0F;
 
-                    //左右空间所占比例,取到右侧
-                    float p = (float)(s + 1) / 1.0F;
+                        //上下比例,取得上侧
+                        float o = (float)(m + 0) / 1.0F;
 
-                    //上下空间所占比例,取到下侧
-                    float q = (float)(m + 1) / 1.0F;
+                        //左右空间所占比例,取到右侧
+                        float p = (float)(s + 1) / 1.0F;
+
+                        //上下空间所占比例,取到下侧
+                        float q = (float)(m + 1) / 1.0F;
 
 
+                        bufferBuilder2 = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+
+                        bufferBuilder2.vertex(matrix4f3, -k, -100.0F, k).texture(p, q);
+
+                        bufferBuilder2.vertex(matrix4f3, k, -100.0F, k).texture(t, q);
+
+                        bufferBuilder2.vertex(matrix4f3, k, -100.0F, -k).texture(t, o);
+
+                        bufferBuilder2.vertex(matrix4f3, -k, -100.0F, -k).texture(p, o);
+                        BufferRenderer.drawWithGlobalProgram(bufferBuilder2.end());
+                    }else if(moonType.equals("blueMoon"))
+                    {
+                        //尺寸大小
+                        k=160.0F;
+                        RenderSystem.setShaderTexture(0,BLUE_MOON);
+                        setMoonType(time);
+
+                        //用来确定行和列
+                        int s = 0;
+                        int m = 0;
+                        //左右比例,取得左侧
+                        float t = (float)(s + 0) / 1.0F;
+
+                        //上下比例,取得上侧
+                        float o = (float)(m + 0) / 1.0F;
+
+                        //左右空间所占比例,取到右侧
+                        float p = (float)(s + 1) / 1.0F;
+
+                        //上下空间所占比例,取到下侧
+                        float q = (float)(m + 1) / 1.0F;
 
 
+                        bufferBuilder2 = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+                        bufferBuilder2.vertex(matrix4f3, -k, -100.0F, k).texture(p, q);
+                        bufferBuilder2.vertex(matrix4f3, k, -100.0F, k).texture(t, q);
+                        bufferBuilder2.vertex(matrix4f3, k, -100.0F, -k).texture(t, o);
+                        bufferBuilder2.vertex(matrix4f3, -k, -100.0F, -k).texture(p, o);
+                        BufferRenderer.drawWithGlobalProgram(bufferBuilder2.end());
+                    }
+                    else if(moonType.equals("harvestMoon")){
+                        //尺寸大小
+                        k=160.0F;
+                        RenderSystem.setShaderTexture(0,HARVEST_MOON);
+                        setMoonType(time);
+
+                        //用来确定行和列
+                        int s = 0;
+                        int m = 0;
+                        //左右比例,取得左侧
+                        float t = (float)(s + 0) / 1.0F;
+
+                        //上下比例,取得上侧
+                        float o = (float)(m + 0) / 1.0F;
+
+                        //左右空间所占比例,取到右侧
+                        float p = (float)(s + 1) / 1.0F;
+
+                        //上下空间所占比例,取到下侧
+                        float q = (float)(m + 1) / 1.0F;
 
 
-                    bufferBuilder2 = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+                        bufferBuilder2 = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+                        bufferBuilder2.vertex(matrix4f3, -k, -100.0F, k).texture(p, q);
+                        bufferBuilder2.vertex(matrix4f3, k, -100.0F, k).texture(t, q);
+                        bufferBuilder2.vertex(matrix4f3, k, -100.0F, -k).texture(t, o);
+                        bufferBuilder2.vertex(matrix4f3, -k, -100.0F, -k).texture(p, o);
+                        BufferRenderer.drawWithGlobalProgram(bufferBuilder2.end());
+                    } else if (moonType.equals("haloMoon")){
 
-                    bufferBuilder2.vertex(matrix4f3, -k, -100.0F, k).texture(p, q);
+                        //尺寸大小
+                        k=80.0F;
+                        RenderSystem.setShaderTexture(0,HALO_MOON);
+                        setMoonType(time);
 
-                    bufferBuilder2.vertex(matrix4f3, k, -100.0F, k).texture(t, q);
+                        //用来确定行和列
+                        int s = 0;
+                        int m = 0;
+                        //左右比例,取得左侧
+                        float t = (float)(s + 0) / 1.0F;
 
-                    bufferBuilder2.vertex(matrix4f3, k, -100.0F, -k).texture(t, o);
+                        //上下比例,取得上侧
+                        float o = (float)(m + 0) / 1.0F;
 
-                    bufferBuilder2.vertex(matrix4f3, -k, -100.0F, -k).texture(p, o);
-                    BufferRenderer.drawWithGlobalProgram(bufferBuilder2.end());
+                        //左右空间所占比例,取到右侧
+                        float p = (float)(s + 1) / 1.0F;
+
+                        //上下空间所占比例,取到下侧
+                        float q = (float)(m + 1) / 1.0F;
+
+
+                        bufferBuilder2 = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+                        bufferBuilder2.vertex(matrix4f3, -k, -100.0F, k).texture(p, q);
+                        bufferBuilder2.vertex(matrix4f3, k, -100.0F, k).texture(t, q);
+                        bufferBuilder2.vertex(matrix4f3, k, -100.0F, -k).texture(t, o);
+                        bufferBuilder2.vertex(matrix4f3, -k, -100.0F, -k).texture(p, o);
+                        BufferRenderer.drawWithGlobalProgram(bufferBuilder2.end());
+                    }
+
+
+//                    int r =(int)(time / 24000L % 8L + 8L) % 8;
+
+//                    int r =(int)(time / 24000L) % 128;
+//                    //用来确定行和列
+//                    int s = r % 4;
+//                    int m = r / 4 % 32;
+//                    //左右比例,取得左侧
+//                    float t = (float)(s + 0) / 4.0F;
+//
+//                    //上下比例,取得上侧
+//                    float o = (float)(m + 0) / 32.0F;
+//
+//                    //左右空间所占比例,取到右侧
+//                    float p = (float)(s + 1) / 4.0F;
+//
+//                    //上下空间所占比例,取到下侧
+//                    float q = (float)(m + 1) / 32.0F;
+
+
                     float u = this.world.getStarBrightness(tickDelta) * i;
                     if (u > 0.0F) {
                         RenderSystem.setShaderColor(u, u, u, u);
