@@ -1,5 +1,7 @@
 package com.equilibrium.util;
 
+import static com.equilibrium.MITEequilibrium.LOGGER;
+
 public class WorldMoonPhasesSelector {
     private static String moonType;
 
@@ -77,7 +79,7 @@ public class WorldMoonPhasesSelector {
             moonType="normalMoon";
         }
 
-        System.out.println("The day is : "+day+" "+"The Moon is : "+ moonType);
+//        LOGGER.info("The day is : "+day+" "+"The Moon is : "+ moonType);
 
     }
 

@@ -2,15 +2,20 @@ package com.equilibrium;
 
 import com.equilibrium.block.ModBlocks;
 
+import com.equilibrium.entity.ModEntities;
+import com.equilibrium.entity.mob.TestZombieEntity;
 import com.equilibrium.item.Ingots;
 import com.equilibrium.item.ModItemGroup;
 import com.equilibrium.item.ModItems;
 import com.equilibrium.item.Tools;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.equilibrium.entity.ModEntities.TEST_ZOMBIE;
+import static com.equilibrium.entity.ModEntities.registerModEntities;
 import static com.equilibrium.worldgen.ModOreGenerator.registerModOre;
 
 
@@ -48,7 +53,7 @@ public class MITEequilibrium implements ModInitializer {
 
 
 
-
+		registerModEntities();
 
 
 
