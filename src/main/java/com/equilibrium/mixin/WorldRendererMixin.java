@@ -16,6 +16,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeEffects;
 import org.joml.Matrix4f;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
@@ -34,7 +36,7 @@ import static com.equilibrium.util.WorldMoonPhasesSelector.setMoonType;
 public abstract class WorldRendererMixin {
 
     private static final Identifier MOON_PHASES = Identifier.of("miteequilibrium","textures/environment/moon_phases.png");
-    private static final Identifier END_SKY = Identifier.of("miteequilibrium","textures/environment/end_sky.png");
+    private static final Identifier END_SKY = Identifier.ofVanilla("textures/environment/end_sky.png");
 
     private static final Identifier BLOOD_MOON = Identifier.of("miteequilibrium","textures/environment/blood_moon.png");
     private static final Identifier BLUE_MOON = Identifier.of("miteequilibrium","textures/environment/blue_moon.png");
@@ -62,6 +64,9 @@ public abstract class WorldRendererMixin {
     @Shadow @Final private static Logger LOGGER;
 
     @Shadow public abstract ChunkBuilder getChunkBuilder();
+
+
+
 
     private void renderEndSkyMixin(MatrixStack matrices) {
         RenderSystem.enableBlend();
@@ -184,8 +189,8 @@ public abstract class WorldRendererMixin {
                     BufferRenderer.drawWithGlobalProgram(bufferBuilder2.end());
 
                     //获取世界时间
-                    float time = this.world.getTimeOfDay();
-                    //LOGGER.info("The time is "+time);
+                    long time = this.world.getTimeOfDay();
+//                    LOGGER.info("The time is "+time);
                     //发送时间,获取月相
                     setMoonType(time);
                     String moonType =getMoonType();
@@ -378,7 +383,7 @@ public abstract class WorldRendererMixin {
                         matrixStack.pop();
                     }
 
-                    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                    RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
                     RenderSystem.depthMask(true);
                 }
             }
