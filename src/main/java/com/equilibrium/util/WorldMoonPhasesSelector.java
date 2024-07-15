@@ -3,7 +3,7 @@ package com.equilibrium.util;
 import static com.equilibrium.MITEequilibrium.LOGGER;
 
 public class WorldMoonPhasesSelector {
-    private static String moonType;
+    private static String moonType=null;
 
 
     static boolean fullMoon;
@@ -14,7 +14,7 @@ public class WorldMoonPhasesSelector {
     static boolean normalMoon;
     static boolean haloMoon;
 
-    public static void setMoonType(float time) {
+    public static void setMoonType(long time) {
 
         int day= getDay(time);
         //满月变种:黄月、血月、蓝月
