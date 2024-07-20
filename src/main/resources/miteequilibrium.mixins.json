@@ -4,18 +4,29 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "AbstractFireBlockMixin",
+    "BiomeMixin",
     "ConcentricRingsStructurePlacementMixin",
     "EnderEyeItemMixin",
+    "GrassColorsMixin",
+    "HungerManagerMixin",
     "IdentifierMixin",
     "MITEequilibriumMixin",
     "NetherPortalBlockMixin",
     "NetherPortalMixin",
     "PlayerEntityMixin",
+    "PlayerManagerMixin",
     "PortalForcerMixin",
     "StrongholdGeneratorMixin",
-    "StrongholdGeneratorStartMixin"
+    "StrongholdGeneratorStartMixin",
+    "loot_table.BlockLootTableMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "BlockModelRendererMixin",
+    "InGameHudMixin",
+    "WorldRendererMixin",
+    "color.LightmapTextureManagerMixin"
+  ]
 }

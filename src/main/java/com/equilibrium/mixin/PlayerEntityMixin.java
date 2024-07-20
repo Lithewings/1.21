@@ -8,9 +8,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,7 +20,6 @@ import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -46,7 +42,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo ci) {
-
 
     }
 
@@ -73,7 +68,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Shadow public abstract void tick();
 
 
-
     @Shadow @Final private PlayerAbilities abilities;
 
 
@@ -90,7 +84,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     //以下修改实体交互距离
     @Inject(method = "getEntityInteractionRange", at = @At("HEAD"), cancellable = true)
     public void getEntityInteractionRange(CallbackInfoReturnable<Double> cir) {
-        cir.setReturnValue(1.0);
+        cir.setReturnValue(8.0);
     }
 
     //玩家基础属性
@@ -124,14 +118,13 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     //修改挖掘速度
     @Inject(method = "getBlockBreakingSpeed", at = @At("RETURN"), cancellable = true)
     public void getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> cir) {
-        hungerManager.setFoodLevel(0);
-        hungerManager.setSaturationLevel(0);
+
 
         int level = this.experienceLevel;
         float speed = cir.getReturnValue();
-        System.out.println(speed);
+
         float finalSpeed = speed * (0.025F) * (1 + level * 0.02F);
-        System.out.println(finalSpeed);
+
         cir.setReturnValue(finalSpeed);
     }
 

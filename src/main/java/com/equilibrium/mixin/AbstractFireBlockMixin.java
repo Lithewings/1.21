@@ -1,6 +1,6 @@
 package com.equilibrium.mixin;
 
-import com.equilibrium.world.dimension.UnderworldPortal;
+
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.AbstractFireBlock;
 import net.minecraft.block.BlockState;
