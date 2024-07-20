@@ -15,7 +15,7 @@ public class InvisibleStalker extends AbstractZombieEntityRenderer<ZombieEntity,
     }
 
     public InvisibleStalker(EntityRendererFactory.Context context) {
-        this(context, EntityModelLayers.ZOMBIE, EntityModelLayers.ZOMBIE_INNER_ARMOR, EntityModelLayers.ZOMBIE_OUTER_ARMOR);
+        this( context, EntityModelLayers.ZOMBIE, EntityModelLayers.ZOMBIE_INNER_ARMOR, EntityModelLayers.ZOMBIE_OUTER_ARMOR);
     }
 
     public InvisibleStalker(EntityRendererFactory.Context ctx, EntityModelLayer layer, EntityModelLayer legsArmorLayer, EntityModelLayer bodyArmorLayer) {
