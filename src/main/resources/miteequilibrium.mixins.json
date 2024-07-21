@@ -18,15 +18,17 @@
     "PortalForcerMixin",
     "StrongholdGeneratorMixin",
     "StrongholdGeneratorStartMixin",
-    "loot_table.BlockLootTableMixin"
+    "loot_table.BlockLootTableMixin",
+    "oreGenerator.OreGeneratorModifiy"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
     "BlockModelRendererMixin",
-    "InGameHudMixin",
-    "WorldRendererMixin",
-    "color.LightmapTextureManagerMixin"
+    "color.LightmapTextureManagerMixin",
+    "render.DebugHudMixin",
+    "render.InGameHudMixin",
+    "render.WorldRendererMixin"
   ]
 }

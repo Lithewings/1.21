@@ -1,5 +1,9 @@
 {
   "item.miteequilibrium.test": "测试物品",
   "block.miteequilibrium.example_block": "测试方块",
-  "itemgroup.testgroup": "测试物品栏"
+  "itemgroup.testgroup": "测试物品栏",
+  "You will transport to nether": "该传送门会将你传送至下界",
+  "You will transport to overworld": "该传送门会将你传送至主世界",
+  "You will transport to underworld": "该传送门会将你传送至地下世界"
+
 }

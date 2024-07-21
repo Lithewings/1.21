@@ -6,7 +6,10 @@ import net.minecraft.block.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.CommandOutput;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
@@ -20,7 +23,44 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(NetherPortal.class)
+
+
+
+
+
+
+
 public abstract class NetherPortalMixin {
+
+    @Shadow
+    private BlockPos lowerCorner;
+    @Shadow
+    private int height;
+    @Shadow
+    @Final
+    private int width;
+    @Shadow
+    @Final
+    private  WorldAccess world;
+    @Shadow
+    @Final
+    private Direction.Axis axis;
+    @Shadow
+    @Final
+    private  Direction negativeDir;
+
+
+
+
+
+
+
+
+
+
+
+
+
 //
 ///* 测试用
 //    @Inject(method = "getNewPortal",at = @At("HEAD"))

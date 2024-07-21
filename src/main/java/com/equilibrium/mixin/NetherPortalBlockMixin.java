@@ -1,17 +1,29 @@
 package com.equilibrium.mixin;
 
+import com.equilibrium.constant.ConstantString;
+import com.equilibrium.util.ShouldSentText;
+import com.mojang.brigadier.Message;
+import net.fabricmc.fabric.api.client.message.v1.ClientSendMessageEvents;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.Portal;
+import net.minecraft.block.entity.VaultBlockEntity;
+import net.minecraft.command.TranslatableBuiltInExceptions;
 import net.minecraft.enchantment.effect.AllOfEnchantmentEffects;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.message.SentMessage;
+import net.minecraft.network.message.SignedMessage;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -26,12 +38,15 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Set;
 
+
+
 @Mixin(NetherPortalBlock.class)
-public abstract class NetherPortalBlockMixin extends Block implements Portal {
+public abstract class NetherPortalBlockMixin extends Block implements Portal{
 
 
     @Shadow @Nullable protected abstract TeleportTarget getOrCreateExitPortalTarget(ServerWorld world, Entity entity, BlockPos pos, BlockPos scaledPos, boolean inNether, WorldBorder worldBorder);
@@ -42,12 +57,84 @@ public abstract class NetherPortalBlockMixin extends Block implements Portal {
         super(settings);
     }
 
+
+
+
+
+    private static String getTeleportWorld(World world, Entity entity) {
+
+        //获取目前的世界类型(访问注册方法)
+        RegistryKey<World> registryKey = world.getRegistryKey();
+        //传送后的世界类型
+        RegistryKey<World> teleport;
+        //避免空指针错误
+
+        if (registryKey == null) {
+            return "Not an illegal transportation";
+        } else {
+            boolean atBottom = Math.abs(entity.getY()-world.getBottomY())<5;
+            if(world.getRegistryKey()==overworld && atBottom){
+                teleport=underworld;
+            } else if (world.getRegistryKey()==overworld && !atBottom) {
+                teleport=overworld;
+            } else if (world.getRegistryKey()==underworld && !atBottom) {
+                teleport=overworld;
+            } else if (world.getRegistryKey()==underworld &&  atBottom) {
+                teleport=nether;
+            } else if(world.getRegistryKey()==nether){
+                teleport=underworld;
+            }
+            else {
+                teleport=world.getRegistryKey();
+            }
+            String worldType;
+            if(teleport==underworld){
+                worldType=ConstantString.TRANSPORT_TARGET2;
+            } else if (teleport==overworld) {
+                worldType= ConstantString.TRANSPORT_TARGET1;
+            } else if (teleport==nether) {
+                worldType=ConstantString.TRANSPORT_TARGET3;
+            }else{
+                worldType="Not an illegal transportation";
+            }
+
+            return worldType;
+        }
+
+
+    }
+
+
+
+
+    @Inject(method = "onEntityCollision",at = @At(value = "HEAD"),cancellable = true)
+    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo ci) {
+        ci.cancel();
+
+        if (entity.canUsePortals(false)) {
+            entity.tryUsePortal(this, pos);
+                if(ShouldSentText.count>=170) {
+                    String teleport = getTeleportWorld(world, entity);
+                    entity.sendMessage(Text.of(teleport));
+                    ShouldSentText.count=0;
+                }
+
+        }
+    }
+
+
+
+
+    private static RegistryKey<World> overworld = World.OVERWORLD;
+    private static RegistryKey<World> nether = World.NETHER;
+    private static RegistryKey<World> underworld = RegistryKey.of(RegistryKeys.WORLD, Identifier.of("miteequilibrium", "underworld"));
+
+
+
     @Inject(method = "createTeleportTarget",at=@At(value = "HEAD"),cancellable = true)
     public void createTeleportTarget(ServerWorld world, Entity entity, BlockPos pos, CallbackInfoReturnable<TeleportTarget> cir) {
         cir.cancel();
-        RegistryKey<World> overworld = World.OVERWORLD;
-        RegistryKey<World> nether = World.NETHER;
-        RegistryKey<World> underworld = RegistryKey.of(RegistryKeys.WORLD, Identifier.of("miteequilibrium", "underworld"));
+
         //获取目前的世界类型(访问注册方法)
         RegistryKey<World> registryKey = world.getRegistryKey();
         //传送后的世界类型
@@ -65,7 +152,7 @@ public abstract class NetherPortalBlockMixin extends Block implements Portal {
             double d = DimensionType.getCoordinateScaleFactor(world.getDimension(), world.getDimension());
             BlockPos blockPos = worldBorder.clamp(entity.getX() * d, entity.getY(), entity.getZ() * d);
 
-            boolean atBottom = Math.abs(blockPos.getY()-world.getBottomY())<5;
+            boolean atBottom = Math.abs(entity.getY()-world.getBottomY())<5;
 
 
 
@@ -116,13 +203,19 @@ public abstract class NetherPortalBlockMixin extends Block implements Portal {
 
                     return;
                 }
-
+                else{
+                    teleport=underworld;
+                }
             } else if (world.getRegistryKey()==underworld && !atBottom) {
                 teleport=overworld;
+
+
+
             } else if (world.getRegistryKey()==underworld &&  atBottom) {
                 teleport=nether;
             } else if(world.getRegistryKey()==nether){
                 teleport=underworld;
+
             }
             else {
                 teleport=world.getRegistryKey();
@@ -130,6 +223,9 @@ public abstract class NetherPortalBlockMixin extends Block implements Portal {
 
 
             serverWorld=world.getServer().getWorld(teleport);
+
+            //传送信息冷却
+            ShouldSentText.count=-100;
             cir.setReturnValue(this.getOrCreateExitPortalTarget(serverWorld, entity, pos, blockPos, inNether, worldBorder));
 
         }}
