@@ -9,8 +9,28 @@ import com.equilibrium.item.ModItems;
 import com.equilibrium.item.Tools;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.equilibrium.config.Config;
+import com.equilibrium.register.BlockEnityRegistry;
+import com.equilibrium.register.BlockInit;
+import com.equilibrium.register.UseBlock;
+import com.equilibrium.sound.SoundEventRegistry;
+import com.equilibrium.util.CreativeGroup;
+import com.equilibrium.worklevel.CraftingIngredients;
+import com.equilibrium.worklevel.FurnaceIngredients;
+
+
+
+
+
+
+
+
+
 
 import static com.equilibrium.entity.ModEntities.registerModEntities;
 import static com.equilibrium.util.LootTableModifier.modifierLootTables;
@@ -24,6 +44,7 @@ public class MITEequilibrium implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 
+	public static Config config;
 
 
 
@@ -61,6 +82,31 @@ public class MITEequilibrium implements ModInitializer {
 
 		//注册事件
 		PlayerBlockBreakEvents.AFTER.register(new BreakBlockEvent());
+
+
+
+		config = new Config();
+		config.load();
+
+		BlockInit.registerBlocks();
+		BlockInit.registerBlockItems();
+		BlockInit.registerFuels();
+
+		BlockEnityRegistry.init();
+		CraftingIngredients.init();
+		FurnaceIngredients.initFuel();
+		FurnaceIngredients.initItem();
+
+		CreativeGroup.addGroup();
+		UseBlock.init();
+		Registry.register(Registries.SOUND_EVENT, SoundEventRegistry.finishSoundID, SoundEventRegistry.finishSound);
+
+
+
+
+
+
+
 
 		LOGGER.info("Hello Fabric world!");
 	}

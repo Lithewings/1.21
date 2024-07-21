@@ -1,5 +1,16 @@
 accessWidener v1 named
 
+
+
+
+
+
+
+accessible field net/minecraft/entity/LivingEntity lastDamageSource Lnet/minecraft/entity/damage/DamageSource;
+accessible field net/minecraft/entity/LivingEntity lastDamageTime J
+accessible method net/minecraft/screen/CraftingScreenHandler updateResult (Lnet/minecraft/screen/ScreenHandler;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/inventory/CraftingResultInventory;Lnet/minecraft/recipe/RecipeEntry;)V
+accessible method net/minecraft/client/gui/hud/DebugHud$AllocationRateCalculator get (J)J
+accessible class net/minecraft/client/gui/hud/DebugHud$AllocationRateCalculator
 accessible field net/minecraft/entity/LivingEntity HEALTH Lnet/minecraft/entity/data/TrackedData;
 accessible method net/minecraft/block/NetherPortalBlock getOrCreateExitPortalTarget (Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;ZLnet/minecraft/world/border/WorldBorder;)Lnet/minecraft/world/TeleportTarget;
 accessible method net/minecraft/world/dimension/NetherPortal validStateInsidePortal (Lnet/minecraft/block/BlockState;)Z
@@ -23,3 +34,11 @@ accessible field net/minecraft/structure/StrongholdGenerator$PieceData pieceType
 accessible field net/minecraft/structure/StrongholdGenerator$PieceData generatedCount I
 accessible method net/minecraft/structure/StrongholdGenerator createPiece (Ljava/lang/Class;Lnet/minecraft/structure/StructurePiecesHolder;Lnet/minecraft/util/math/random/Random;IIILnet/minecraft/util/math/Direction;I)Lnet/minecraft/structure/StrongholdGenerator$Piece;
 accessible method net/minecraft/structure/StrongholdGenerator pickPiece (Lnet/minecraft/structure/StrongholdGenerator$Start;Lnet/minecraft/structure/StructurePiecesHolder;Lnet/minecraft/util/math/random/Random;IIILnet/minecraft/util/math/Direction;I)Lnet/minecraft/structure/StrongholdGenerator$Piece;
+
+
+
+
+
+
+accessible method net/minecraft/client/gui/hud/DebugHud drawText (Lnet/minecraft/client/gui/DrawContext;Ljava/util/List;Z)V
+accessible method net/minecraft/client/gui/hud/DebugHud getLeftText ()Ljava/util/List;

@@ -1,0 +1,99 @@
+package com.equilibrium.util;
+
+import com.equilibrium.config.CommonConfig;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.CraftingScreen;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.recipe.CraftingRecipe;
+import net.minecraft.recipe.input.CraftingRecipeInput;
+import net.minecraft.registry.Registries;
+import net.minecraft.screen.AbstractRecipeScreenHandler;
+import net.minecraft.screen.slot.Slot;
+import net.minecraft.text.Text;
+
+import java.util.ArrayList;
+
+import static com.equilibrium.MITEequilibrium.LOGGER;
+
+public class CraftingDifficultyHelper {
+
+	public static float getCraftingDifficultyFromMatrix(AbstractRecipeScreenHandler<CraftingRecipeInput, CraftingRecipe> handler, boolean is_craft_table, Screen screen) {
+		ArrayList<Slot> slots = new ArrayList<Slot>();
+		int index = is_craft_table? 10 : 5;
+		for (int i = 1; i < index; i++) {
+			slots.add(handler.getSlot(i));
+		}
+
+		Text text = screen.getTitle();
+		float p = 1.0f;
+		if(text.equals(Text.translatable("container.copper_crafting"))){
+			p -= 0.3f;//铜工作台减30%
+		}
+		if(text.equals(Text.translatable("container.iron_crafting"))){
+			p -= 0.5f;//铁工作台减50%
+		}
+		if(text.equals(Text.translatable("container.diamond_crafting"))){
+			p -= 0.7f;//钻石工作台减70%
+		}
+		if(text.equals(Text.translatable("container.netherite_crafting"))){
+			p -= 0.9f;//下界合金工作台减90%
+		}
+
+		return Math.max(getCraftingDifficultyFromMatrix(slots) * p, 15F);
+	}
+
+
+	public static float getCraftingDifficultyFromMatrix(ArrayList<Slot> slots) {
+		float item_difficulty = 5F;
+		for (Slot s : slots) {
+			Item item = s.getStack().getItem();
+			if (item == Items.AIR)
+				continue;
+			item_difficulty += getDifficulty(item);
+		}
+		int totalDifficulty1 = (int) item_difficulty;
+		int totalDifficulty2 = (int) item_difficulty;
+
+		totalDifficulty1 = (int) Math.log(totalDifficulty1);
+		totalDifficulty2 = (int) Math.pow(totalDifficulty2,0.68);
+
+
+		return totalDifficulty1*totalDifficulty2;
+	}
+	
+	public static ArrayList<Item> getItemFromMatrix(AbstractRecipeScreenHandler<CraftingRecipeInput, CraftingRecipe> handler, boolean is_craft_table) {
+		ArrayList<Item> items = new ArrayList<Item>();
+		int index = is_craft_table ? 10 : 5;
+		for (int i = 1; i < index; i++) {
+			items.add(handler.getSlot(i).getStack().getItem());
+		}
+		return items;
+	}
+
+	public static float getDifficulty(Item item) {
+		String name =  Registries.ITEM.getId(item).toString();
+		if(item==Items.IRON_BLOCK){
+			return 3200*9;
+		}
+		if(item==Items.IRON_INGOT){
+			return 3200F;
+		}
+		if(item==Items.GOLD_INGOT){
+			return 1600F;
+		}
+		if(item==Items.DIAMOND){
+			return 25600F;
+		}
+		if(item==Items.NETHERITE_INGOT){
+			return 25600*4F;
+		}
+
+
+		if(CommonConfig.craftItemTimeMap.containsKey(name)){
+			return CommonConfig.craftItemTimeMap.get(name);
+		}
+
+		return 20F;
+	}
+}

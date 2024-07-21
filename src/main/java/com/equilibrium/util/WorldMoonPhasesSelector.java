@@ -1,7 +1,5 @@
 package com.equilibrium.util;
 
-import static com.equilibrium.MITEequilibrium.LOGGER;
-
 public class WorldMoonPhasesSelector {
     private static String moonType=null;
 
