@@ -1,4 +1,4 @@
-package com.equilibrium.mixin;
+package com.equilibrium.mixin.render;
 
 import com.equilibrium.util.PlayerMaxHealthHelper;
 import com.equilibrium.util.PlayerMaxHungerHelper;

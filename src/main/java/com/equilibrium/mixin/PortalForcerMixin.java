@@ -15,7 +15,7 @@ import net.minecraft.world.dimension.PortalForcer;
 import net.minecraft.world.poi.PointOfInterest;
 import net.minecraft.world.poi.PointOfInterestStorage;
 import net.minecraft.world.poi.PointOfInterestType;
-import net.minecraft.world.poi.PointOfInterestTypes;
+
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -37,10 +37,7 @@ public abstract class PortalForcerMixin {
     @Final
     @Shadow private ServerWorld world;
 
-        @Inject(method = "getPortalPos",at = @At("TAIL"),cancellable = true)
-        public void getPortalPos(BlockPos pos, boolean destIsNether, WorldBorder worldBorder, CallbackInfoReturnable<Optional<BlockPos>> cir) {
-            System.out.println(cir.getReturnValue());
-    }
+
 //    @Inject(method = "createPortal",at = @At("HEAD"))
 //    public void createPortal(BlockPos pos, Direction.Axis axis, CallbackInfoReturnable<Optional<BlockLocating.Rectangle>> cir) {
 //        System.out.println("getPortalPos");

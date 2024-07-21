@@ -1,9 +1,13 @@
 package com.equilibrium.mixin;
 
+import com.equilibrium.constant.ConstantString;
 import com.equilibrium.util.PlayerMaxHealthHelper;
 import com.equilibrium.util.PlayerMaxHungerHelper;
+import com.equilibrium.util.ShouldSentText;
 import com.mojang.authlib.GameProfile;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -11,7 +15,10 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.message.SentMessage;
+import net.minecraft.network.message.SignedMessage;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Difficulty;
@@ -42,7 +49,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo ci) {
-
     }
 
 
@@ -72,6 +78,10 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
 
     @Shadow public abstract boolean isCreative();
+
+    @Shadow public abstract void sendMessage(Text message, boolean overlay);
+
+    @Shadow public abstract void tickMovement();
 
     //调用CallbackInfo类,修改返回值
     //以下是修改方块交互距离
@@ -150,6 +160,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "addExperienceLevels", at = @At("HEAD"), cancellable = true)
     public void addExperienceLevels(int levels, CallbackInfo ci) {
+
         //触发器,用作增加经验值的后续处理,比如增加生命值和饥饿度等
         //除了初始化会增加上限之外,只有该方法才能增加上限值
         ci.cancel();
@@ -176,6 +187,16 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     public void canFoodHeal(CallbackInfoReturnable<Boolean> cir){
         cir.setReturnValue(false);
     }
+
+
+
+
+    @Inject(method = "tick",at = @At("HEAD"))
+    public void tick(CallbackInfo ci) {
+        ShouldSentText.count++;
+    }
+
+
     @Inject(method = "tickMovement",at = @At("HEAD"))
     public void tickMovement(CallbackInfo ci){
         //刷新上限值,和Hud保持同步,都是1s20次刷新
@@ -189,6 +210,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                 LOGGER.info("Natural Regeneration +1 ");
             }
         }
+
 
 
     }
