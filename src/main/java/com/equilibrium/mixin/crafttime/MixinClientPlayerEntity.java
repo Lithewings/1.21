@@ -1,7 +1,7 @@
 package com.equilibrium.mixin.crafttime;
 
 import com.equilibrium.ITimeCraftPlayer;
-import com.equilibrium.sound.SoundEventRegistry;
+import com.equilibrium.event.sound.SoundEventRegistry;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;

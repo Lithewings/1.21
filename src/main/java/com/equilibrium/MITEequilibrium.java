@@ -18,21 +18,17 @@ import com.equilibrium.config.Config;
 import com.equilibrium.register.BlockEnityRegistry;
 import com.equilibrium.register.BlockInit;
 import com.equilibrium.register.UseBlock;
-import com.equilibrium.sound.SoundEventRegistry;
+import com.equilibrium.event.sound.SoundEventRegistry;
 import com.equilibrium.util.CreativeGroup;
-import com.equilibrium.worklevel.CraftingIngredients;
-import com.equilibrium.worklevel.FurnaceIngredients;
-
-
-
-
-
-
-
-
+import com.equilibrium.mixin.crafttime.worklevel.CraftingIngredients;
+import com.equilibrium.mixin.crafttime.worklevel.FurnaceIngredients;
 
 
 import static com.equilibrium.entity.ModEntities.registerModEntities;
+
+
+import static com.equilibrium.register.tags.ModBlockTags.registerModBlockTags;
+import static com.equilibrium.register.tags.ModItemTags.registerModItemTags;
 import static com.equilibrium.util.LootTableModifier.modifierLootTables;
 
 import static com.equilibrium.worldgen.ModPlacementGenerator.registerModOre;
@@ -84,6 +80,12 @@ public class MITEequilibrium implements ModInitializer {
 		PlayerBlockBreakEvents.AFTER.register(new BreakBlockEvent());
 
 
+		//创建标签
+		registerModBlockTags();
+		registerModItemTags();
+
+
+
 
 		config = new Config();
 		config.load();
@@ -100,10 +102,6 @@ public class MITEequilibrium implements ModInitializer {
 		CreativeGroup.addGroup();
 		UseBlock.init();
 		Registry.register(Registries.SOUND_EVENT, SoundEventRegistry.finishSoundID, SoundEventRegistry.finishSound);
-
-
-
-
 
 
 

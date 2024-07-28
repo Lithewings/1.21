@@ -3,7 +3,7 @@ package com.equilibrium.mixin.tables;
 import com.equilibrium.config.CommonConfig;
 
 import com.equilibrium.register.BlockInit;
-import com.equilibrium.worklevel.FurnaceIngredients;
+import com.equilibrium.mixin.crafttime.worklevel.FurnaceIngredients;
 import com.google.common.collect.Maps;
 import net.minecraft.SharedConstants;
 import net.minecraft.block.Block;
@@ -13,7 +13,6 @@ import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;

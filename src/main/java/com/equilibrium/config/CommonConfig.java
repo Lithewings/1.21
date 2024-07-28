@@ -34,64 +34,64 @@ public class CommonConfig {
     //序列化配置文件:写入配置文件
     public JsonObject serialize(){
         JsonObject root = new JsonObject();//父类
-//        JsonObject entry = new JsonObject();//子条目
-//        JsonObject entry_items_crafting_time = new JsonObject();//子条目
-//        JsonObject entry_item_crafttable_level = new JsonObject();//子条目
-//        JsonObject entry_item_furnace_levell = new JsonObject();//子条目
-//        JsonObject entry_fuel_item_level = new JsonObject();//子条目
-//        JsonObject entry_item_cooktime = new JsonObject();//子条目
-//
-//        entry.addProperty("desc0:", "若发现配置不生效，则是模组设定好的内容不可更改，如：铁锭的工作台等级为3");
-//        //物品合成时间========================================================================
-//        entry.addProperty("desc1:", "添加单个材料物品的合成所需时间,例如： " +
-//                "{\n" +
-//                "   \"minecraft:stick\": 20.0,\n" +
-//                "   \"minecraft:coal\": 20.0\n" +
-//                "}");
-//        entry.add(item_crafting_time,entry_items_crafting_time);
-//        craftItemTimeMap.forEach(entry_items_crafting_time::addProperty);
-//
-//        //物品工作台等级========================================================================
-//        entry.addProperty("desc2:", "添加单个材料物品的所需工作台等级,FLINT_CRAFTING_TABLE = 1, COPPER_CRAFTING_TABLE = 2, IRON_CRAFTING_TABLE = 3, DIAMOND_CRAFTING_TABLE = 4, NETHERITE_CRAFTING_TABLE = 5" +
-//                "例如： " +
-//                "{\n" +
-//                "   \"minecraft:stick\": 1,\n" +
-//                "   \"minecraft:coal\": 2\n" +
-//                "}");
-//        entry.add(item_crafttable_level,entry_item_crafttable_level);
-//        itemCrafttableLevelMap.forEach(entry_item_crafttable_level::addProperty);
-//
-//        //物品熔炼所需熔炉等级========================================================================
-//        entry.addProperty("desc3:", "添加物品熔炼所需熔炉等级,CLAY_FURNACE = 0, FURNACE = 1, BLAST_FURNACE = 1,OBSIDIAN_FURNACE = 2, NETHERRACK_FURNACE = 3" +
-//                "例如： " +
-//                "{\n" +
-//                "   \"minecraft:raw_copper\": 1,\n" +
-//                "   \"minecraft:raw_iron\": 2\n" +
-//                "}");
-//        entry.add(item_furnace_level,entry_item_furnace_levell);
-//        itemFurnaceLevelMap.forEach(entry_item_furnace_levell::addProperty);
-//
-//        //燃料的等级========================================================================
-//        entry.addProperty("desc4:", "添加燃料的等级,CLAY_FURNACE = 0, FURNACE = 1, BLAST_FURNACE = 1,OBSIDIAN_FURNACE = 2, NETHERRACK_FURNACE = 3" +
-//                "例如： " +
-//                "{\n" +
-//                "   \"minecraft:stick\": 1,\n" +
-//                "   \"minecraft:coal\": 2\n" +
-//                "}");
-//        entry.add(fuel_item_level,entry_fuel_item_level);
-//        fuelItemLevelMap.forEach(entry_fuel_item_level::addProperty);
-//
-//        //物品在熔炉中烧炼所需时间========================================================================
-//        entry.addProperty("desc5:", "添加物品在熔炉中烧炼所需时间,minecraft:iron_ore为200,minecraft:deepslate_iron_ore为802" +
-//                "例如： " +
-//                "{\n" +
-//                "   \"minecraft:iron_ore\": 200,\n" +
-//                "   \"minecraft:deepslate_iron_ore\": 802\n" +
-//                "}");
-//        entry.add(item_cooktime,entry_item_cooktime);
-//        itemCooktimeMap.forEach(entry_item_cooktime::addProperty);
-//
-//        root.add(fileConfigName, entry);//创建父类条目名称，并把子条目添加进去
+        JsonObject entry = new JsonObject();//子条目
+        JsonObject entry_items_crafting_time = new JsonObject();//子条目
+        JsonObject entry_item_crafttable_level = new JsonObject();//子条目
+        JsonObject entry_item_furnace_levell = new JsonObject();//子条目
+        JsonObject entry_fuel_item_level = new JsonObject();//子条目
+        JsonObject entry_item_cooktime = new JsonObject();//子条目
+
+        entry.addProperty("desc0:", "若发现配置不生效，则是模组设定好的内容不可更改，如：铁锭的工作台等级为3");
+        //物品合成时间========================================================================
+        entry.addProperty("desc1:", "添加单个材料物品的合成所需时间,例如： " +
+                "{\n" +
+                "   \"minecraft:stick\": 20.0,\n" +
+                "   \"minecraft:coal\": 20.0\n" +
+                "}");
+        entry.add(item_crafting_time,entry_items_crafting_time);
+        craftItemTimeMap.forEach(entry_items_crafting_time::addProperty);
+
+        //物品工作台等级========================================================================
+        entry.addProperty("desc2:", "添加单个材料物品的所需工作台等级,FLINT_CRAFTING_TABLE = 1, COPPER_CRAFTING_TABLE = 2, IRON_CRAFTING_TABLE = 3, DIAMOND_CRAFTING_TABLE = 4, NETHERITE_CRAFTING_TABLE = 5" +
+                "例如： " +
+                "{\n" +
+                "   \"minecraft:stick\": 1,\n" +
+                "   \"minecraft:coal\": 2\n" +
+                "}");
+        entry.add(item_crafttable_level,entry_item_crafttable_level);
+        itemCrafttableLevelMap.forEach(entry_item_crafttable_level::addProperty);
+
+        //物品熔炼所需熔炉等级========================================================================
+        entry.addProperty("desc3:", "添加物品熔炼所需熔炉等级,CLAY_FURNACE = 0, FURNACE = 1, BLAST_FURNACE = 1,OBSIDIAN_FURNACE = 2, NETHERRACK_FURNACE = 3" +
+                "例如： " +
+                "{\n" +
+                "   \"minecraft:raw_copper\": 1,\n" +
+                "   \"minecraft:raw_iron\": 2\n" +
+                "}");
+        entry.add(item_furnace_level,entry_item_furnace_levell);
+        itemFurnaceLevelMap.forEach(entry_item_furnace_levell::addProperty);
+
+        //燃料的等级========================================================================
+        entry.addProperty("desc4:", "添加燃料的等级,CLAY_FURNACE = 0, FURNACE = 1, BLAST_FURNACE = 1,OBSIDIAN_FURNACE = 2, NETHERRACK_FURNACE = 3" +
+                "例如： " +
+                "{\n" +
+                "   \"minecraft:stick\": 1,\n" +
+                "   \"minecraft:coal\": 2\n" +
+                "}");
+        entry.add(fuel_item_level,entry_fuel_item_level);
+        fuelItemLevelMap.forEach(entry_fuel_item_level::addProperty);
+
+        //物品在熔炉中烧炼所需时间========================================================================
+        entry.addProperty("desc5:", "添加物品在熔炉中烧炼所需时间,minecraft:iron_ore为200,minecraft:deepslate_iron_ore为802" +
+                "例如： " +
+                "{\n" +
+                "   \"minecraft:iron_ore\": 200,\n" +
+                "   \"minecraft:deepslate_iron_ore\": 802\n" +
+                "}");
+        entry.add(item_cooktime,entry_item_cooktime);
+        itemCooktimeMap.forEach(entry_item_cooktime::addProperty);
+
+        root.add(fileConfigName, entry);//创建父类条目名称，并把子条目添加进去
         return root;
     }
 

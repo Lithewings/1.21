@@ -1,4 +1,4 @@
-package com.equilibrium.mixin.structure;
+package com.equilibrium.mixin.structure.strong_hold;
 
 import net.minecraft.structure.StructurePieceType;
 import net.minecraft.util.math.Direction;

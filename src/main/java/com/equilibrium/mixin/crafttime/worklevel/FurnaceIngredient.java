@@ -1,4 +1,4 @@
-package com.equilibrium.worklevel;
+package com.equilibrium.mixin.crafttime.worklevel;
 
 public class FurnaceIngredient {
     public static final int COBBLESTONE_FURNACE = 1, OBSIDIAN_FURNACE = 2, NETHERRACK_FURNACE = 3;

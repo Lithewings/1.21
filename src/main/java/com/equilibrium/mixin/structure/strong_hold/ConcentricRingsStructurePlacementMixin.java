@@ -1,4 +1,4 @@
-package com.equilibrium.mixin.structure;
+package com.equilibrium.mixin.structure.strong_hold;
 
 import net.minecraft.registry.Registerable;
 import net.minecraft.registry.RegistryBuilder;

@@ -1,4 +1,4 @@
-package com.equilibrium.worklevel;
+package com.equilibrium.mixin.crafttime.worklevel;
 
 import java.util.HashMap;
 

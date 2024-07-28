@@ -1,0 +1,53 @@
+{
+  "values": [
+
+    "minecraft:sandstone",
+    "minecraft:red_sandstone",
+    "minecraft:ice",
+    "minecraft:packed_ice",
+    "minecraft:blue_ice",
+
+
+    "minecraft:stone",
+    "minecraft:deepslate",
+    "minecraft:granite",
+    "minecraft:diorite",
+    "minecraft:andesite",
+
+
+    "minecraft:calcite",
+    "minecraft:tuff",
+    "minecraft:dripstone_block",
+    "minecraft:pointed_dripstone",
+    "minecraft:prismarine",
+    "minecraft:magma_block",
+    "minecraft:netherrack",
+    "minecraft:warped_nylium",
+    "minecraft:crimson_nylium",
+    "minecraft:bone_block",
+    "minecraft:blackstone",
+    "minecraft:basalt",
+    "minecraft:smooth_basalt",
+    "minecraft:end_stone",
+
+    "#minecraft:coal_ores",
+    "#minecraft:copper_ores",
+    "#minecraft:lapis_ores",
+    "minecraft:glowstone",
+    "minecraft:amethyst_block",
+    "minecraft:budding_amethyst",
+
+
+
+
+
+
+
+
+
+    "#minecraft:logs"
+
+
+
+  ]
+}

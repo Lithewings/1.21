@@ -2,11 +2,10 @@ package com.equilibrium.mixin.tables;
 
 import com.equilibrium.config.CommonConfig;
 import com.equilibrium.register.BlockInit;
-import com.equilibrium.worklevel.CraftingIngredients;
+import com.equilibrium.mixin.crafttime.worklevel.CraftingIngredients;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.CraftingTableBlock;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.RecipeInputInventory;
@@ -33,7 +32,6 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;

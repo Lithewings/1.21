@@ -1,4 +1,4 @@
-package com.equilibrium.blockentity;
+package com.equilibrium.block.blockentity;
 
 import com.equilibrium.register.BlockEnityRegistry;
 import com.equilibrium.register.BlockInit;

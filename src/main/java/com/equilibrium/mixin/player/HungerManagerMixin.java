@@ -1,6 +1,7 @@
 package com.equilibrium.mixin.player;
 
 import com.equilibrium.util.PlayerMaxHungerHelper;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -47,6 +48,12 @@ public abstract class HungerManagerMixin {
     private int foodTickTimer;
     @Shadow
     private int prevFoodLevel ;
+
+
+
+
+
+
 
     @Inject(method = "addInternal",at = @At("HEAD"), cancellable = true)
     private void addInternal(int nutrition, float saturation, CallbackInfo ci) {

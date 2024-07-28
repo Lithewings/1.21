@@ -40,7 +40,7 @@ public abstract class CowEntityMixin extends AnimalEntity {
     protected void initGoals(CallbackInfo ci) {
         ci.cancel();
         this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(1, new AdvanceEscapeDangerGoal(this, 2.0));
+        this.goalSelector.add(1, new AdvanceEscapeDangerGoal(this, 2.25));
         this.goalSelector.add(2, new AnimalMateGoal(this, 1.0));
         this.goalSelector.add(3, new TemptGoal(this, 1.25, stack -> stack.isIn(ItemTags.COW_FOOD), false));
         this.goalSelector.add(4, new FollowParentGoal(this, 1.25));

@@ -1,20 +1,27 @@
 package com.equilibrium.event;
+import com.equilibrium.register.tags.ModBlockTags;
+import com.equilibrium.util.IsMinable;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
+import static com.equilibrium.MITEequilibrium.LOGGER;
+
 public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
+
 
     /**
      * Called after a block is successfully broken.
@@ -27,9 +34,30 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
      */
     @Override
     public void afterBlockBreak(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity) {
+
+        ItemStack itemStack =player.getMainHandStack();
+
+        player.sendMessage(Text.of("Block Harvest Level is :"+IsMinable.getBlockHarvertLevel(state)));
+        player.sendMessage(Text.of("Item Harvest Level is :"+IsMinable.getItemHarvertLevel(itemStack)));
+        player.sendMessage(Text.of(""+state.getBlock().toString()));
+
+        if(IsMinable.getBlockHarvertLevel(state)<=IsMinable.getItemHarvertLevel(itemStack))
+            player.sendMessage(Text.of("Is Minable"));
+        else{
+            player.sendMessage(Text.of("Not Minable"));
+        }
+
+
+        if(state.isIn(ModBlockTags.STONE_LIKE_240)){
+            itemStack.damage(240-1,player, EquipmentSlot.MAINHAND);
+        }
+        if(state.isIn(ModBlockTags.LOG_120)){
+            itemStack.damage(120-1,player, EquipmentSlot.MAINHAND);
+        }
+
         if (state.getBlock() == Blocks.GRAVEL) {
 
-            ItemStack itemStack =player.getMainHandStack();
+            itemStack =player.getMainHandStack();
             int funtuneLevel=EnchantmentHelper.getLevel(world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.FORTUNE).get(),itemStack);
             int slikTouch=EnchantmentHelper.getLevel(world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.SILK_TOUCH).get(),itemStack);
 

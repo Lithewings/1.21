@@ -4,8 +4,8 @@ accessWidener v1 named
 
 
 
-
-
+accessible field net/minecraft/item/ToolItem material Lnet/minecraft/item/ToolMaterial;
+accessible class net/minecraft/structure/pool/StructurePoolBasedGenerator$StructurePoolGenerator
 accessible field net/minecraft/entity/LivingEntity lastDamageSource Lnet/minecraft/entity/damage/DamageSource;
 accessible field net/minecraft/entity/LivingEntity lastDamageTime J
 accessible method net/minecraft/screen/CraftingScreenHandler updateResult (Lnet/minecraft/screen/ScreenHandler;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/inventory/RecipeInputInventory;Lnet/minecraft/inventory/CraftingResultInventory;Lnet/minecraft/recipe/RecipeEntry;)V

@@ -1,7 +1,7 @@
 package com.equilibrium.block;
 
 
-import com.equilibrium.blockentity.TheFurnaceEntity;
+import com.equilibrium.block.blockentity.TheFurnaceEntity;
 
 import com.equilibrium.register.BlockEnityRegistry;
 

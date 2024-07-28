@@ -1,4 +1,4 @@
-package com.equilibrium.sound;
+package com.equilibrium.event.sound;
 
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;

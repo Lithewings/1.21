@@ -3,7 +3,7 @@ package com.equilibrium.register;
 
 import com.equilibrium.MITEequilibrium;
 
-import com.equilibrium.blockentity.TheFurnaceEntity;
+import com.equilibrium.block.blockentity.TheFurnaceEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;

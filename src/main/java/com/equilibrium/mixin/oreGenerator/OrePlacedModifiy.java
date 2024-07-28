@@ -18,15 +18,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 @Mixin(OrePlacedFeatures.class)
-public class OreGeneratorModifiy {
+public abstract class OrePlacedModifiy {
+    @Shadow
     private static List<PlacementModifier> modifiers(PlacementModifier countModifier, PlacementModifier heightModifier) {
         return List.of(countModifier, SquarePlacementModifier.of(), heightModifier, BiomePlacementModifier.of());
     }
-
+    @Shadow
     private static List<PlacementModifier> modifiersWithCount(int count, PlacementModifier heightModifier) {
         return modifiers(CountPlacementModifier.of(count), heightModifier);
     }
-
+    @Shadow
     private static List<PlacementModifier> modifiersWithRarity(int chance, PlacementModifier heightModifier) {
         return modifiers(RarityFilterPlacementModifier.of(chance), heightModifier);
     }
@@ -110,6 +111,13 @@ public class OreGeneratorModifiy {
     public static final RegistryKey<PlacedFeature> ORE_COPPER_LARGE = PlacedFeatures.of("ore_copper_large");
     @Shadow
     public static final RegistryKey<PlacedFeature> ORE_CLAY = PlacedFeatures.of("ore_clay");
+
+
+
+
+
+
+
 
 
     @Inject(method = "bootstrap",at = @At(value = "HEAD"),cancellable = true)
