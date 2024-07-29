@@ -1,7 +1,12 @@
 package com.equilibrium.item;
 
 
+import com.equilibrium.item.tools.FlintHatchet;
+import com.equilibrium.item.tools.ModToolMaterials;
 import net.minecraft.item.Item;
+import net.minecraft.item.PickaxeItem;
+import net.minecraft.item.ShovelItem;
+import net.minecraft.item.ToolMaterials;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -15,7 +20,7 @@ public class Tools {
     public static final Item adamantium_hatchet = new Item(new Item.Settings());
 
 
-
+    public static final Item FLINT_HATCHET = new FlintHatchet(ModToolMaterials.FLINT_HATCHET,new Item.Settings().attributeModifiers(FlintHatchet.createAttributeModifiers(ModToolMaterials.FLINT_HATCHET,3,1.0f)));
 
 
 
@@ -26,7 +31,7 @@ public class Tools {
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","adamantium_hatchet"), adamantium_hatchet);
 
 
-
+        Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","flint_hatchet"),FLINT_HATCHET);
 
 
 

@@ -2,7 +2,7 @@ package com.equilibrium.mixin.tables;
 
 import com.equilibrium.config.CommonConfig;
 import com.equilibrium.register.BlockInit;
-import com.equilibrium.mixin.crafttime.worklevel.CraftingIngredients;
+import com.equilibrium.worklevel.CraftingIngredients;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.CraftingTableBlock;
 import net.minecraft.entity.player.PlayerEntity;

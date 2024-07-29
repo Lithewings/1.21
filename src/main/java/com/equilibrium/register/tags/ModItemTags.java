@@ -14,6 +14,10 @@ public class ModItemTags {
     public static final TagKey<Item> HARVEST_THREE = of("tool_harvest_3");
     public static final TagKey<Item> HARVEST_FOUR = of("tool_harvest_4");
 
+    public static final TagKey<Item> HATCHET = of("hatchet");
+
+    public static final TagKey<Item> MINING_ENCHANTABLE = of("mining_enchantable");
+
 
     private static TagKey<Item> of(String id) {
         return TagKey.of(RegistryKeys.ITEM, Identifier.of("miteequilibrium",id));

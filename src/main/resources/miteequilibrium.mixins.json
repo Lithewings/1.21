@@ -10,6 +10,7 @@
     "MITEequilibriumMixin",
     "recipeModifier",
     "crafttime.ScreenHandlerMixin",
+
     "entitymixin.CowEntityMixin",
     "loot_table.BlockLootTableMixin",
     "oreGenerator.OreConfiguredModify",

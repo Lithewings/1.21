@@ -82,7 +82,6 @@ public abstract class recipeModifier {
 
 
 
-
             resultInventory.setStack(0, itemStack);
             handler.setPreviousTrackedSlot(0, itemStack);
             serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(handler.syncId, handler.nextRevision(), 0, itemStack));

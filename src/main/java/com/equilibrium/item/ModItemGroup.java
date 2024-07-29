@@ -69,6 +69,7 @@ public class ModItemGroup {
                                 entries.add(ModBlocks.MITHRIL_ORE);
                                 entries.add(ModBlocks.SILVER_ORE);
 
+                                entries.add(Tools.FLINT_HATCHET);
 
                             }
                     ).build());

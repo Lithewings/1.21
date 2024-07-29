@@ -143,8 +143,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Inject(method = "getEntityInteractionRange", at = @At("HEAD"), cancellable = true)
     public void getEntityInteractionRange(CallbackInfoReturnable<Double> cir) {
         ItemStack itemstack = this.getMainHandStack();
-        if (itemstack.isEnchantable()) {
 
+        if (itemstack.isEnchantable()) {
             if (itemstack.isIn(ItemTags.SHOVELS)) {
                 //铲子
                 setEntityInteractBonus(0.75f);
@@ -160,6 +160,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             } else if (itemstack.isIn(ItemTags.HOES)) {
                 //锄头
                 setEntityInteractBonus(0.75f);
+            } else if(itemstack.isIn(ModItemTags.HATCHET)){
+                setEntityInteractBonus(0.5f);
             }
 
         } else if (itemstack.isOf(Items.STICK) || itemstack.isOf(Items.BONE)) {

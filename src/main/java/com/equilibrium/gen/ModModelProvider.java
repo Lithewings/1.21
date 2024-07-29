@@ -2,6 +2,8 @@ package com.equilibrium.gen;
 
 import com.equilibrium.block.ModBlocks;
 import com.equilibrium.item.Metal;
+import com.equilibrium.item.Tools;
+import com.equilibrium.item.tools.ModToolMaterials;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.minecraft.data.client.BlockStateModelGenerator;
@@ -55,6 +57,7 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(Metal.silver_nugget, Models.GENERATED);
 
 
+        itemModelGenerator.register(Tools.FLINT_HATCHET, Models.HANDHELD);
 
     }
 }

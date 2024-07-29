@@ -1,4 +1,4 @@
-package com.equilibrium.mixin.crafttime.worklevel;
+package com.equilibrium.worklevel;
 
 public class CraftingIngredient {
     public static final int FLINT_CRAFTING_TABLE = 1, COPPER_CRAFTING_TABLE = 2, IRON_CRAFTING_TABLE = 3, DIAMOND_CRAFTING_TABLE = 4, NETHERITE_CRAFTING_TABLE = 5;

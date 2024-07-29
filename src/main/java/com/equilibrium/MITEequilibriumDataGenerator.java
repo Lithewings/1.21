@@ -14,7 +14,7 @@ public class MITEequilibriumDataGenerator implements DataGeneratorEntrypoint {
 //		pack.addProvider(ModRecipeGenerator::new);
 //		pack.addProvider(ModModelProvider::new);
 //		pack.addProvider(ModLanguageTranslatorZhCn::new);
-//		pack.addProvider(BlocksTagsGen::new);
+//		pack.addProvider(TagsProvider::new);
 
 
 	}

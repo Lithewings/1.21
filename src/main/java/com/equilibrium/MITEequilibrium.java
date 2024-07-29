@@ -7,8 +7,11 @@ import com.equilibrium.item.Metal;
 import com.equilibrium.item.ModItemGroup;
 import com.equilibrium.item.ModItems;
 import com.equilibrium.item.Tools;
+import com.equilibrium.register.tags.ModItemTags;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import org.slf4j.Logger;
@@ -20,8 +23,8 @@ import com.equilibrium.register.BlockInit;
 import com.equilibrium.register.UseBlock;
 import com.equilibrium.event.sound.SoundEventRegistry;
 import com.equilibrium.util.CreativeGroup;
-import com.equilibrium.mixin.crafttime.worklevel.CraftingIngredients;
-import com.equilibrium.mixin.crafttime.worklevel.FurnaceIngredients;
+import com.equilibrium.worklevel.CraftingIngredients;
+import com.equilibrium.worklevel.FurnaceIngredients;
 
 
 import static com.equilibrium.entity.ModEntities.registerModEntities;
@@ -102,7 +105,6 @@ public class MITEequilibrium implements ModInitializer {
 		CreativeGroup.addGroup();
 		UseBlock.init();
 		Registry.register(Registries.SOUND_EVENT, SoundEventRegistry.finishSoundID, SoundEventRegistry.finishSound);
-
 
 
 
