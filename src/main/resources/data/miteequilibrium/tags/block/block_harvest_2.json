@@ -10,6 +10,9 @@
 
     "minecraft:raw_iron_block",
     "minecraft:raw_copper_block",
-    "minecraft:raw_gold_block"
+    "minecraft:raw_gold_block",
+
+    "minecraft:lapis_block",
+    "minecraft:gold_block"
   ]
 }

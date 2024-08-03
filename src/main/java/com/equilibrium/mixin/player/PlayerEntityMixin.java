@@ -1,15 +1,16 @@
 package com.equilibrium.mixin.player;
 
-import com.equilibrium.register.tags.ModBlockTags;
-import com.equilibrium.register.tags.ModItemTags;
+import com.equilibrium.event.MoonPhaseEvent;
+import com.equilibrium.tags.ModItemTags;
 import com.equilibrium.util.PlayerMaxHealthHelper;
 import com.equilibrium.util.PlayerMaxHungerHelper;
 import com.equilibrium.util.ShouldSentText;
+import com.equilibrium.util.WorldMoonPhasesSelector;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.component.type.FoodComponent;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
@@ -17,17 +18,31 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.HungerManager;
+import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.projectile.FishingBobberEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.dimension.DimensionTypes;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -36,8 +51,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Objects;
+
+import static com.equilibrium.event.MoonPhaseEvent.*;
 import static com.equilibrium.util.IsMinable.getBlockHarvertLevel;
 import static com.equilibrium.util.IsMinable.getItemHarvertLevel;
+import static java.lang.Math.max;
+import static net.minecraft.util.math.MathHelper.nextBetween;
 
 @Mixin(PlayerEntity.class)
 //和源码构造方式一致,继承谁这里也跟着继承
@@ -90,7 +110,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Shadow
     public abstract boolean damage(DamageSource source, float amount);
 
-    @Shadow public abstract float getBlockBreakingSpeed(BlockState block);
+    @Shadow
+    public abstract float getBlockBreakingSpeed(BlockState block);
 
     @Unique
     public int getPhytonutrient() {
@@ -100,6 +121,12 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Unique
     public void setEntityInteractBonus(float bonus) {
         this.entityInteractBonus = bonus;
+    }
+
+    @Inject(method = "canHarvest", at = @At(value = "HEAD"), cancellable = true)
+    public void canHarvest(BlockState state, CallbackInfoReturnable<Boolean> cir) {
+        cir.cancel();
+        cir.setReturnValue(true);
     }
 
 
@@ -123,14 +150,46 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         nbt.putInt("Phytonutrient", (int) this.phytonutrient);
     }
 
+
+    @Shadow
+    public double getEntityInteractionRange() {
+        return this.getAttributeValue(EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE);
+    }
+
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo ci) {
-        this.getMainHandStack().damage((int) (this.getMainHandStack().getMaxDamage()*0.25),this, EquipmentSlot.MAINHAND);
+//        this.getMainHandStack().damage((int) (this.getMainHandStack().getMaxDamage() * 0.25), this, EquipmentSlot.MAINHAND);
+//        this.sendMessage(Text.of(""+this.getEntityInteractionRange()));
 //        if (!this.getWorld().isClient) {
 //            this.sendMessage(Text.of("" + getPhytonutrient()));
 //        }
+//        ZombieEntity zombieEntity = new ZombieEntity(this.getWorld());
+
+//        int i = this.random.nextBetween(16,32);
+//        BlockPos blockpos1 = BlockPos.ofFloored(this.getPos().add(i,0,i));
+//        BlockPos blockpos2 = BlockPos.ofFloored(this.getPos().add(i,0,-i));
+//        BlockPos blockpos3 = BlockPos.ofFloored(this.getPos().add(-i,0,i));
+//        BlockPos blockpos4 = BlockPos.ofFloored(this.getPos().add(-i,0,-i));
+//
+//        int j =this.random.nextBetween(1,4);
+//        switch (j) {
+//            case 1:
+//                zombieEntity.setOnGround(true, Vec3d.of(blockpos1));
+//                break;
+//            case 2:
+//                zombieEntity.setOnGround(true, Vec3d.of(blockpos2));
+//                break;
+//            case 3:
+//                zombieEntity.setOnGround(true, Vec3d.of(blockpos3));
+//                break;
+//            case 4:
+//                zombieEntity.setOnGround(true, Vec3d.of(blockpos4));
+//                break;
+//            default:zombieEntity.setOnGround(true, Vec3d.of(blockpos1));
+//        }
 
     }
+
 
     //以下是修改方块交互距离
     @Inject(method = "getBlockInteractionRange", at = @At("HEAD"), cancellable = true)
@@ -145,23 +204,27 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         ItemStack itemstack = this.getMainHandStack();
 
         if (itemstack.isEnchantable()) {
-            if (itemstack.isIn(ItemTags.SHOVELS)) {
+            if (itemstack.isIn(ModItemTags.SHOVELS)) {
                 //铲子
                 setEntityInteractBonus(0.75f);
-            } else if (itemstack.isIn(ItemTags.PICKAXES)) {
+            } else if (itemstack.isIn(ModItemTags.PICKAXES)) {
                 //镐子
                 setEntityInteractBonus(0.75f);
-            } else if (itemstack.isIn(ItemTags.AXES)) {
+            } else if (itemstack.isIn(ModItemTags.AXES)) {
                 //斧子
                 setEntityInteractBonus(0.75f);
-            } else if (itemstack.isIn(ItemTags.SWORDS)) {
+            } else if (itemstack.isIn(ModItemTags.SWORDS)) {
                 //剑
                 setEntityInteractBonus(0.75f);
-            } else if (itemstack.isIn(ItemTags.HOES)) {
+            } else if (itemstack.isIn(ModItemTags.HOES)) {
                 //锄头
                 setEntityInteractBonus(0.75f);
-            } else if(itemstack.isIn(ModItemTags.HATCHET)){
+                //手斧
+            } else if (itemstack.isIn(ModItemTags.HATCHET)) {
                 setEntityInteractBonus(0.5f);
+            } else if (itemstack.isIn(ModItemTags.DAGGERS)) {
+                //小刀、匕首
+                setEntityInteractBonus(0.35f);
             }
 
         } else if (itemstack.isOf(Items.STICK) || itemstack.isOf(Items.BONE)) {
@@ -200,27 +263,69 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     }
 
 
-
-
-
     @Unique
     private int itemHarvest;
     @Unique
     private int blockHarvest;
+    @Shadow
+    @Final
+    PlayerInventory inventory;
 
 
+    @Shadow
+    @Nullable
+    public FishingBobberEntity fishHook;
 
+    @Shadow public abstract PlayerAbilities getAbilities();
+
+    @Shadow public abstract void playSound(SoundEvent sound, float volume, float pitch);
+
+    @Shadow public abstract boolean isMainPlayer();
 
     //修改挖掘速度
-    @Inject(method = "getBlockBreakingSpeed", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "getBlockBreakingSpeed", at = @At("HEAD"), cancellable = true)
     public void getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> cir) {
-
+        cir.cancel();
         ItemStack stack = this.getMainHandStack();
-        this.itemHarvest=getItemHarvertLevel(stack);
-        this.blockHarvest=getBlockHarvertLevel(block);
-        if(this.itemHarvest>=this.blockHarvest){
-            cir.setReturnValue(speed * (0.025F) * (1 + this.experienceLevel * 0.02F));
-        }else{
+        float f = this.inventory.getBlockBreakingSpeed(block);
+        if (f > 1.0F) {
+            f += (float) this.getAttributeValue(EntityAttributes.PLAYER_MINING_EFFICIENCY);
+        }
+
+        if (StatusEffectUtil.hasHaste(this)) {
+            f *= 1.0F + (float) (StatusEffectUtil.getHasteAmplifier(this) + 1) * 0.2F;
+        }
+
+        if (this.hasStatusEffect(StatusEffects.MINING_FATIGUE)) {
+            f *= switch (this.getStatusEffect(StatusEffects.MINING_FATIGUE).getAmplifier()) {
+                case 0 -> 0.3F;
+                case 1 -> 0.09F;
+                case 2 -> 0.0027F;
+                default -> 8.1E-4F;
+            };
+        }
+
+        f *= (float) this.getAttributeValue(EntityAttributes.PLAYER_BLOCK_BREAK_SPEED);
+        if (this.isSubmergedIn(FluidTags.WATER)) {
+            f *= (float) this.getAttributeInstance(EntityAttributes.PLAYER_SUBMERGED_MINING_SPEED).getValue();
+        }
+
+        if (!this.isOnGround()) {
+            f /= 5.0F;
+        }
+
+
+        if (stack.isSuitableFor(block)) {
+            f = f * 4;
+
+        }
+
+        this.itemHarvest = getItemHarvertLevel(stack);
+        this.blockHarvest = getBlockHarvertLevel(block);
+        if (this.itemHarvest >= this.blockHarvest) {
+
+            cir.setReturnValue(f * (0.040F) * (1 + this.experienceLevel * 0.02F));
+        } else {
             cir.setReturnValue(0f);
         }
 
@@ -281,11 +386,23 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     }
 
 
+
+
+
+    //获取时间,得到月相,决定是否触发月相事件
+
+    private String moonType;
+
+    //随机刻增益持续时长,用世界时间来记录是否过去了增益时间
+    private long randomTickBonusStart;
+    private long randomTickBonusShouldEnd;
+
+
+
     @Inject(method = "tick", at = @At("HEAD"))
     public void tick(CallbackInfo ci) {
         //刷新上限值,和Hud保持同步,都是1s20次刷新
         refreshPlayerFoodLevelAndMaxHealth();
-
         if (!this.isCreative()) {
             //在tick中加入生命回复任务
             int maxHealth = PlayerMaxHealthHelper.getMaxHealthLevel();
@@ -297,6 +414,99 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 //                MITEequilibrium.LOGGER.info("Natural Regeneration +1 ");
             }
         }
+
+
+
+        //最好不要无条件地重复执行gamerule
+        moonType = getMoonType(this.getWorld());
+
+        if(moonType!=null) {
+            //需要获得最新的世界数据,把worldRegistryKey放到tick里面来
+            RegistryKey<World> worldRegistryKey = this.getWorld().getRegistryKey();
+
+            //随机刻速度检查,不是黄月或者蓝月就恢复默认的随机刻速度
+
+            //不在主世界,一定不能获得随机刻增益
+            if (worldRegistryKey!=World.OVERWORLD && !this.getWorld().isClient) {
+                if (this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 3){
+                    this.sendMessage(Text.of("随机刻应该修改为3"));
+                    RandomTickModifier((ServerWorld) this.getWorld(), 3);
+                }
+            }
+            //月相事件,只在主世界进行
+            if (worldRegistryKey == World.OVERWORLD && !this.getWorld().isClient) {
+
+                //普通月相且无随机刻修改逻辑
+                boolean randomTickMoonType = (moonType.equals("blueMoon")) || (moonType.equals("harvestMoon")) || (moonType.equals("haloMoon"));
+                if (!randomTickMoonType)
+                    if(this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED)!=3){
+//                        RandomTickModifier((ServerWorld) this.getWorld(), ((ServerWorld) this.getWorld()).getPlayers().getFirst(), 3);
+                        this.sendMessage(Text.of("随机刻应该修改为3"));
+                        RandomTickModifier((ServerWorld) this.getWorld(), 3);}
+
+
+                //不是特殊月相,以下不执行
+                //改进,月相用枚举类
+
+
+
+
+                if (moonType.equals("bloodMoon")) {
+                    //this.getWorld()一定是服务器世界
+                    if (this.age % 100 == 0) {
+                        //执行间隔事件
+                        spawnMobNearPlayer((ServerWorld)this.getWorld());
+                        this.sendMessage(Text.of("血月升起,怪物刷新一次"));
+                    }
+                    if (this.age % this.random.nextBetween(50,64) == 0) {
+                        //执行间隔事件
+                        controlWeather((ServerWorld) this.getWorld());
+                        this.sendMessage(Text.of("雷电事件"));
+                    }
+                }
+
+
+
+
+
+
+                if (moonType.equals("harvestMoon") || (moonType.equals("haloMoon"))) {
+                    if(this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED)!=4)
+                        RandomTickModifier((ServerWorld) this.getWorld(), 4);
+                    if (this.age % 100 == 0) {
+                        //执行间隔事件
+                        this.sendMessage(Text.of("黄月/幻月升起,触发事件"));
+
+                    }
+                }
+                if (moonType.equals("fullMoon")) {
+                    if (this.age % 100 == 0)
+                        this.sendMessage(Text.of("满月升起,触发事件"));
+                }
+                if (moonType.equals("newMoon")) {
+                    if (this.age % 100 == 0)
+                        this.sendMessage(Text.of("新月升起,触发事件"));
+                }
+                if (moonType.equals("blueMoon")) {
+                    if(this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED)!=5)
+                        RandomTickModifier((ServerWorld) this.getWorld(), 5);
+                    if (this.age % 1200 == 0) {
+                        this.sendMessage(Text.of("蓝月升起,触发事件"));
+                        ServerWorld serverWorld = (ServerWorld) this.getWorld();
+                        //执行间隔事件
+                        spawnAnimalNearPlayer(serverWorld);
+                    }
+                    //应该是用world.找到所有玩家,这里无非就是避免客户端世界直接转服务器世界造成崩溃
+                    //待改进:应该是this.getWorld,如果不是客户端世界再执行spawnAnimal方法
+
+                }
+
+
+            }
+        }
+
+
+
         ShouldSentText.count++;
         if (!this.getWorld().isClient) {
             this.phytonutrient--;
@@ -305,14 +515,14 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             //溢出判断,大于192000就为192000,否则不动
             this.phytonutrient = this.phytonutrient > 192000 ? 192000 : this.phytonutrient;
             //施加饥饿效果
-            if (this.phytonutrient<100) {
-                if(!this.hasStatusEffect(StatusEffects.HUNGER)){
-                    StatusEffectInstance statusEffectInstance1 = new StatusEffectInstance(StatusEffects.HUNGER, -1,1, false,false,false);
-                    StatusEffectUtil.addEffectToPlayersWithinDistance((ServerWorld) this.getWorld(), this, this.getPos(), 4, statusEffectInstance1,-1);
+            if (this.phytonutrient < 100) {
+                if (!this.hasStatusEffect(StatusEffects.HUNGER)) {
+                    StatusEffectInstance statusEffectInstance1 = new StatusEffectInstance(StatusEffects.HUNGER, -1, 1, false, false, false);
+                    StatusEffectUtil.addEffectToPlayersWithinDistance((ServerWorld) this.getWorld(), this, this.getPos(), 4, statusEffectInstance1, -1);
 
                 }
-            }else{
-                if(this.hasStatusEffect(StatusEffects.HUNGER)){
+            } else {
+                if (this.hasStatusEffect(StatusEffects.HUNGER)) {
                     this.removeStatusEffect(StatusEffects.HUNGER);
                 }
             }
@@ -335,11 +545,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         int maxHealth = PlayerMaxHealthHelper.getMaxHealthLevel();
         this.dataTracker.set(HEALTH, MathHelper.clamp(health, 0.0F, maxHealth));
     }
-
-
-
-
-
 
 
 }

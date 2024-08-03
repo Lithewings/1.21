@@ -85,7 +85,7 @@ public abstract class MixinCraftingScreen extends HandledScreen<CraftingScreenHa
 			int l = (int) ((player.craftTime$getCraftTime() * 24.0F / player.craftTime$getCraftPeriod()));
 			//一旦中途退出,就失去所有进度渲染,直到再次摆出正确配方而且点击了目标合成物
 
-			MITEequilibrium.LOGGER.info(String.valueOf(l));
+//			MITEequilibrium.LOGGER.info(String.valueOf(l));
 
 			if (stopRenderArrow){
 				return;

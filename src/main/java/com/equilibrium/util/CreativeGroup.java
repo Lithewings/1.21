@@ -1,7 +1,7 @@
 package com.equilibrium.util;
 
 import com.equilibrium.MITEequilibrium;
-import com.equilibrium.register.BlockInit;
+import com.equilibrium.craft_time_register.BlockInit;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;

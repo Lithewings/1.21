@@ -1,6 +1,9 @@
 {
   "values": [
-    "#minecraft:diamond_ores"
+    "#minecraft:diamond_ores",
 
+
+
+    "minecraft:iron_block"
   ]
 }

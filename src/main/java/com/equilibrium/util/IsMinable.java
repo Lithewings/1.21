@@ -1,7 +1,7 @@
 package com.equilibrium.util;
 
-import com.equilibrium.register.tags.ModBlockTags;
-import com.equilibrium.register.tags.ModItemTags;
+import com.equilibrium.tags.ModBlockTags;
+import com.equilibrium.tags.ModItemTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 
@@ -13,6 +13,10 @@ public class IsMinable {
             return 2;
         } else if (block.isIn(ModBlockTags.HARVEST_THREE)) {
             return 3;
+        } else if (block.isIn(ModBlockTags.HARVEST_FOUR)) {
+            return 4;
+        } else if (block.isIn(ModBlockTags.HARVEST_FIVE)) {
+            return 5;
         }else
             return 0;
     }
@@ -25,6 +29,8 @@ public class IsMinable {
             return 3;
         } else if (stack.isIn(ModItemTags.HARVEST_FOUR)) {
             return 4;
+        } else if (stack.isIn(ModItemTags.HARVEST_FIVE)) {
+            return 5;
         }else
             //空手采集
             return 0;

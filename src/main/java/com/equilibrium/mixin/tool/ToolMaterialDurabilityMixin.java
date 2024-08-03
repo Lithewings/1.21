@@ -52,7 +52,7 @@ public abstract class ToolMaterialDurabilityMixin {
 
     @Inject(method = "getDurability",at = @At(value = "HEAD"),cancellable = true)
     public void getDurability(CallbackInfoReturnable<Integer> cir) {
-        LOGGER.info(String.valueOf(this.inverseTag));
+//        LOGGER.info(String.valueOf(this.inverseTag));
         if (Objects.equals(String.valueOf(this.inverseTag), "TagKey[minecraft:block / minecraft:incorrect_for_wooden_tool]"))
             cir.setReturnValue(160);
         else if (Objects.equals(String.valueOf(this.inverseTag),"TagKey[minecraft:block / minecraft:incorrect_for_gold_tool]"))

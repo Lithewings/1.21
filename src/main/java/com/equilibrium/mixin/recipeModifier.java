@@ -1,6 +1,7 @@
 package com.equilibrium.mixin;
 
-import com.equilibrium.register.BlockInit;
+import com.equilibrium.item.Tools;
+import com.equilibrium.tags.ModItemTags;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.RecipeInputInventory;
@@ -48,34 +49,55 @@ public abstract class recipeModifier {
                 }
             }
             //合成表过滤器,按照物品频率排序
-            if(itemStack.isOf(Items.WOODEN_SWORD)){
+
+
+            //先删除要移除的物品
+            if(itemStack.isIn(ModItemTags.REMOVEITEM))
                 itemStack = ItemStack.EMPTY;
-            }
-            if(itemStack.isOf(Items.WOODEN_AXE)){
-                itemStack = ItemStack.EMPTY;
-            }
-            if(itemStack.isOf(Items.WOODEN_HOE)){
-                itemStack = ItemStack.EMPTY;
-            }
-            if(itemStack.isOf(Items.WOODEN_PICKAXE)){
-                itemStack = ItemStack.EMPTY;
+
+
+
+
+            //斧子中,替换铁,金
+            if(itemStack.isIn(ModItemTags.AXES)){
+                if(itemStack.isOf(Items.IRON_AXE))
+                    itemStack = Tools.IRON_AXE.getDefaultStack();
+
+                if(itemStack.isOf(Items.GOLDEN_AXE))
+                    itemStack = Tools.GOLD_AXE.getDefaultStack();
             }
 
-            if(itemStack.isOf(Items.STONE_SWORD)){
-                itemStack = ItemStack.EMPTY;
+            if(itemStack.isIn(ModItemTags.HOES)){
+                if(itemStack.isOf(Items.IRON_HOE))
+                    itemStack = Tools.IRON_HOE.getDefaultStack();
+
+                if(itemStack.isOf(Items.GOLDEN_HOE))
+                    itemStack = Tools.GOLD_HOE.getDefaultStack();
             }
-            if(itemStack.isOf(Items.STONE_PICKAXE)){
-                itemStack = ItemStack.EMPTY;
+
+            if(itemStack.isIn(ModItemTags.SHOVELS)){
+                if(itemStack.isOf(Items.IRON_SHOVEL))
+                    itemStack = Tools.IRON_AXE.getDefaultStack();
+
+                if(itemStack.isOf(Items.GOLDEN_SHOVEL))
+                    itemStack = Tools.GOLD_SHOVEL.getDefaultStack();
             }
-            if(itemStack.isOf(Items.STONE_AXE)){
-                itemStack = ItemStack.EMPTY;
+
+            if(itemStack.isIn(ModItemTags.SWORDS)){
+                if(itemStack.isOf(Items.IRON_SWORD))
+                    itemStack = Tools.IRON_SWORD.getDefaultStack();
+
+                if(itemStack.isOf(Items.GOLDEN_SWORD))
+                    itemStack = Tools.GOLD_SWORD.getDefaultStack();
             }
-            if(itemStack.isOf(Items.STONE_HOE)){
-                itemStack = ItemStack.EMPTY;
+            if(itemStack.isIn(ModItemTags.PICKAXES)){
+                if(itemStack.isOf(Items.IRON_PICKAXE))
+                    itemStack = Tools.IRON_PICKAXE.getDefaultStack();
+
+                if(itemStack.isOf(Items.GOLDEN_PICKAXE))
+                    itemStack = Tools.GOLD_PICKAXE.getDefaultStack();
             }
-            if(itemStack.isOf(Items.STONE_SHOVEL)){
-                itemStack = ItemStack.EMPTY;
-            }
+
 
 
 

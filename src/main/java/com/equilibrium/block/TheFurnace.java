@@ -3,7 +3,7 @@ package com.equilibrium.block;
 
 import com.equilibrium.block.blockentity.TheFurnaceEntity;
 
-import com.equilibrium.register.BlockEnityRegistry;
+import com.equilibrium.craft_time_register.BlockEnityRegistry;
 
 
 import com.mojang.serialization.MapCodec;

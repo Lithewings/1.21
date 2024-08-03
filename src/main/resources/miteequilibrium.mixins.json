@@ -5,17 +5,18 @@
   "mixins": [
     "BiomeMixin",
     "BlocksMixin",
+    "EntitySpawner",
     "GrassColorsMixin",
-    "IdentifierMixin",
+    "ItemMixin",
     "MITEequilibriumMixin",
     "recipeModifier",
     "crafttime.ScreenHandlerMixin",
-
     "entitymixin.CowEntityMixin",
+    "entitymixin.HostileAttributesMixin",
+    "entitymixin.SkeletonEntityMixin",
+    "entitymixin.ZombieEntityMixin",
+    "entitymixin.goal_mixin.LookAtEntityGoalMixin",
     "loot_table.BlockLootTableMixin",
-    "oreGenerator.OreConfiguredModify",
-    "oreGenerator.OrePlacedModifiy",
-    "oreGenerator.PlacedFeaturesMixin",
     "player.HungerManagerMixin",
     "player.PlayerEntityMixin",
     "player.PlayerManagerMixin",
@@ -35,8 +36,8 @@
     "tables.PlayerManagerMixin",
     "tables.PlayerScreenHandlerAccessor",
     "tables.PlayerScreenHandlerMixin",
-    "tool.PickaxeItemMixin",
-    "tool.ToolMaterialDurabilityMixin"
+    "tool.ToolMaterialDurabilityMixin",
+    "world.ServerWorldMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -47,8 +48,8 @@
     "crafttime.MixinClientPlayerEntity",
     "crafttime.MixinCraftingScreen",
     "crafttime.MixinInventoryScreen",
-    "render.DebugHudMixin",
     "render.InGameHudMixin",
-    "render.WorldRendererMixin"
+    "render.WorldRendererMixin",
+    "world.EditGameRulesScreenMixin"
   ]
 }

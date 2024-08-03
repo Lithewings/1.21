@@ -72,27 +72,27 @@ public class CraftingDifficultyHelper {
 	}
 
 	public static float getDifficulty(Item item) {
-		String name =  Registries.ITEM.getId(item).toString();
-		if(item==Items.IRON_BLOCK){
-			return 3200*9;
-		}
-		if(item==Items.IRON_INGOT){
-			return 3200F;
-		}
-		if(item==Items.GOLD_INGOT){
-			return 1600F;
-		}
-		if(item==Items.DIAMOND){
-			return 25600F;
-		}
-		if(item==Items.NETHERITE_INGOT){
-			return 25600*4F;
-		}
-
-
-		if(CommonConfig.craftItemTimeMap.containsKey(name)){
-			return CommonConfig.craftItemTimeMap.get(name);
-		}
+//		String name =  Registries.ITEM.getId(item).toString();
+//		if(item==Items.IRON_BLOCK){
+//			return 3200*9;
+//		}
+//		if(item==Items.IRON_INGOT){
+//			return 3200F;
+//		}
+//		if(item==Items.GOLD_INGOT){
+//			return 1600F;
+//		}
+//		if(item==Items.DIAMOND){
+//			return 25600F;
+//		}
+//		if(item==Items.NETHERITE_INGOT){
+//			return 25600*4F;
+//		}
+//
+//
+//		if(CommonConfig.craftItemTimeMap.containsKey(name)){
+//			return CommonConfig.craftItemTimeMap.get(name);
+//		}
 
 		return 20F;
 	}

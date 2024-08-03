@@ -1,7 +1,7 @@
 package com.equilibrium.block.blockentity;
 
-import com.equilibrium.register.BlockEnityRegistry;
-import com.equilibrium.register.BlockInit;
+import com.equilibrium.craft_time_register.BlockEnityRegistry;
+import com.equilibrium.craft_time_register.BlockInit;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;

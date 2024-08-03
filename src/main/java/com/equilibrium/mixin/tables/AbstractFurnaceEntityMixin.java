@@ -2,8 +2,8 @@ package com.equilibrium.mixin.tables;
 
 import com.equilibrium.config.CommonConfig;
 
-import com.equilibrium.register.BlockInit;
-import com.equilibrium.worklevel.FurnaceIngredients;
+import com.equilibrium.craft_time_register.BlockInit;
+import com.equilibrium.craft_time_worklevel.FurnaceIngredients;
 import com.google.common.collect.Maps;
 import net.minecraft.SharedConstants;
 import net.minecraft.block.Block;

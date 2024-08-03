@@ -146,8 +146,7 @@ public abstract class LightmapTextureManagerMixin {
 
                         float v = this.client.options.getGamma().getValue().floatValue();
                         Vector3f vector3f5 = new Vector3f(this.easeOutQuart(vector3f2.x), this.easeOutQuart(vector3f2.y), this.easeOutQuart(vector3f2.z));
-                        //伽马值修正
-                        vector3f2.lerp(vector3f5, 0F);
+
 
                         //原来的代码:
                         //vector3f2.lerp(vector3f5, Math.max(0.0F, v - i));
@@ -160,31 +159,45 @@ public abstract class LightmapTextureManagerMixin {
                             LOGGER.info("moonType is null");
                             WorldMoonPhasesSelector.setMoonType(clientWorld.getTimeOfDay());
                         }
+                        //夜视增益
+                        float nightVision = 0;
+
+
 
                         //返回方块底色颜色浓淡的因子
                         float factor = MoonlightController.calculateFactor(clientWorld.getTimeOfDay());
 //                        LOGGER.info("light factor is " +factor);
                         if(Objects.equals(moonType, "blueMoon")|| Objects.equals(moonType, "haloMoon")){
                             //蓝色月亮渲染
+                            //伽马值修正
+                            vector3f2.lerp(vector3f5, 0.1F+nightVision);
 //                            LOGGER.info("Blue Moonlight rendering.");
                             vector3f2.lerp(new Vector3f(0F, 0F, factor), 0.04F);
                         } else if (Objects.equals(moonType, "harvestMoon")) {
+                            //伽马值修正
+                            vector3f2.lerp(vector3f5, 0.1F+nightVision);
                             //黄色月亮渲染
 //                            LOGGER.info("Yellow Moonlight rendering.");
                             vector3f2.lerp(new Vector3f(factor, factor, 0F), 0.04F);
                         } else if (Objects.equals(moonType, "bloodMoon")) {
+                            //伽马值修正
+                            vector3f2.lerp(vector3f5, 0F+nightVision);
                             //红色月亮渲染
 //                            LOGGER.info("Blood Moonlight rendering.");
-                            vector3f2.lerp(new Vector3f(factor,0F, 0F), 0.04F);
-                        }else {
+                            vector3f2.lerp(new Vector3f(factor,0F, 0F), 0F);}
+
+                        else if (Objects.equals(moonType, "newMoon")) {
+                                //伽马值修正
+                                vector3f2.lerp(vector3f5, 0F+nightVision);
+                                //新月渲染
+//                            LOGGER.info("Blood Moonlight rendering.");
+                                vector3f2.lerp(new Vector3f(factor,0F, 0F), 0F);
+                            }else {
+                            //伽马值修正
+                            vector3f2.lerp(vector3f5, 0.04F+nightVision);
 //                            LOGGER.info("Normal Moonlight rendering.");
                             vector3f2.lerp(new Vector3f(0.75F, 0.75F, 0.75F), 0F);
                         }
-
-
-
-
-
 
                         clamp(vector3f2);
                         vector3f2.mul(255.0F);

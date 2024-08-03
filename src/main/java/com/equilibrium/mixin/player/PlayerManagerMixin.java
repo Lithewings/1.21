@@ -1,5 +1,6 @@
 package com.equilibrium.mixin.player;
 
+import com.equilibrium.constant.MaxCount;
 import com.equilibrium.util.PlayerMaxHealthHelper;
 import com.equilibrium.util.PlayerMaxHungerHelper;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -37,6 +38,11 @@ public abstract class PlayerManagerMixin {
         LOGGER.info("When finishing connect,the player xp level is "+player.experienceLevel);
 
         LOGGER.info("When finishing connect,the player health level is "+player.getHealth());
+
+        if(player.experienceLevel>50)
+            MaxCount.vanillaMaxCount=true;
+        else
+            MaxCount.vanillaMaxCount=false;
 
         int initializedMaxHealth = player.experienceLevel >=35 ? 20 : 6 +(int)(player.experienceLevel/5)*2;
         PlayerMaxHealthHelper.setMaxHealthLevel(initializedMaxHealth);

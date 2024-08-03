@@ -1,5 +1,35 @@
 {
   "values": [
-    "miteequilibrium:flint_hatchet"
+    "miteequilibrium:flint_hatchet",
+
+
+    "miteequilibrium:flint_axe",
+    "miteequilibrium:gold_axe",
+    "miteequilibrium:mithril_axe",
+    "miteequilibrium:iron_axe",
+    "miteequilibrium:copper_axe",
+    "miteequilibrium:adamantium_axe",
+
+    "miteequilibrium:flint_shovel",
+    "miteequilibrium:gold_shovel",
+    "miteequilibrium:mithril_shovel",
+    "miteequilibrium:iron_shovel",
+    "miteequilibrium:copper_shovel",
+    "miteequilibrium:adamantium_shovel",
+
+    "miteequilibrium:silver_sword",
+    "miteequilibrium:gold_sword",
+    "miteequilibrium:mithril_sword",
+    "miteequilibrium:iron_sword",
+    "miteequilibrium:copper_sword",
+    "miteequilibrium:adamantium_sword",
+
+    "miteequilibrium:silver_dagger",
+    "miteequilibrium:gold_dagger",
+    "miteequilibrium:mithril_dagger",
+    "miteequilibrium:iron_dagger",
+    "miteequilibrium:copper_dagger",
+    "miteequilibrium:adamantium_dagger"
+
   ]
 }

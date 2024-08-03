@@ -1,7 +1,7 @@
 package com.equilibrium.block;
 
 
-import com.equilibrium.register.BlockInit;
+import com.equilibrium.craft_time_register.BlockInit;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CraftingTableBlock;

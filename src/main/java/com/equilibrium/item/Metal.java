@@ -18,13 +18,23 @@ public class Metal {
     public static final Item mithril = new Item(new Item.Settings());
     public static final Item silver = new Item(new Item.Settings());
 
+    //maxCount = 32
+    public static final Item adamantium_nugget= new Item(new Item.Settings().maxCount(64));
+    public static final Item ancient_metal_nugget= new Item(new Item.Settings().maxCount(64));
+    public static final Item copper_nugget = new Item(new Item.Settings().maxCount(64));
+    public static final Item gold_nugget = new Item(new Item.Settings().maxCount(64));
+    public static final Item mithril_nugget = new Item(new Item.Settings().maxCount(64));
+    public static final Item silver_nugget = new Item(new Item.Settings().maxCount(64));
 
-    public static final Item adamantium_nugget= new Item(new Item.Settings());
-    public static final Item ancient_metal_nugget= new Item(new Item.Settings());
-    public static final Item copper_nugget = new Item(new Item.Settings());
-    public static final Item gold_nugget = new Item(new Item.Settings());
-    public static final Item mithril_nugget = new Item(new Item.Settings());
-    public static final Item silver_nugget = new Item(new Item.Settings());
+
+    public static final Item FLINT = new Item(new Item.Settings().maxCount(64));
+
+
+
+
+
+
+
 
     public static void registerModItemIngots() {
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","adamantium"), adamantium);
@@ -33,6 +43,8 @@ public class Metal {
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","gold"), gold);
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","mithril"), mithril);
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","silver"), silver);
+
+        Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","flint"), FLINT);
     }
     public static void registerModItemNuggets(){
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","adamantium_nugget"), adamantium_nugget);

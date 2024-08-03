@@ -31,9 +31,8 @@ public class ModItemGroup {
     //工具栏
     public static final ItemGroup modTools = Registry.register(Registries.ITEM_GROUP, Identifier.of(MITEequilibrium.MOD_ID,"toolsgroup"),
             FabricItemGroup.builder().displayName(Text.translatable("itemgroup.toolsgroup"))
-                    .icon(()->new ItemStack(Tools.adamantium_axe)).entries((displayContext, entries) ->
+                    .icon(()->new ItemStack(Tools.ADAMANTIUM_AXE)).entries((displayContext, entries) ->
                             {
-                                entries.add(Tools.adamantium_axe);
                             }
                     ).build());
 
@@ -48,6 +47,7 @@ public class ModItemGroup {
                                 entries.add(Metal.gold);
                                 entries.add(Metal.mithril);
                                 entries.add(Metal.silver);
+                                entries.add(Metal.FLINT);
 
                                 entries.add(Metal.adamantium_nugget);
                                 entries.add(Metal.ancient_metal_nugget);
@@ -70,6 +70,45 @@ public class ModItemGroup {
                                 entries.add(ModBlocks.SILVER_ORE);
 
                                 entries.add(Tools.FLINT_HATCHET);
+                                entries.add(Tools.FLINT_AXE);
+                                entries.add(Tools.FLINT_KNIFE);
+                                entries.add(Tools.FLINT_SHOVEL);
+
+                                entries.add(Tools.ADAMANTIUM_AXE);
+                                entries.add(Tools.COPPER_AXE);
+                                entries.add(Tools.GOLD_AXE);
+                                entries.add(Tools.MITHRIL_AXE);
+                                entries.add(Tools.SILVER_AXE);
+                                entries.add(Tools.IRON_AXE);
+
+                                entries.add(Tools.ADMANTIUM_HOE);
+                                entries.add(Tools.COPPER_HOE);
+                                entries.add(Tools.GOLD_HOE);
+                                entries.add(Tools.MITHRIL_HOE);
+                                entries.add(Tools.SILVER_HOE);
+                                entries.add(Tools.IRON_HOE);
+
+                                entries.add(Tools.ADMANTIUM_SHOVEL);
+                                entries.add(Tools.COPPER_SHOVEL);
+                                entries.add(Tools.GOLD_SHOVEL);
+                                entries.add(Tools.MITHRIL_SHOVEL);
+                                entries.add(Tools.SILVER_SHOVEL);
+                                entries.add(Tools.IRON_SHOVEL);
+
+                                entries.add(Tools.ADMANTIUM_SWORD);
+                                entries.add(Tools.COPPER_SWORD);
+                                entries.add(Tools.GOLD_SWORD);
+                                entries.add(Tools.MITHRIL_SWORD);
+                                entries.add(Tools.SILVER_SWORD);
+                                entries.add(Tools.IRON_SWORD);
+
+                                entries.add(Tools.ADMANTIUM_PICKAXE);
+                                entries.add(Tools.GOLD_PICKAXE);
+                                entries.add(Tools.COPPER_PICKAXE);
+                                entries.add(Tools.IRON_PICKAXE);
+                                entries.add(Tools.MITHRIL_PICKAXE);
+                                entries.add(Tools.SILVER_PICKAXE);
+
 
                             }
                     ).build());

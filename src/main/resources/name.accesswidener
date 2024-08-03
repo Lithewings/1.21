@@ -2,8 +2,21 @@ accessWidener v1 named
 
 
 
+accessible method net/minecraft/entity/mob/ZombieEntity initCustomGoals ()V
+accessible class net/minecraft/entity/mob/ZombieEntity$DestroyEggGoal
 
 
+accessible field net/minecraft/server/world/ServerChunkManager$ChunkWithHolder holder Lnet/minecraft/server/world/ChunkHolder;
+
+accessible class net/minecraft/server/world/ServerChunkManager$ChunkWithHolder
+
+accessible method net/minecraft/server/world/ServerChunkLoadingManager shouldTick (Lnet/minecraft/util/math/ChunkPos;)Z
+
+accessible field net/minecraft/server/world/ServerChunkManager$ChunkWithHolder chunk Lnet/minecraft/world/chunk/WorldChunk;
+
+accessible method net/minecraft/server/world/ServerChunkLoadingManager getChunkHolder (J)Lnet/minecraft/server/world/ChunkHolder;
+accessible method net/minecraft/server/world/ServerChunkLoadingManager entryIterator ()Ljava/lang/Iterable;
+accessible class net/minecraft/server/world/ServerChunkManager$ChunkWithHolder
 accessible field net/minecraft/item/ToolItem material Lnet/minecraft/item/ToolMaterial;
 accessible class net/minecraft/structure/pool/StructurePoolBasedGenerator$StructurePoolGenerator
 accessible field net/minecraft/entity/LivingEntity lastDamageSource Lnet/minecraft/entity/damage/DamageSource;

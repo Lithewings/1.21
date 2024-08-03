@@ -2,46 +2,48 @@ package com.equilibrium;
 
 import com.equilibrium.block.ModBlocks;
 
+import com.equilibrium.craft_time_register.BlockInit;
+import com.equilibrium.craft_time_register.UseBlock;
 import com.equilibrium.event.BreakBlockEvent;
 import com.equilibrium.item.Metal;
 import com.equilibrium.item.ModItemGroup;
 import com.equilibrium.item.ModItems;
 import com.equilibrium.item.Tools;
-import com.equilibrium.register.tags.ModItemTags;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import com.equilibrium.config.Config;
-import com.equilibrium.register.BlockEnityRegistry;
-import com.equilibrium.register.BlockInit;
-import com.equilibrium.register.UseBlock;
+import com.equilibrium.craft_time_register.BlockEnityRegistry;
+
 import com.equilibrium.event.sound.SoundEventRegistry;
 import com.equilibrium.util.CreativeGroup;
-import com.equilibrium.worklevel.CraftingIngredients;
-import com.equilibrium.worklevel.FurnaceIngredients;
+import com.equilibrium.craft_time_worklevel.CraftingIngredients;
+import com.equilibrium.craft_time_worklevel.FurnaceIngredients;
 
 
 import static com.equilibrium.entity.ModEntities.registerModEntities;
 
 
-import static com.equilibrium.register.tags.ModBlockTags.registerModBlockTags;
-import static com.equilibrium.register.tags.ModItemTags.registerModItemTags;
+import static com.equilibrium.tags.ModBlockTags.registerModBlockTags;
+import static com.equilibrium.tags.ModItemTags.registerModItemTags;
 import static com.equilibrium.util.LootTableModifier.modifierLootTables;
 
-import static com.equilibrium.worldgen.ModPlacementGenerator.registerModOre;
+import static com.equilibrium.ore_generator.ModPlacementGenerator.registerModOre;
 
 
 public class MITEequilibrium implements ModInitializer {
 
 	public static final String MOD_ID = "miteequilibrium";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-
 
 	public static Config config;
 
@@ -86,6 +88,9 @@ public class MITEequilibrium implements ModInitializer {
 		//创建标签
 		registerModBlockTags();
 		registerModItemTags();
+
+
+
 
 
 
