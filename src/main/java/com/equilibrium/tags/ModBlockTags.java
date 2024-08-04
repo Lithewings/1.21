@@ -25,6 +25,14 @@ public class ModBlockTags {
     public static final TagKey<Block> HARVEST_THREE = of("block_harvest_3");
     public static final TagKey<Block> HARVEST_FOUR = of("block_harvest_4");
     public static final TagKey<Block> HARVEST_FIVE = of("block_harvest_5");
+
+
+    public static final TagKey<Block> TRANSPARENT_FOR_ZOMBIE= of("transparent_for_zombie");
+
+
+
+
+
     private static TagKey<Block> of(String id) {
         return TagKey.of(RegistryKeys.BLOCK, Identifier.of("miteequilibrium",id));
     }

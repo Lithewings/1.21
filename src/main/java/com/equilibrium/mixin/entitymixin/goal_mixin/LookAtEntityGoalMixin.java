@@ -17,13 +17,4 @@ import java.util.EnumSet;
 
 @Mixin(LookAtEntityGoal.class)
 public abstract class LookAtEntityGoalMixin {
-    @Shadow
-    private int lookTime;
-    @Shadow
-    @Final
-    protected MobEntity mob;
-    @Shadow
-    @Final
-    protected float chance = 1;
-
 }

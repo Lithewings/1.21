@@ -2,6 +2,9 @@ accessWidener v1 named
 
 
 
+
+accessible field net/minecraft/entity/damage/DamageTracker recentlyAttacked Z
+accessible method net/minecraft/entity/ai/TargetPredicate <init> (Z)V
 accessible method net/minecraft/entity/mob/ZombieEntity initCustomGoals ()V
 accessible class net/minecraft/entity/mob/ZombieEntity$DestroyEggGoal
 
