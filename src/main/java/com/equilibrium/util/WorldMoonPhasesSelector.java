@@ -4,7 +4,7 @@ import net.minecraft.world.World;
 
 public class WorldMoonPhasesSelector {
     private static String moonType=null;
-
+    private static int day;
 
     static boolean fullMoon;
     static boolean newMoon;
@@ -169,7 +169,7 @@ public class WorldMoonPhasesSelector {
     }
 
     public static int getDay(float time){
-        int day =(int)(time / 24000L) % 128;
+        day =(int)(time / 24000L) % 128;
         return day;
     }
 

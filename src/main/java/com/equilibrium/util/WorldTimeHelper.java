@@ -1,8 +1,12 @@
 package com.equilibrium.util;
 
 public class WorldTimeHelper {
-    public static int getDay(long time){
-        int day =(int)(time / 24000L);
+    private static int day;
+    public static void setDay(long time){
+        day =(int)( time / 24000L);
+    }
+
+    public static int getDay() {
         return day;
     }
 }

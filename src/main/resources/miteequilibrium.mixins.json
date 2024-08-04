@@ -26,6 +26,7 @@
     "portal.NetherPortalBlockMixin",
     "portal.NetherPortalMixin",
     "portal.PortalForcerMixin",
+    "structure.RandomSpreadStructurePlacementMixin",
     "structure.strong_hold.ConcentricRingsStructurePlacementMixin",
     "structure.strong_hold.StrongholdGeneratorMixin",
     "structure.strong_hold.StrongholdGeneratorStartMixin",

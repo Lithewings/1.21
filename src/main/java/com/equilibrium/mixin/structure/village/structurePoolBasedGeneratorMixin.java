@@ -1,5 +1,6 @@
 package com.equilibrium.mixin.structure.village;
 
+import com.equilibrium.util.WorldTimeHelper;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
@@ -48,15 +49,27 @@ public class structurePoolBasedGeneratorMixin {
 
     @Inject(method = "generate(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/registry/entry/RegistryEntry;Lnet/minecraft/util/Identifier;ILnet/minecraft/util/math/BlockPos;Z)Z", at = @At("HEAD"), cancellable = true)
     private static void generate(ServerWorld world, RegistryEntry<StructurePool> structurePool, Identifier id, int size, BlockPos pos, boolean keepJigsaws, CallbackInfoReturnable<Boolean> cir) {
-        if (regEntryContains(structurePool, "village")) {
-            cir.setReturnValue(false);
-            cir.cancel();
+        if(WorldTimeHelper.getDay()>=32){
+//            if (regEntryContains(structurePool, "village")) {
+//                cir.setReturnValue(false);
+//                cir.cancel();
+//            }
+        }else{
+        cir.setReturnValue(false);
+        cir.cancel();
         }
+
     }
 
     @Inject(method = "generate(Lnet/minecraft/world/gen/structure/Structure$Context;Lnet/minecraft/registry/entry/RegistryEntry;Ljava/util/Optional;ILnet/minecraft/util/math/BlockPos;ZLjava/util/Optional;ILnet/minecraft/structure/pool/alias/StructurePoolAliasLookup;Lnet/minecraft/world/gen/structure/DimensionPadding;Lnet/minecraft/structure/StructureLiquidSettings;)Ljava/util/Optional;", at = @At("HEAD"), cancellable = true)
     private static void generate(Structure.Context context, RegistryEntry<StructurePool> structurePool, Optional<Identifier> id, int size, BlockPos pos, boolean useExpansionHack, Optional<Heightmap.Type> projectStartToHeightmap, int maxDistanceFromCenter, StructurePoolAliasLookup aliasLookup, DimensionPadding dimensionPadding, StructureLiquidSettings liquidSettings, CallbackInfoReturnable<Optional<Structure.StructurePosition>> cir) {
-        if (regEntryContains(structurePool, "village")) {
+        if(WorldTimeHelper.getDay()>=32) {
+//            if (regEntryContains(structurePool, "village")) {
+//                cir.setReturnValue(Optional.empty());
+//                cir.cancel();
+//            }
+        }
+        else{
             cir.setReturnValue(Optional.empty());
             cir.cancel();
         }
@@ -66,14 +79,17 @@ public class structurePoolBasedGeneratorMixin {
     private static class StructurePoolGeneratorMixin {
         @Inject(method = "generatePiece", at = @At("HEAD"), cancellable = true)
         void generatePiece(PoolStructurePiece piece, MutableObject<VoxelShape> pieceShape, int minY, boolean modifyBoundingBox, HeightLimitView world, NoiseConfig noiseConfig, StructurePoolAliasLookup aliasLookup, StructureLiquidSettings liquidSettings, CallbackInfo ci) {
-            if (piece == null) return;
-            StructurePoolElement element = piece.getPoolElement();
-            if (element == null) return;
-            StructurePoolElementType<?> type = element.getType();
-            if (type == null) return;
-            if (type.toString().contains("village")) {
+            if(WorldTimeHelper.getDay()>=32) {
+//                if (piece == null) return;
+//                StructurePoolElement element = piece.getPoolElement();
+//                if (element == null) return;
+//                StructurePoolElementType<?> type = element.getType();
+//                if (type == null) return;
+//                if (type.toString().contains("village")) {
+//                    ci.cancel();
+//                }
+            }else
                 ci.cancel();
-            }
         }
     }
 
