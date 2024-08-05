@@ -6,6 +6,8 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ToolComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,11 +21,12 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class MetalHoe extends MiningToolItem{
+public class MetalHoe extends ToolItem{
     /**
      * A map of input blocks to predicate-consumer action pairs.
      *
@@ -45,8 +48,16 @@ public class MetalHoe extends MiningToolItem{
             )
     );
 
+
     public MetalHoe(ToolMaterial toolMaterial, Item.Settings settings) {
-        super(toolMaterial, BlockTags.HOE_MINEABLE, settings);
+        super(toolMaterial,settings.component(DataComponentTypes.TOOL, createToolComponent()));
+    }
+
+
+    private static ToolComponent createToolComponent() {
+        return new ToolComponent(
+                List.of(ToolComponent.Rule.ofAlwaysDropping(BlockTags.HOE_MINEABLE, 4F)), 1.0F, 0
+        );
     }
 
     @Override

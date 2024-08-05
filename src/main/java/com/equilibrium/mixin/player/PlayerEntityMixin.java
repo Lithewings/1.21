@@ -1,6 +1,7 @@
 package com.equilibrium.mixin.player;
 
 import com.equilibrium.event.MoonPhaseEvent;
+import com.equilibrium.status.registerStatusEffect;
 import com.equilibrium.tags.ModItemTags;
 import com.equilibrium.util.PlayerMaxHealthHelper;
 import com.equilibrium.util.PlayerMaxHungerHelper;
@@ -187,7 +188,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 //                break;
 //            default:zombieEntity.setOnGround(true, Vec3d.of(blockpos1));
 //        }
-
+        if(!this.getWorld().isClient)
+            this.phytonutrient=0;
     }
 
 
@@ -417,7 +419,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
 
 
-        //最好不要无条件地重复执行gamerule
         moonType = getMoonType(this.getWorld());
 
         if(moonType!=null) {
@@ -516,14 +517,14 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             this.phytonutrient = this.phytonutrient > 192000 ? 192000 : this.phytonutrient;
             //施加饥饿效果
             if (this.phytonutrient < 100) {
-                if (!this.hasStatusEffect(StatusEffects.HUNGER)) {
-                    StatusEffectInstance statusEffectInstance1 = new StatusEffectInstance(StatusEffects.HUNGER, -1, 1, false, false, false);
-                    StatusEffectUtil.addEffectToPlayersWithinDistance((ServerWorld) this.getWorld(), this, this.getPos(), 4, statusEffectInstance1, -1);
+                if (!this.hasStatusEffect(registerStatusEffect.PHYTONUTRIENT)) {
+                    StatusEffectInstance statusEffectInstance1 = new StatusEffectInstance(registerStatusEffect.PHYTONUTRIENT, -1, 1, false, false, false);
+                    StatusEffectUtil.addEffectToPlayersWithinDistance((ServerWorld) this.getWorld(), this, this.getPos(), 16, statusEffectInstance1, -1);
 
                 }
             } else {
-                if (this.hasStatusEffect(StatusEffects.HUNGER)) {
-                    this.removeStatusEffect(StatusEffects.HUNGER);
+                if (this.hasStatusEffect(registerStatusEffect.PHYTONUTRIENT)) {
+                    this.removeStatusEffect(registerStatusEffect.PHYTONUTRIENT);
                 }
             }
 

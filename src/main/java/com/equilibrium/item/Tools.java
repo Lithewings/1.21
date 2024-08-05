@@ -75,12 +75,12 @@ public class Tools {
     public static final Item MITHRIL_SWORD = createMetalSwordItem(ModToolMaterials.MITHRIL_SWORD,9,3f);
     public static final Item ADMANTIUM_SWORD =createMetalSwordItem(ModToolMaterials.ADAMANTIUM_SHOVEL,10,3f);
 
-    public static final Item COPPER_DAGGER = createMetalSwordItem(ModToolMaterials.COOPER_DAGGER,6,4f);
-    public static final Item GOLD_DAGGER = createMetalSwordItem(ModToolMaterials.GOLD_DAGGER,6,4f);
-    public static final Item SILVER_DAGGER = createMetalSwordItem(ModToolMaterials.SILVER_DAGGER,6,4f);
-    public static final Item IRON_DAGGER = createMetalSwordItem(ModToolMaterials.IRON_DAGGER,7,4f);
-    public static final Item MITHRIL_DAGGER = createMetalSwordItem(ModToolMaterials.MITHRIL_DAGGER,8,4f);
-    public static final Item ADMANTIUM_DAGGER =createMetalSwordItem(ModToolMaterials.ADAMANTIUM_DAGGER,9,4f);
+    public static final Item COPPER_DAGGER = createMetalDaggerItem(ModToolMaterials.COOPER_DAGGER,6,4f);
+    public static final Item GOLD_DAGGER = createMetalDaggerItem(ModToolMaterials.GOLD_DAGGER,6,4f);
+    public static final Item SILVER_DAGGER = createMetalDaggerItem(ModToolMaterials.SILVER_DAGGER,6,4f);
+    public static final Item IRON_DAGGER = createMetalDaggerItem(ModToolMaterials.IRON_DAGGER,7,4f);
+    public static final Item MITHRIL_DAGGER = createMetalDaggerItem(ModToolMaterials.MITHRIL_DAGGER,8,4f);
+    public static final Item ADMANTIUM_DAGGER =createMetalDaggerItem(ModToolMaterials.ADAMANTIUM_DAGGER,9,4f);
 
 
 
@@ -125,7 +125,7 @@ public class Tools {
 
 
     public static Item createMetalPickAxeItem(ToolMaterial material, int finalDamage,float finalDamageSpeed){
-        return new MetalPickAxe(material,BlockTags.PICKAXE_MINEABLE,new Item.Settings().
+        return new MetalPickAxe(material,new Item.Settings().
                 attributeModifiers(MiningToolItem.createAttributeModifiers(material,-1+finalDamage,-4+finalDamageSpeed))
         );
     }
@@ -135,7 +135,12 @@ public class Tools {
                 attributeModifiers(MiningToolItem.createAttributeModifiers(material,-1+finalDamage,-4+finalDamageSpeed))
         );
     }
+    public static Item createMetalDaggerItem(ToolMaterial material, int finalDamage,float finalDamageSpeed){
 
+        return new MetalDagger(material,new Item.Settings().
+                attributeModifiers(MiningToolItem.createAttributeModifiers(material,-1+finalDamage,-4+finalDamageSpeed))
+        );
+    }
 
 
 

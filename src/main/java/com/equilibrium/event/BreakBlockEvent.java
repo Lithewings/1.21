@@ -47,49 +47,49 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
 
 
         if(state.isIn(ModBlockTags.LOG_120)){
-            itemStack.damage(120-1,player, EquipmentSlot.MAINHAND);
+            itemStack.damage(120,player, EquipmentSlot.MAINHAND);
             player.sendMessage(Text.of("-120"));
         }else
 
         if(state.isIn(ModBlockTags.STONE_LIKE_240)){
-            itemStack.damage(240-1,player, EquipmentSlot.MAINHAND);
+            itemStack.damage(240,player, EquipmentSlot.MAINHAND);
             player.sendMessage(Text.of("-240"));
         }
         else
         if(state.isIn(ModBlockTags.STONE_LIKE_360)){
-            itemStack.damage(360-1,player, EquipmentSlot.MAINHAND);
+            itemStack.damage(360,player, EquipmentSlot.MAINHAND);
             player.sendMessage(Text.of("-360"));
         }
         else
         if(state.isIn(ModBlockTags.STONE_LIKE_480)){
-            itemStack.damage(480-1,player, EquipmentSlot.MAINHAND);
+            itemStack.damage(480,player, EquipmentSlot.MAINHAND);
             player.sendMessage(Text.of("-480"));
         }
 
         //240 360 480其余没有列出的,但是确实比较硬的物品,而且在三者子集里容易冲突
         else
         if(state.isIn(BlockTags.NEEDS_STONE_TOOL)){
-            itemStack.damage(240-1,player, EquipmentSlot.MAINHAND);
+            itemStack.damage(240,player, EquipmentSlot.MAINHAND);
             player.sendMessage(Text.of("-240"));}
         else
         if(state.isIn(BlockTags.NEEDS_IRON_TOOL)) {
-            itemStack.damage(360 - 1, player, EquipmentSlot.MAINHAND);
+            itemStack.damage(360, player, EquipmentSlot.MAINHAND);
             player.sendMessage(Text.of("-360"));
         }
         else
         if(state.isIn(BlockTags.NEEDS_DIAMOND_TOOL)) {
-            itemStack.damage(480 - 1, player, EquipmentSlot.MAINHAND);
+            itemStack.damage(480, player, EquipmentSlot.MAINHAND);
             player.sendMessage(Text.of("-480"));
         }
 
         else
         if(state.isIn(ModBlockTags.NORMAL_30)){
-            itemStack.damage(30-1,player, EquipmentSlot.MAINHAND);
+            itemStack.damage(30,player, EquipmentSlot.MAINHAND);
         player.sendMessage(Text.of("-30"));
         }
         else
         if(state.isIn(ModBlockTags.NORMAL_60)){
-            itemStack.damage(60-1,player, EquipmentSlot.MAINHAND);
+            itemStack.damage(60,player, EquipmentSlot.MAINHAND);
             player.sendMessage(Text.of("-60"));
         }
 

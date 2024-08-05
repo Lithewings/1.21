@@ -33,6 +33,8 @@ import com.equilibrium.craft_time_worklevel.FurnaceIngredients;
 import static com.equilibrium.entity.ModEntities.registerModEntities;
 
 
+
+import static com.equilibrium.status.registerStatusEffect.registerStatusEffects;
 import static com.equilibrium.tags.ModBlockTags.registerModBlockTags;
 import static com.equilibrium.tags.ModItemTags.registerModItemTags;
 import static com.equilibrium.util.LootTableModifier.modifierLootTables;
@@ -89,8 +91,8 @@ public class MITEequilibrium implements ModInitializer {
 		registerModBlockTags();
 		registerModItemTags();
 
-
-
+		//注册(药水)效果
+		registerStatusEffects();
 
 
 

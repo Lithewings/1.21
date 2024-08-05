@@ -4,6 +4,8 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.*;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ToolComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,10 +23,11 @@ import net.minecraft.world.WorldEvents;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class MetalAxe extends MiningToolItem {
+public class MetalAxe extends ToolItem {
     protected static final Map<Block, Block> STRIPPED_BLOCKS = new ImmutableMap.Builder<Block, Block>()
             .put(Blocks.OAK_WOOD, Blocks.STRIPPED_OAK_WOOD)
             .put(Blocks.OAK_LOG, Blocks.STRIPPED_OAK_LOG)
@@ -50,7 +53,14 @@ public class MetalAxe extends MiningToolItem {
             .build();
 
     public MetalAxe(ToolMaterial material, Settings settings) {
-        super(material, BlockTags.AXE_MINEABLE, settings);
+        super(material, settings.component(DataComponentTypes.TOOL, createToolComponent()));
+
+    }
+    //ofAlwaysDropping 可以将为工具添加一个正确挖掘的"标签"
+    private static ToolComponent createToolComponent() {
+        return new ToolComponent(
+                List.of(ToolComponent.Rule.ofAlwaysDropping(BlockTags.AXE_MINEABLE, 4F)), 1.0F, 0
+        );
     }
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
@@ -79,6 +89,8 @@ public class MetalAxe extends MiningToolItem {
             }
         }
     }
+
+
 
     private static boolean shouldCancelStripAttempt(ItemUsageContext context) {
         PlayerEntity playerEntity = context.getPlayer();

@@ -6,12 +6,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CampfireBlock;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ToolComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.item.MiningToolItem;
+import net.minecraft.item.ToolItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.sound.SoundCategory;
@@ -23,9 +25,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
 import net.minecraft.world.event.GameEvent;
 
+import java.util.List;
 import java.util.Map;
 
-public class MetalShovel extends MiningToolItem {
+public class MetalShovel extends ToolItem {
     protected static final Map<Block, BlockState> PATH_STATES = Maps.<Block, BlockState>newHashMap(
             new ImmutableMap.Builder()
                     .put(Blocks.GRASS_BLOCK, Blocks.DIRT_PATH.getDefaultState())
@@ -37,9 +40,23 @@ public class MetalShovel extends MiningToolItem {
                     .build()
     );
 
+
     public MetalShovel(ToolMaterial toolMaterial, Settings settings) {
-        super(toolMaterial, BlockTags.SHOVEL_MINEABLE, settings);
+        super(toolMaterial,settings.component(DataComponentTypes.TOOL, createToolComponent()));
     }
+
+    private static ToolComponent createToolComponent() {
+        return new ToolComponent(
+                List.of(ToolComponent.Rule.ofAlwaysDropping(BlockTags.SHOVEL_MINEABLE,4F)), 1.0F, 0
+        );
+    }
+
+
+
+
+
+
+
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
