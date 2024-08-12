@@ -68,7 +68,7 @@ public abstract class ZombieEntityMixin extends HostileEntity {
     private static void createZombieAttributes(CallbackInfoReturnable<DefaultAttributeContainer.Builder> cir) {
         cir.cancel();
         cir.setReturnValue(HostileEntity.createHostileAttributes()
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 128.0)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 64.0)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.30F)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 3.0)
                 .add(EntityAttributes.GENERIC_ARMOR, 2.0)
@@ -95,7 +95,7 @@ public abstract class ZombieEntityMixin extends HostileEntity {
         this.goalSelector.add(3, new BreakBlockGoal(this, 800, difficulty -> difficulty == Difficulty.NORMAL || difficulty == Difficulty.HARD));
         this.targetSelector.add(4, new ActiveTargetGoal(this, MerchantEntity.class, false));
         this.targetSelector.add(4, new ActiveTargetGoal(this, IronGolemEntity.class, true));
-        this.targetSelector.add(4, new AdvanceActiveTargetGoal<>(this,PassiveEntity.class, false));
+        this.targetSelector.add(4, new AdvanceActiveTargetGoal<>(this,PassiveEntity.class, true));
         this.targetSelector.add(5, new ActiveTargetGoal(this, TurtleEntity.class, 10, true, false, TurtleEntity.BABY_TURTLE_ON_LAND_FILTER));
         this.targetSelector.add(3, new ActiveTargetGoal<>(this, PassiveEntity.class, true, false));
 

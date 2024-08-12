@@ -73,6 +73,7 @@
     [
       "minecraft:glow_lichen",
       "minecraft:patch_tall_grass_2",
+      "minecraft:patch_sunflower",
       "minecraft:trees_plains",
       "minecraft:flower_plains",
       "minecraft:patch_grass_plain",
@@ -91,8 +92,8 @@
     "ambient": [
       {
         "type": "minecraft:bat",
-        "maxCount": 1,
-        "minCount": 1,
+        "maxCount": 8,
+        "minCount": 8,
         "weight": 10
       }
     ],
@@ -189,8 +190,8 @@
     "underground_water_creature": [
       {
         "type": "minecraft:glow_squid",
-        "maxCount": 1,
-        "minCount": 1,
+        "maxCount": 6,
+        "minCount": 4,
         "weight": 10
       }
     ],
