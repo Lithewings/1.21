@@ -137,11 +137,8 @@
 
     "#minecraft:logs",
 
-    "#minecraft:stone_bricks"
+    "#minecraft:stone_bricks",
 
-
-
-
-
+    "#minecraft:logs"
   ]
 }

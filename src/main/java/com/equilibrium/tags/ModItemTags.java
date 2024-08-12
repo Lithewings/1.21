@@ -1,6 +1,7 @@
 package com.equilibrium.tags;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
@@ -28,8 +29,10 @@ public class ModItemTags {
 
     public static final TagKey<Item> REMOVEITEM = of("remove_item");
 
+    public static final TagKey<Item> HARMFOOD = of("harm_food");
+    public static final TagKey<Item> PHYTONUTRIENT_LEVEL1 = of("phytonutrient_level1");
 
-
+    public static final TagKey<Item> PHYTONUTRIENT_LEVEL2 = of("phytonutrient_level2");
 
     public static final TagKey<Item> MINING_ENCHANTABLE = of("mining_enchantable");
 
@@ -41,7 +44,25 @@ public class ModItemTags {
     //只能在附魔台附魔的,应该是铁砧的子集
     public static final TagKey<Item> FORTUNE_ENCHANTABLE = of("fortune_enchantable");
 
-    public static final TagKey<Item> SILKTOUCH = of("silktouch.json");
+    public static final TagKey<Item> SILKTOUCH = of("silktouch");
+
+
+    //燃料等级
+    public static final TagKey<Item> FUEL_LEVEL1 = of("fuel_level1");
+    public static final TagKey<Item> FUEL_LEVEL2 = of("fuel_level2");
+    public static final TagKey<Item> FUEL_LEVEL3 = of("fuel_level3");
+    public static final TagKey<Item> FUEL_LEVEL4 = of("fuel_level4");
+    //物品燃烧的所需要的燃料等级
+    public static final TagKey<Item> BLOCK_NEED_FUEL_LEVEL1 = of("block_need_fuel_level1");
+    public static final TagKey<Item> BLOCK_NEED_FUEL_LEVEL2 = of("block_need_fuel_level2");
+    public static final TagKey<Item> BLOCK_NEED_FUEL_LEVEL3 = of("block_need_fuel_level3");
+    public static final TagKey<Item> BLOCK_NEED_FUEL_LEVEL4 = of("block_need_fuel_level4");
+    //有些物品燃烧也需要等级
+    public static final TagKey<Item> ITEM_NEED_FUEL_LEVEL1 = of("item_need_fuel_level1");
+    public static final TagKey<Item> ITEM_NEED_FUEL_LEVEL2 = of("item_need_fuel_level2");
+    public static final TagKey<Item> ITEM_NEED_FUEL_LEVEL3 = of("item_need_fuel_level3");
+    public static final TagKey<Item> ITEM_NEED_FUEL_LEVEL4 = of("item_need_fuel_level4");
+
 
 
     private static TagKey<Item> of(String id) {

@@ -33,7 +33,7 @@ import com.equilibrium.craft_time_worklevel.FurnaceIngredients;
 import static com.equilibrium.entity.ModEntities.registerModEntities;
 
 
-
+import static com.equilibrium.item.Metal.registerModItemRaw;
 import static com.equilibrium.status.registerStatusEffect.registerStatusEffects;
 import static com.equilibrium.tags.ModBlockTags.registerModBlockTags;
 import static com.equilibrium.tags.ModItemTags.registerModItemTags;
@@ -71,7 +71,8 @@ public class MITEequilibrium implements ModInitializer {
 		Metal.registerModItemIngots();
 		//添加金属颗粒
 		Metal.registerModItemNuggets();
-
+		//粗矿
+		registerModItemRaw();
 		//注册矿物
 
 		registerModOre();

@@ -1,9 +1,16 @@
 {
   "values": [
-    "#minecraft:diamond_ores",
+
+    "#minecraft:emerald_ores",
+
+    "miteequilibrium:mithril_ore",
 
 
 
+
+
+    "minecraft:lapis_block",
+    "minecraft:gold_block",
     "minecraft:iron_block"
   ]
 }

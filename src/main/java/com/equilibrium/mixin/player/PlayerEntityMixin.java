@@ -3,10 +3,7 @@ package com.equilibrium.mixin.player;
 import com.equilibrium.event.MoonPhaseEvent;
 import com.equilibrium.status.registerStatusEffect;
 import com.equilibrium.tags.ModItemTags;
-import com.equilibrium.util.PlayerMaxHealthHelper;
-import com.equilibrium.util.PlayerMaxHungerHelper;
-import com.equilibrium.util.ShouldSentText;
-import com.equilibrium.util.WorldMoonPhasesSelector;
+import com.equilibrium.util.*;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.world.ClientWorld;
@@ -131,10 +128,21 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     }
 
 
+
     @Inject(method = "eatFood", at = @At(value = "HEAD"))
     public void eatFood(World world, ItemStack stack, FoodComponent foodComponent, CallbackInfoReturnable<ItemStack> cir) {
-        if (stack.isOf(Items.APPLE))
-            this.phytonutrient += 1000;
+        if (stack.isIn(ModItemTags.HARMFOOD)){
+            this.phytonutrient-=2000;
+            StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.POISON, 400,0,true,true,true);
+            this.setStatusEffect(statusEffectInstance,null);
+        }
+        if (stack.isIn(ModItemTags.PHYTONUTRIENT_LEVEL1)){
+            this.phytonutrient+=6000;
+        }
+        if (stack.isIn(ModItemTags.PHYTONUTRIENT_LEVEL2)){
+            this.phytonutrient+=48000;
+        }
+
     }
 
 
@@ -403,6 +411,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void tick(CallbackInfo ci) {
+
         //刷新上限值,和Hud保持同步,都是1s20次刷新
         refreshPlayerFoodLevelAndMaxHealth();
         if (!this.isCreative()) {
@@ -488,14 +497,21 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                     if (this.age % 100 == 0)
                         this.sendMessage(Text.of("新月升起,触发事件"));
                 }
+                //第一次蓝月,不改变随机刻速度
                 if (moonType.equals("blueMoon")) {
-                    if(this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED)!=5)
-                        RandomTickModifier((ServerWorld) this.getWorld(), 5);
-                    if (this.age % 1200 == 0) {
-                        this.sendMessage(Text.of("蓝月升起,触发事件"));
-                        ServerWorld serverWorld = (ServerWorld) this.getWorld();
-                        //执行间隔事件
-                        spawnAnimalNearPlayer(serverWorld);
+                    if(this.getWorld().getTimeOfDay()>24000){
+                        if(this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED)!=5)
+                            RandomTickModifier((ServerWorld) this.getWorld(), 5);
+                        if (this.age % 1200 == 0) {
+                            this.sendMessage(Text.of("蓝月升起,触发事件"));
+                            ServerWorld serverWorld = (ServerWorld) this.getWorld();
+                            //执行间隔事件
+                            spawnAnimalNearPlayer(serverWorld);
+                        }
+                    }else{
+                        this.sendMessage(Text.of("随机刻应该修改为3"));
+                        if(this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED)!=3)
+                            RandomTickModifier((ServerWorld) this.getWorld(), 3);
                     }
                     //应该是用world.找到所有玩家,这里无非就是避免客户端世界直接转服务器世界造成崩溃
                     //待改进:应该是this.getWorld,如果不是客户端世界再执行spawnAnimal方法

@@ -1,11 +1,14 @@
 package com.equilibrium.tags;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
 public class ModBlockTags {
+
+
 
 
     public static final TagKey<Block> STONE_LIKE_240 = of("stone_like_240");
@@ -29,7 +32,7 @@ public class ModBlockTags {
 
     public static final TagKey<Block> TRANSPARENT_FOR_ZOMBIE= of("transparent_for_zombie");
 
-
+    public static final TagKey<Block> ORE = of("ore");
 
 
 

@@ -43,7 +43,7 @@ public abstract class PlayerManagerMixin {
 
         LOGGER.info("When finishing connect,the player health level is "+player.getHealth());
         //发送时间
-        WorldTimeHelper.setDay(this.players.getFirst().getWorld().getTimeOfDay());
+        WorldTimeHelper.setDay(this.players.getFirst().getWorld());
 
 
 

@@ -17,18 +17,18 @@ public class ModModelProvider extends FabricModelProvider {
 
     @Override
     public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
-        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.ADAMANTIUM_BLOCK);
-        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.COPPER_BLOCK);
-        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.SILVER_BLOCK);
-        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.MITHRIL_BLOCK);
-        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.ANCIENT_METAL_BLOCK);
-        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.GOLD_BLOCK);
-
-        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.ADAMANTIUM_ORE);
-        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.COPPER_ORE);
-        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.SILVER_ORE);
-        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.MITHRIL_ORE);
-        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.GOLD_ORE);
+//        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.ADAMANTIUM_BLOCK);
+//        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.COPPER_BLOCK);
+//        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.SILVER_BLOCK);
+//        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.MITHRIL_BLOCK);
+//        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.ANCIENT_METAL_BLOCK);
+//        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.GOLD_BLOCK);
+//
+//        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.ADAMANTIUM_ORE);
+//        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.COPPER_ORE);
+//        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.SILVER_ORE);
+//        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.MITHRIL_ORE);
+//        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.GOLD_ORE);
 
 //        blockStateModelGenerator.registerItemModel(ModBlocks.ADAMANTIUM_BLOCK);
 //        blockStateModelGenerator.registerItemModel(ModBlocks.COPPER_BLOCK);
@@ -47,60 +47,69 @@ public class ModModelProvider extends FabricModelProvider {
 
     @Override
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
-        itemModelGenerator.register(Metal.adamantium_nugget, Models.GENERATED);
-        itemModelGenerator.register(Metal.ancient_metal_nugget, Models.GENERATED);
-        itemModelGenerator.register(Metal.copper_nugget, Models.GENERATED);
-        itemModelGenerator.register(Metal.gold_nugget, Models.GENERATED);
-        itemModelGenerator.register(Metal.mithril_nugget, Models.GENERATED);
-        itemModelGenerator.register(Metal.silver_nugget, Models.GENERATED);
-        itemModelGenerator.register(Metal.FLINT, Models.GENERATED);
+
+        itemModelGenerator.register(Metal.ADAMANTIUM_RAW, Models.GENERATED);
+        itemModelGenerator.register(Metal.MITHRIL_RAW, Models.GENERATED);
+        itemModelGenerator.register(Metal.SILVER_RAW, Models.GENERATED);
 
 
-        itemModelGenerator.register(Tools.FLINT_HATCHET, Models.HANDHELD);
-        itemModelGenerator.register(Tools.FLINT_AXE, Models.HANDHELD);
-        itemModelGenerator.register(Tools.FLINT_KNIFE, Models.HANDHELD);
-        itemModelGenerator.register(Tools.FLINT_SHOVEL, Models.HANDHELD);
 
-        itemModelGenerator.register(Tools.IRON_AXE, Models.HANDHELD);
-        itemModelGenerator.register(Tools.ADAMANTIUM_AXE, Models.HANDHELD);
-        itemModelGenerator.register(Tools.GOLD_AXE, Models.HANDHELD);
-        itemModelGenerator.register(Tools.COPPER_AXE, Models.HANDHELD);
-        itemModelGenerator.register(Tools.SILVER_AXE, Models.HANDHELD);
-        itemModelGenerator.register(Tools.MITHRIL_AXE, Models.HANDHELD);
 
-        itemModelGenerator.register(Tools.IRON_HOE, Models.HANDHELD);
-        itemModelGenerator.register(Tools.ADMANTIUM_HOE, Models.HANDHELD);
-        itemModelGenerator.register(Tools.GOLD_HOE, Models.HANDHELD);
-        itemModelGenerator.register(Tools.COPPER_HOE, Models.HANDHELD);
-        itemModelGenerator.register(Tools.SILVER_HOE, Models.HANDHELD);
-        itemModelGenerator.register(Tools.MITHRIL_HOE, Models.HANDHELD);
 
-        itemModelGenerator.register(Tools.IRON_DAGGER, Models.HANDHELD);
-        itemModelGenerator.register(Tools.ADMANTIUM_DAGGER, Models.HANDHELD);
-        itemModelGenerator.register(Tools.GOLD_DAGGER, Models.HANDHELD);
-        itemModelGenerator.register(Tools.COPPER_DAGGER, Models.HANDHELD);
-        itemModelGenerator.register(Tools.SILVER_DAGGER, Models.HANDHELD);
-        itemModelGenerator.register(Tools.MITHRIL_DAGGER, Models.HANDHELD);
-
-        itemModelGenerator.register(Tools.IRON_SHOVEL, Models.HANDHELD);
-        itemModelGenerator.register(Tools.ADMANTIUM_SHOVEL, Models.HANDHELD);
-        itemModelGenerator.register(Tools.GOLD_SHOVEL, Models.HANDHELD);
-        itemModelGenerator.register(Tools.COPPER_SHOVEL, Models.HANDHELD);
-        itemModelGenerator.register(Tools.SILVER_SHOVEL, Models.HANDHELD);
-        itemModelGenerator.register(Tools.MITHRIL_SHOVEL, Models.HANDHELD);
-
-        itemModelGenerator.register(Tools.IRON_SWORD, Models.HANDHELD);
-        itemModelGenerator.register(Tools.ADMANTIUM_SWORD, Models.HANDHELD);
-        itemModelGenerator.register(Tools.GOLD_SWORD, Models.HANDHELD);
-        itemModelGenerator.register(Tools.COPPER_SWORD, Models.HANDHELD);
-        itemModelGenerator.register(Tools.SILVER_SWORD, Models.HANDHELD);
-        itemModelGenerator.register(Tools.MITHRIL_SWORD, Models.HANDHELD);
-
-        itemModelGenerator.register(Tools.IRON_PICKAXE, Models.HANDHELD);
-        itemModelGenerator.register(Tools.ADMANTIUM_PICKAXE, Models.HANDHELD);
-        itemModelGenerator.register(Tools.GOLD_PICKAXE, Models.HANDHELD);
-        itemModelGenerator.register(Tools.COPPER_PICKAXE, Models.HANDHELD);
-        itemModelGenerator.register(Tools.SILVER_PICKAXE, Models.HANDHELD);
-        itemModelGenerator.register(Tools.MITHRIL_PICKAXE, Models.HANDHELD);
+//        itemModelGenerator.register(Metal.adamantium_nugget, Models.GENERATED);
+//        itemModelGenerator.register(Metal.ancient_metal_nugget, Models.GENERATED);
+//        itemModelGenerator.register(Metal.copper_nugget, Models.GENERATED);
+//        itemModelGenerator.register(Metal.gold_nugget, Models.GENERATED);
+//        itemModelGenerator.register(Metal.mithril_nugget, Models.GENERATED);
+//        itemModelGenerator.register(Metal.silver_nugget, Models.GENERATED);
+//        itemModelGenerator.register(Metal.FLINT, Models.GENERATED);
+//
+//
+//        itemModelGenerator.register(Tools.FLINT_HATCHET, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.FLINT_AXE, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.FLINT_KNIFE, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.FLINT_SHOVEL, Models.HANDHELD);
+//
+//        itemModelGenerator.register(Tools.IRON_AXE, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.ADAMANTIUM_AXE, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.GOLD_AXE, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.COPPER_AXE, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.SILVER_AXE, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.MITHRIL_AXE, Models.HANDHELD);
+//
+//        itemModelGenerator.register(Tools.IRON_HOE, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.ADMANTIUM_HOE, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.GOLD_HOE, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.COPPER_HOE, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.SILVER_HOE, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.MITHRIL_HOE, Models.HANDHELD);
+//
+//        itemModelGenerator.register(Tools.IRON_DAGGER, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.ADMANTIUM_DAGGER, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.GOLD_DAGGER, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.COPPER_DAGGER, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.SILVER_DAGGER, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.MITHRIL_DAGGER, Models.HANDHELD);
+//
+//        itemModelGenerator.register(Tools.IRON_SHOVEL, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.ADMANTIUM_SHOVEL, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.GOLD_SHOVEL, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.COPPER_SHOVEL, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.SILVER_SHOVEL, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.MITHRIL_SHOVEL, Models.HANDHELD);
+//
+//        itemModelGenerator.register(Tools.IRON_SWORD, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.ADMANTIUM_SWORD, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.GOLD_SWORD, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.COPPER_SWORD, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.SILVER_SWORD, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.MITHRIL_SWORD, Models.HANDHELD);
+//
+//        itemModelGenerator.register(Tools.IRON_PICKAXE, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.ADMANTIUM_PICKAXE, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.GOLD_PICKAXE, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.COPPER_PICKAXE, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.SILVER_PICKAXE, Models.HANDHELD);
+//        itemModelGenerator.register(Tools.MITHRIL_PICKAXE, Models.HANDHELD);
     }
 }

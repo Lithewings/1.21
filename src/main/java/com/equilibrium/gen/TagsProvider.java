@@ -1,5 +1,7 @@
 package com.equilibrium.gen;
 
+import com.equilibrium.item.Metal;
+import com.equilibrium.tags.ModItemTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.item.Items;
@@ -10,33 +12,20 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public class TagsProvider extends FabricTagProvider.ItemTagProvider {
+
+
     /**
-     * Construct an {@link ItemTagProvider} tag provider <b>with</b> an associated {@link BlockTagProvider} tag provider.
+     * Construct an {@link ItemTagProvider} tag provider <b>without</b> an associated {@link BlockTagProvider} tag provider.
      *
      * @param output            The {@link FabricDataOutput} instance
      * @param completableFuture
-     * @param blockTagProvider
      */
-    public TagsProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture, @Nullable FabricTagProvider.BlockTagProvider blockTagProvider) {
-        super(output, completableFuture, blockTagProvider);
+    public TagsProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
+        super(output, completableFuture);
     }
-    /**
-     * Constructs a new {@link FabricTagProvider} with the default computed path.
-     *
-     * <p>Common implementations of this class are provided.
-     *
-     * @param output           the {@link FabricDataOutput} instance
-     * @param registryKey
-     * @param registriesFuture the backing registry for the tag type
-     */
 
-    /**
-     * Implement this method and then use {@link FabricTagProvider#getOrCreateTagBuilder} to get and register new tag builders.
-     *
-     * @param wrapperLookup
-     */
     @Override
     protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
-        getOrCreateTagBuilder(ItemTags.FISHES).add(Items.ACACIA_BOAT);
+        getOrCreateTagBuilder(ModItemTags.FUEL_LEVEL1).add(Items.COAL);
     }
 }

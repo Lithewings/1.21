@@ -10,15 +10,20 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.data.server.recipe.RecipeProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class ModRecipeGenerator extends FabricRecipeProvider {
-
+    private static final List<ItemConvertible> ADAMANTIUM_RAW=List.of(Metal.ADAMANTIUM_RAW);
+    private static final List<ItemConvertible> COPPER_INGOT=List.of(Items.COPPER_INGOT);
+    private static final List<ItemConvertible> MITHRIL_RAW=List.of(Metal.MITHRIL_RAW);
+    private static final List<ItemConvertible> SILVER_RAW=List.of(Metal.SILVER_RAW);
 
     public ModRecipeGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
         super(output, registriesFuture);
@@ -26,6 +31,10 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
 
     @Override
     public void generate(RecipeExporter exporter) {
+        offerSmelting(exporter,ADAMANTIUM_RAW,RecipeCategory.MISC,Metal.adamantium,100,200,"adamantium_raw");
+        offerSmelting(exporter,COPPER_INGOT,RecipeCategory.MISC,Metal.copper,10,200,"copper_ingot");
+        offerSmelting(exporter,MITHRIL_RAW,RecipeCategory.MISC,Metal.mithril,50,200,"mithril_raw");
+        offerSmelting(exporter,SILVER_RAW,RecipeCategory.MISC,Metal.silver,10,200,"silver_raw");
 
         //piece->flint
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Items.FLINT).
@@ -473,6 +482,11 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
                 input('X', Metal.silver).
                 criterion("has_item", RecipeProvider.conditionsFromItem(Metal.silver)).
                 offerTo(exporter, Identifier.of("miteequilibrium","silver_nugget"));
+
+
+
+
+
 
     }
 

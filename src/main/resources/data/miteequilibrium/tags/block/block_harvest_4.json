@@ -1,6 +1,9 @@
 {
   "values": [
     "minecraft:ancient_debris",
-    "minecraft:diamond_block"
+    "minecraft:diamond_block",
+    "#minecraft:diamond_ores",
+    "miteequilibrium:gold_ore",
+    "miteequilibrium:adamantium_ore"
   ]
 }

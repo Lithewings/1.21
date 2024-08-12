@@ -109,6 +109,20 @@ public class ModItemGroup {
                                 entries.add(Tools.MITHRIL_PICKAXE);
                                 entries.add(Tools.SILVER_PICKAXE);
 
+                                entries.add(Tools.ADMANTIUM_DAGGER);
+                                entries.add(Tools.GOLD_DAGGER);
+                                entries.add(Tools.COPPER_DAGGER);
+                                entries.add(Tools.IRON_DAGGER);
+                                entries.add(Tools.MITHRIL_DAGGER);
+                                entries.add(Tools.SILVER_DAGGER);
+
+
+                                entries.add(Metal.ADAMANTIUM_RAW);
+                                entries.add(Metal.MITHRIL_RAW);
+                                entries.add(Metal.SILVER_RAW);
+
+
+
 
                             }
                     ).build());

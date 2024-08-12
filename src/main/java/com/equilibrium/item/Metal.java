@@ -29,8 +29,10 @@ public class Metal {
 
     public static final Item FLINT = new Item(new Item.Settings().maxCount(64));
 
-
-
+    //maxCount = 16
+    public static final Item ADAMANTIUM_RAW= new Item(new Item.Settings().maxCount(32));
+    public static final Item MITHRIL_RAW = new Item(new Item.Settings().maxCount(32));
+    public static final Item SILVER_RAW = new Item(new Item.Settings().maxCount(32));
 
 
 
@@ -55,7 +57,12 @@ public class Metal {
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","silver_nugget"), silver_nugget);
 
     }
+    public static void registerModItemRaw(){
+        Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","adamantium_raw"), ADAMANTIUM_RAW);
+        Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","mithril_raw"), MITHRIL_RAW);
+        Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","silver_raw"), SILVER_RAW);
 
+    }
 
 
 

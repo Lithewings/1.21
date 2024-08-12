@@ -21,7 +21,7 @@ public abstract class CropBlockMixin extends PlantBlock implements Fertilizable 
 
     @Inject(method = "randomTick",at = @At(value = "HEAD"),cancellable = true)
     protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo ci) {
-       if(random.nextInt(16)!=0){
+       if(random.nextInt(128)!=0){
            ci.cancel();
        }
     }
