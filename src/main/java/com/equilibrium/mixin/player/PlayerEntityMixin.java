@@ -164,6 +164,18 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     public double getEntityInteractionRange() {
         return this.getAttributeValue(EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE);
     }
+    @Shadow
+    private final PlayerAbilities abilities = new PlayerAbilities();
+    //加快饥饿速度
+    @Inject(method = "addExhaustion", at = @At("HEAD"), cancellable = true)
+    public void addExhaustion(float exhaustion, CallbackInfo ci) {
+        ci.cancel();
+        if (!this.abilities.invulnerable) {
+            if (!this.getWorld().isClient) {
+                this.hungerManager.addExhaustion(exhaustion*4);
+            }
+        }
+    }
 
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo ci) {
@@ -196,8 +208,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 //                break;
 //            default:zombieEntity.setOnGround(true, Vec3d.of(blockpos1));
 //        }
-        if(!this.getWorld().isClient)
-            this.phytonutrient=0;
+//        if(!this.getWorld().isClient)
+//            this.phytonutrient=0;
     }
 
 
@@ -420,7 +432,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             setMalnourishedForSlowHealing(
                     this.phytonutrient < 100 ? 4 : 1
             );
-            if (this.getHealth() < maxHealth && this.age % (40 * malnourishedForSlowHealing) == 0) {
+            if (this.getHealth() < maxHealth && this.age % (960 * malnourishedForSlowHealing) == 0) {
                 this.heal(1.0F);
 //                MITEequilibrium.LOGGER.info("Natural Regeneration +1 ");
             }
@@ -439,7 +451,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             //不在主世界,一定不能获得随机刻增益
             if (worldRegistryKey!=World.OVERWORLD && !this.getWorld().isClient) {
                 if (this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 3){
-                    this.sendMessage(Text.of("随机刻应该修改为3"));
+                    this.sendMessage(Text.of("由于不在主世界,随机刻应该修改为3"));
                     RandomTickModifier((ServerWorld) this.getWorld(), 3);
                 }
             }
@@ -450,8 +462,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                 boolean randomTickMoonType = (moonType.equals("blueMoon")) || (moonType.equals("harvestMoon")) || (moonType.equals("haloMoon"));
                 if (!randomTickMoonType)
                     if(this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED)!=3){
-//                        RandomTickModifier((ServerWorld) this.getWorld(), ((ServerWorld) this.getWorld()).getPlayers().getFirst(), 3);
-                        this.sendMessage(Text.of("随机刻应该修改为3"));
+
+                        this.sendMessage(Text.of("由于处在普通月相,随机刻应该修改为3"));
                         RandomTickModifier((ServerWorld) this.getWorld(), 3);}
 
 
@@ -509,9 +521,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                             spawnAnimalNearPlayer(serverWorld);
                         }
                     }else{
-                        this.sendMessage(Text.of("随机刻应该修改为3"));
-                        if(this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED)!=3)
-                            RandomTickModifier((ServerWorld) this.getWorld(), 3);
+                        if(this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED)!=3){
+                            this.sendMessage(Text.of("由于第一天的蓝月并没有随机刻增益,随机刻应该修改为3"));
+                            RandomTickModifier((ServerWorld) this.getWorld(), 3);}
                     }
                     //应该是用world.找到所有玩家,这里无非就是避免客户端世界直接转服务器世界造成崩溃
                     //待改进:应该是this.getWorld,如果不是客户端世界再执行spawnAnimal方法

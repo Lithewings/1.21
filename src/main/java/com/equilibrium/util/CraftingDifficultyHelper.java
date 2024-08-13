@@ -1,10 +1,13 @@
 package com.equilibrium.util;
 
+import com.equilibrium.block.ModBlocks;
 import com.equilibrium.config.CommonConfig;
+import com.equilibrium.item.Metal;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.CraftingScreen;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.item.MaceItem;
 import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.Registries;
@@ -72,27 +75,86 @@ public class CraftingDifficultyHelper {
 	}
 
 	public static float getDifficulty(Item item) {
-//		String name =  Registries.ITEM.getId(item).toString();
-//		if(item==Items.IRON_BLOCK){
-//			return 3200*9;
-//		}
-//		if(item==Items.IRON_INGOT){
-//			return 3200F;
-//		}
-//		if(item==Items.GOLD_INGOT){
-//			return 1600F;
-//		}
-//		if(item==Items.DIAMOND){
-//			return 25600F;
-//		}
-//		if(item==Items.NETHERITE_INGOT){
-//			return 25600*4F;
-//		}
-//
-//
-//		if(CommonConfig.craftItemTimeMap.containsKey(name)){
-//			return CommonConfig.craftItemTimeMap.get(name);
-//		}
+		String name =  Registries.ITEM.getId(item).toString();
+
+
+
+		if(item==Items.IRON_BLOCK){
+			return 3200f*9;
+		}
+		if(item==Items.IRON_INGOT){
+			return 3200F;
+		}
+		if(item==Items.IRON_NUGGET){
+			return (3200f/9f);
+		}
+
+		if(item==Items.GOLD_INGOT){
+			return 1600F;
+		}
+		if(item==Items.GOLD_BLOCK){
+			return 1600F*9;
+		}
+		if(item==Items.GOLD_NUGGET){
+			return 1600F/9f;
+		}
+
+
+		if(item== Metal.mithril){
+			return 25600F;
+		}
+		if(item== Metal.mithril_nugget){
+			return 25600F/9F;
+		}
+		if(item== ModBlocks.MITHRIL_BLOCK.asItem()){
+			return 25600F*9F;
+		}
+
+
+		if(item== Metal.silver){
+			return 1600F;
+		}
+		if(item== Metal.silver_nugget){
+			return 1600F/9F;
+		}
+		if(item== ModBlocks.SILVER_BLOCK.asItem()){
+			return 1600F*9F;
+		}
+		if(item== Metal.copper){
+			return 1600F;
+		}
+		if(item== Metal.copper_nugget){
+			return 1600F/9F;
+		}
+		if(item== ModBlocks.COPPER_BLOCK.asItem()){
+			return 1600F*9F;
+		}
+
+
+		if(item==Items.DIAMOND){
+			return 25600F;
+		}
+		if(item==Items.NETHERITE_INGOT){
+			return 25600*4F;
+		}
+
+
+		if(item==Metal.adamantium){
+			return 25600*4F;
+		}
+		if(item==Metal.adamantium_nugget){
+			return 25600*4F/9f;
+		}
+		if(item== ModBlocks.ADAMANTIUM_BLOCK.asItem()){
+			return 25600*4F*9F;
+		}
+
+
+
+
+		if(CommonConfig.craftItemTimeMap.containsKey(name)){
+			return CommonConfig.craftItemTimeMap.get(name);
+		}
 
 		return 20F;
 	}

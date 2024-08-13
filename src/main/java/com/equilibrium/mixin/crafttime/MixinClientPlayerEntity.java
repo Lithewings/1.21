@@ -105,7 +105,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity implemen
 	@Unique
 	public float getCraftingSpeed(PlayerEntity player) {
 		float speed = 1F;
-		speed += 0.02F * Math.min(200, player.experienceLevel);
+		speed += 0.05F * Math.min(200, player.experienceLevel);
 		return speed;
 	}
 }

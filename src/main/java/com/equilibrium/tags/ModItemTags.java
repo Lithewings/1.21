@@ -64,6 +64,14 @@ public class ModItemTags {
     public static final TagKey<Item> ITEM_NEED_FUEL_LEVEL4 = of("item_need_fuel_level4");
 
 
+    //合成等级,若出现以下物品,则获取更高的合成等级
+    public static final TagKey<Item> CRAFT_LEVEL1 = of("craft_level1");
+    public static final TagKey<Item> CRAFT_LEVEL2 = of("craft_level2");
+    public static final TagKey<Item> CRAFT_LEVEL3 = of("craft_level3");
+    public static final TagKey<Item> CRAFT_LEVEL4 = of("craft_level4");
+    public static final TagKey<Item> CRAFT_LEVEL5 = of("craft_level5");
+    //所有金属锭
+    public static final TagKey<Item> INGOT = of("ingot");
 
     private static TagKey<Item> of(String id) {
         return TagKey.of(RegistryKeys.ITEM, Identifier.of("miteequilibrium",id));

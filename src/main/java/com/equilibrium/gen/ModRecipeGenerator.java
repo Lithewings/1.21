@@ -1,6 +1,7 @@
 package com.equilibrium.gen;
 
 import com.equilibrium.block.ModBlocks;
+import com.equilibrium.craft_time_register.BlockInit;
 import com.equilibrium.item.Metal;
 import com.equilibrium.item.ModItems;
 import com.equilibrium.item.Tools;
@@ -14,6 +15,7 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -31,6 +33,59 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
 
     @Override
     public void generate(RecipeExporter exporter) {
+        //craftTables
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, BlockInit.FLINT_CRAFTING_TABLE).
+                pattern("X").
+                pattern("Y").
+                input('X', Tools.FLINT_KNIFE).
+                input('Y', ItemTags.LOGS).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Items.FLINT)).
+                offerTo(exporter, Identifier.of("miteequilibrium","flint_craft_table"));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, BlockInit.COPPER_CRAFTING_TABLE).
+                pattern("XZ").
+                pattern("YW").
+                input('X', Metal.copper).
+                input('Y', Items.STICK).
+                input('Z', Items.LEATHER).
+                input('W', ItemTags.LOGS).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.copper)).
+                offerTo(exporter, Identifier.of("miteequilibrium","copper_crafting_table"));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, BlockInit.IRON_CRAFTING_TABLE).
+                pattern("XZ").
+                pattern("YW").
+                input('X', Items.IRON_INGOT).
+                input('Y', Items.STICK).
+                input('Z', Items.LEATHER).
+                input('W', ItemTags.LOGS).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Items.IRON_INGOT)).
+                offerTo(exporter, Identifier.of("miteequilibrium","iron_crafting_table"));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, BlockInit.DIAMOND_CRAFTING_TABLE).
+                pattern("XZ").
+                pattern("YW").
+                input('X', Items.DIAMOND).
+                input('Y', Items.STICK).
+                input('Z', Items.LEATHER).
+                input('W', ItemTags.LOGS).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Items.DIAMOND)).
+                offerTo(exporter, Identifier.of("miteequilibrium","diamond_crafting_table"));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, BlockInit.NETHERITE_CRAFTING_TABLE).
+                pattern("XZ").
+                pattern("YW").
+                input('X', Items.NETHERITE_INGOT).
+                input('Y', Items.STICK).
+                input('Z', Items.LEATHER).
+                input('W', ItemTags.LOGS).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Items.NETHERITE_INGOT)).
+                offerTo(exporter, Identifier.of("miteequilibrium","netherite_crafting_table"));
+
+
+
+
         offerSmelting(exporter,ADAMANTIUM_RAW,RecipeCategory.MISC,Metal.adamantium,100,200,"adamantium_raw");
         offerSmelting(exporter,COPPER_INGOT,RecipeCategory.MISC,Metal.copper,10,200,"copper_ingot");
         offerSmelting(exporter,MITHRIL_RAW,RecipeCategory.MISC,Metal.mithril,50,200,"mithril_raw");
@@ -52,6 +107,17 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
                 offerTo(exporter, Identifier.of("miteequilibrium","flint_to_piece"));
 
 
+        //hatchet
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.FLINT_HATCHET).
+                pattern("XY").
+                pattern(" Y").
+                input('X', Items.FLINT).
+                input('Y',Items.STICK).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Items.FLINT)).
+                offerTo(exporter, Identifier.of("miteequilibrium","flint_hatchet"));
+
+
+
 
 
         //axe
@@ -63,6 +129,7 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
                 input('Y',Items.STICK).
                 criterion("has_item", RecipeProvider.conditionsFromItem(Items.FLINT)).
                 offerTo(exporter, Identifier.of("miteequilibrium","flint_axe"));
+
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.ADAMANTIUM_AXE).
                 pattern("XX").

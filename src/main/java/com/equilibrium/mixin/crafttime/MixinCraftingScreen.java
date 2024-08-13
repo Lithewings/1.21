@@ -53,13 +53,14 @@ public abstract class MixinCraftingScreen extends HandledScreen<CraftingScreenHa
 	}
 
 
-	private static boolean stopRenderArrow = false;
+	@Unique
+	private boolean stopRenderArrow = false;
 
 
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		if (keyCode != GLFW.GLFW_KEY_LEFT_SHIFT && this.shouldCloseOnEsc()) {
-			stopRenderArrow=true;
+			this.stopRenderArrow=true;
 			this.close();
 			return true;
 		}else{
@@ -87,7 +88,7 @@ public abstract class MixinCraftingScreen extends HandledScreen<CraftingScreenHa
 
 //			MITEequilibrium.LOGGER.info(String.valueOf(l));
 
-			if (stopRenderArrow){
+			if (this.stopRenderArrow){
 				return;
 			}
 
@@ -138,8 +139,9 @@ public abstract class MixinCraftingScreen extends HandledScreen<CraftingScreenHa
 			player.craftTime$setCrafting(false);
 		}
 		if (invSlot == 0) {
-			stopRenderArrow=false;
+			this.stopRenderArrow=false;
 			if (!player.craftTime$isCrafting() ) {
+
 				player.craftTime$startCraftWithNewPeriod(CraftingDifficultyHelper.getCraftingDifficultyFromMatrix(this.handler, true,this));
 			}
 
