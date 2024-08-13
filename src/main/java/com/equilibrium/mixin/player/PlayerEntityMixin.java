@@ -298,16 +298,23 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Nullable
     public FishingBobberEntity fishHook;
 
-    @Shadow public abstract PlayerAbilities getAbilities();
 
-    @Shadow public abstract void playSound(SoundEvent sound, float volume, float pitch);
 
-    @Shadow public abstract boolean isMainPlayer();
+    @Shadow
+    public void addExhaustion(float exhaustion) {
+        if (!this.abilities.invulnerable) {
+            if (!this.getWorld().isClient) {
+                this.hungerManager.addExhaustion(exhaustion);
+            }
+        }
+    }
+
 
     //修改挖掘速度
     @Inject(method = "getBlockBreakingSpeed", at = @At("HEAD"), cancellable = true)
     public void getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> cir) {
         cir.cancel();
+        this.addExhaustion(0.0005f);
         ItemStack stack = this.getMainHandStack();
         float f = this.inventory.getBlockBreakingSpeed(block);
         if (f > 1.0F) {
@@ -423,7 +430,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void tick(CallbackInfo ci) {
-
+        if(this.getWorld().getTimeOfDay()%8000==0){
+            addExhaustion(4f);
+        }
         //刷新上限值,和Hud保持同步,都是1s20次刷新
         refreshPlayerFoodLevelAndMaxHealth();
         if (!this.isCreative()) {

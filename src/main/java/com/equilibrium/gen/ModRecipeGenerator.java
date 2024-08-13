@@ -8,6 +8,8 @@ import com.equilibrium.item.Tools;
 import com.equilibrium.tags.ModItemTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.data.server.recipe.RecipeProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
@@ -33,6 +35,35 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
 
     @Override
     public void generate(RecipeExporter exporter) {
+        //furnace
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, BlockInit.CLAY_FURNACE).
+                pattern("XX").
+                pattern("XX").
+                input('X', Blocks.CLAY).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Blocks.CLAY)).
+                offerTo(exporter, Identifier.of("miteequilibrium","clay_furnace"));
+
+
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, BlockInit.OBSIDIAN_FURNACE).
+                pattern("XXX").
+                pattern("X X").
+                pattern("XXX").
+                input('X', Blocks.OBSIDIAN).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Blocks.OBSIDIAN)).
+                offerTo(exporter, Identifier.of("miteequilibrium","obsidian_furnace"));
+
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, BlockInit.NETHERRACK_FURNACE).
+                pattern("XXX").
+                pattern("X X").
+                pattern("XXX").
+                input('X', Blocks.NETHERRACK).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Blocks.NETHERRACK)).
+                offerTo(exporter, Identifier.of("miteequilibrium","netherrack_furnace"));
+
+
         //craftTables
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, BlockInit.FLINT_CRAFTING_TABLE).
@@ -118,7 +149,46 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
 
 
 
+        //sword
 
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.ADMANTIUM_SWORD).
+                pattern("X").
+                pattern("X").
+                pattern("Y").
+                input('X', Metal.adamantium).
+                input('Y',Items.STICK).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.adamantium)).
+                offerTo(exporter, Identifier.of("miteequilibrium","admantium_sword"));
+
+
+
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.COPPER_SWORD).
+                pattern("X").
+                pattern("X").
+                pattern("Y").
+                input('X', Metal.copper).
+                input('Y',Items.STICK).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.copper)).
+                offerTo(exporter, Identifier.of("miteequilibrium","copper_sword"));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.SILVER_SWORD).
+                pattern("X").
+                pattern("X").
+                pattern("Y").
+                input('X', Metal.silver).
+                input('Y',Items.STICK).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.silver)).
+                offerTo(exporter, Identifier.of("miteequilibrium","silver_sword"));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.MITHRIL_SWORD).
+                pattern("X").
+                pattern("X").
+                pattern("Y").
+                input('X', Metal.mithril).
+                input('Y',Items.STICK).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.mithril)).
+                offerTo(exporter, Identifier.of("miteequilibrium","mithril_sword"));
 
         //axe
         ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.FLINT_AXE).

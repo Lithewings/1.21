@@ -31,7 +31,7 @@ public class Tools {
 
 
     public static final Item FLINT_HATCHET =createFlintAxeOrHatchetItem(ModToolMaterials.FLINT_HATCHET,4,1f);
-    public static final Item FLINT_AXE =createFlintAxeOrHatchetItem(ModToolMaterials.FLINT_HATCHET,5,1f);
+    public static final Item FLINT_AXE =createFlintAxeOrHatchetItem(ModToolMaterials.FLINT_AXE,5,1f);
     public static final Item FLINT_KNIFE =createFlintKnifeItem(ModToolMaterials.FLINT_KNIFE,3,2f);
     public static final Item FLINT_SHOVEL =createFlintShovelItem(ModToolMaterials.FLINT_SHOVEL,2,2f);
 

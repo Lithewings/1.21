@@ -1,6 +1,7 @@
 package com.equilibrium.gen;
 
 import com.equilibrium.block.ModBlocks;
+import com.equilibrium.craft_time_register.BlockInit;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLootTableProvider;
@@ -27,6 +28,17 @@ public class ModLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.COPPER_BLOCK);
         addDrop(ModBlocks.ADAMANTIUM_BLOCK);
         addDrop(ModBlocks.MITHRIL_BLOCK);
+
+        addDrop(BlockInit.CLAY_FURNACE);
+        addDrop(BlockInit.OBSIDIAN_FURNACE);
+        addDrop(BlockInit.NETHERRACK_FURNACE);
+
+        addDrop(BlockInit.FLINT_CRAFTING_TABLE);
+        addDrop(BlockInit.COPPER_CRAFTING_TABLE);
+        addDrop(BlockInit.DIAMOND_CRAFTING_TABLE);
+        addDrop(BlockInit.IRON_CRAFTING_TABLE);
+        addDrop(BlockInit.NETHERITE_CRAFTING_TABLE);
+
     }
 
 }

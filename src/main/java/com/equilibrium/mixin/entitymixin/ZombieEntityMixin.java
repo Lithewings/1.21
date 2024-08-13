@@ -90,9 +90,9 @@ public abstract class ZombieEntityMixin extends HostileEntity {
 //        this.targetSelector.add(2, new ActiveTargetGoal(this, PlayerEntity.class, false));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
         //僵尸透视泥土等方块
-        this.targetSelector.add(1, new RevengeGoal(this).setGroupRevenge(ZombifiedPiglinEntity.class));
+        this.targetSelector.add(3, new RevengeGoal(this).setGroupRevenge(ZombifiedPiglinEntity.class));
         this.targetSelector.add(2, new AdvanceActiveTargetGoal<>(this, PlayerEntity.class, false));
-        this.goalSelector.add(3, new BreakBlockGoal(this, 800, difficulty -> difficulty == Difficulty.NORMAL || difficulty == Difficulty.HARD));
+        this.goalSelector.add(1, new BreakBlockGoal(this, 800, difficulty -> difficulty == Difficulty.NORMAL || difficulty == Difficulty.HARD));
         this.targetSelector.add(4, new ActiveTargetGoal(this, MerchantEntity.class, false));
         this.targetSelector.add(4, new ActiveTargetGoal(this, IronGolemEntity.class, true));
         this.targetSelector.add(4, new AdvanceActiveTargetGoal<>(this,PassiveEntity.class, true));

@@ -4,6 +4,7 @@ import com.equilibrium.block.ModBlocks;
 
 import com.equilibrium.craft_time_register.BlockInit;
 import com.equilibrium.craft_time_register.UseBlock;
+import com.equilibrium.entity.goal.BreakBlockGoal;
 import com.equilibrium.event.BreakBlockEvent;
 import com.equilibrium.item.Metal;
 import com.equilibrium.item.ModItemGroup;
@@ -30,6 +31,10 @@ import com.equilibrium.craft_time_worklevel.CraftingIngredients;
 import com.equilibrium.craft_time_worklevel.FurnaceIngredients;
 
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import static com.equilibrium.entity.ModEntities.registerModEntities;
 
 
@@ -49,10 +54,21 @@ public class MITEequilibrium implements ModInitializer {
 
 	public static Config config;
 
+	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
+	public static void init() {
+		// 任务在mod加载时初始化,初始化僵尸破坏的方块进度
+		scheduler.scheduleAtFixedRate(() -> {
+			synchronized (BreakBlockGoal.blockBreakProgressMap) {
+				BreakBlockGoal.blockBreakProgressMap.clear();
+				System.out.println("Progress map cleared.");
+			}
+		}, 240, 240, TimeUnit.SECONDS);  // 30秒后首次运行，以后每隔30秒执行一次
+	}
 
 	@Override
 	public void onInitialize() {
+		init();
 		//物品栏添加
 		ModItemGroup.registerModItemGroup();
 

@@ -1,6 +1,9 @@
 package com.equilibrium.mixin.tables;
 
 import com.equilibrium.craft_time_register.BlockInit;
+import com.equilibrium.item.Metal;
+import com.equilibrium.item.Tools;
+import com.equilibrium.tags.ModItemTags;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.PillarBlock;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,16 +19,24 @@ import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.AbstractRecipeScreenHandler;
 import net.minecraft.screen.CraftingScreenHandler;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Mixin(PlayerScreenHandler.class)
@@ -44,77 +55,90 @@ public abstract class PlayerScreenHandlerMixin extends AbstractRecipeScreenHandl
 
 //    @Inject(at = @At("HEAD"), method = "onContentChanged", cancellable = true)
 //    public void onContentChanged(Inventory inventory, CallbackInfo ca) {
-/**
- * @author
- * @reason
- */
-@Overwrite
-    public void onContentChanged(Inventory inventory) {
-        if (this.onServer) {
-            //输出物品
-            CraftingRecipeInput craftingRecipeInput = craftingInput.createRecipeInput();
-            ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity)owner;
-            ItemStack itemStack = ItemStack.EMPTY;
-            Optional<RecipeEntry<CraftingRecipe>> optional = serverPlayerEntity.getWorld().getServer().getRecipeManager().getFirstMatch(RecipeType.CRAFTING, craftingRecipeInput, serverPlayerEntity.getWorld(),(RecipeEntry)null);
-            if (optional.isPresent()) {
-                RecipeEntry<CraftingRecipe> recipeEntry = (RecipeEntry)optional.get();
-                CraftingRecipe craftingRecipe = (CraftingRecipe)recipeEntry.value();
-                if (this.craftingResult.shouldCraftRecipe(serverPlayerEntity.getWorld(), serverPlayerEntity, recipeEntry)) {
-                    itemStack = craftingRecipe.craft(craftingRecipeInput,owner.getWorld().getRegistryManager());
-                }
+
+    @Inject(method = "onContentChanged",at = @At(value = "HEAD"),cancellable = true)
+    public void onContentChanged(Inventory inventory, CallbackInfo ci) {
+        ci.cancel();
+        this.craftingResult.clear();
+        if(this.onServer) {
+            //确定4个输入物品的合成等级
+            List<Integer> list = new ArrayList<>();
+
+            for (int i = 0; i < 4; i++) {
+                int craftLevel = 0;
+                ItemStack itemStack = this.craftingInput.getStack(i);
+                if (itemStack.isIn(ModItemTags.CRAFT_LEVEL1))
+                    craftLevel = 1;
+                else if (itemStack.isIn(ModItemTags.CRAFT_LEVEL2))
+                    craftLevel = 2;
+                else if (itemStack.isIn(ModItemTags.CRAFT_LEVEL3))
+                    craftLevel = 3;
+                else if (itemStack.isIn(ModItemTags.CRAFT_LEVEL4))
+                    craftLevel = 4;
+                else if (itemStack.isIn(ModItemTags.CRAFT_LEVEL5))
+                    craftLevel = 5;
+                else
+                    craftLevel = 0;
+                list.add(craftLevel);
             }
+            int maxCraftLevel = Collections.max(list);
 
-            Item item = itemStack.getItem();
-            String name = Registries.ITEM.getId(item).toString();
-            //输入物品
-            int count = 0;
-            int countHay = 0;
-
-            int i;
-            int j;
-            for(i = 0; i < 2; ++i) {
-                for(j = 0; j < 2; ++j) {
-                    Item inputItem = ((PlayerScreenHandlerAccessor)(Object)this).getCraftingInput().getStack(j + i * 2).getItem();
-//                    String inputItemName = Registry.ITEM.getId(inputItem).toString();
-                    //输入物品检测：铜，铁，金，红石，绿宝石，青金石，钻石，下界合金，黑曜石
-                    if(inputItem== Items.COPPER_INGOT || inputItem== Items.IRON_INGOT || inputItem== Items.IRON_BLOCK
-                            || inputItem== Items.GOLD_INGOT || inputItem== Items.GOLD_BLOCK
-                            || inputItem== Items.REDSTONE || inputItem== Items.REDSTONE_BLOCK || inputItem== Items.OBSIDIAN
-                            || inputItem== Items.EMERALD || inputItem== Items.EMERALD_BLOCK || inputItem== Items.LAPIS_LAZULI || inputItem== Items.LAPIS_BLOCK
-                            || inputItem== Items.DIAMOND || inputItem== Items.DIAMOND_BLOCK
-                            || inputItem== Items.NETHERITE_INGOT || inputItem== Items.NETHERITE_BLOCK
-                            || inputItem instanceof BlockItem blockItem && blockItem.getBlock() instanceof PillarBlock && (Registries.ITEM.getId(inputItem).toString().contains("_log") || Registries.ITEM.getId(inputItem).toString().contains("_stem"))
-                            || inputItem instanceof BlockItem && (Registries.ITEM.getId(inputItem).toString().contains("_log") || Registries.ITEM.getId(inputItem).toString().contains("_stem") || Registries.ITEM.getId(inputItem).toString().contains("_wood"))
-                    ){
-                        count++;
-                    }
-
-                    if(inputItem == Items.HAY_BLOCK){
-                        countHay++;
-                    }
-                }
-            }
-
-            long time = this.owner.getWorld().getLevelProperties().getTimeOfDay();
-            int day = (int)(time / 24000L)+1;
-            int structureUnderDay;
-            if(FabricLoader.getInstance().isModLoaded("aliveandwell")){
-                structureUnderDay = 48;
-            }else {
-                structureUnderDay = 1;
-            }
+            //是否在合成工作台?
+            ItemStack itemStack0 = this.craftingInput.getStack(0);ItemStack itemStack1 = this.craftingInput.getStack(1);
+            ItemStack itemStack2 = this.craftingInput.getStack(2);ItemStack itemStack3 = this.craftingInput.getStack(3);
 
 
-            if(item != BlockInit.FLINT_CRAFTING_TABLE.asItem() && count > 0 || item==Items.ENCHANTED_GOLDEN_APPLE
-                    || name.contains("aliveandwell:enchanted_golden_carrot")
-                    || day<=structureUnderDay && (name.equals("soulsweapons:boss_compass")
-                    || name.equals("bosses_of_mass_destruction:void_lily"))){
-                this.craftingResult.setStack(0, ItemStack.EMPTY);
-            }else if(countHay>0 && item == Items.WHEAT){
-                this.craftingResult.setStack(0, ItemStack.EMPTY);
-            } else {
-                CraftingScreenHandler.updateResult(this, this.owner.getWorld(), this.owner, ((PlayerScreenHandlerAccessor)(Object)this).getCraftingInput(), this.craftingResult, (RecipeEntry)null);
-            }
+            boolean condition1 = itemStack0.isOf(Tools.FLINT_KNIFE)&&itemStack2.isIn(ItemTags.LOGS);
+            boolean condition2 = itemStack1.isOf(Tools.FLINT_KNIFE)&&itemStack3.isIn(ItemTags.LOGS);
+            boolean isCraftTable =condition1||condition2;
+
+            if (maxCraftLevel > 0 && !isCraftTable) {
+            //什么都不做,不更新
+            } else
+                CraftingScreenHandler.updateResult(this, this.owner.getWorld(), this.owner, this.craftingInput, this.craftingResult, null);
         }
     }
+
 }
+
+
+
+
+
+
+///**
+// * @author
+// * @reason
+// */
+//@Overwrite
+//    public void onContentChanged(Inventory inventory) {
+//        if (this.onServer) {
+//            //输出物品
+//            CraftingRecipeInput craftingRecipeInput = craftingInput.createRecipeInput();
+//            ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity)owner;
+//            ItemStack itemStack = ItemStack.EMPTY;
+//            Optional<RecipeEntry<CraftingRecipe>> optional = serverPlayerEntity.getWorld().getServer().getRecipeManager().getFirstMatch(RecipeType.CRAFTING, craftingRecipeInput, serverPlayerEntity.getWorld(),(RecipeEntry)null);
+//            if (optional.isPresent()) {
+//                RecipeEntry<CraftingRecipe> recipeEntry = (RecipeEntry)optional.get();
+//                CraftingRecipe craftingRecipe = (CraftingRecipe)recipeEntry.value();
+//                if (this.craftingResult.shouldCraftRecipe(serverPlayerEntity.getWorld(), serverPlayerEntity, recipeEntry)) {
+//                    itemStack = craftingRecipe.craft(craftingRecipeInput,owner.getWorld().getRegistryManager());
+//                }
+//            }
+//
+//            Item item = itemStack.getItem();
+//            String name = Registries.ITEM.getId(item).toString();
+//
+//
+//            if(item != BlockInit.FLINT_CRAFTING_TABLE.asItem() && count > 0 || item==Items.ENCHANTED_GOLDEN_APPLE
+//
+//                this.craftingResult.setStack(0, ItemStack.EMPTY);
+//            } else {
+//                CraftingScreenHandler.updateResult(this, this.owner.getWorld(), this.owner, ((PlayerScreenHandlerAccessor)(Object)this).getCraftingInput(), this.craftingResult, (RecipeEntry)null);
+//            }
+//        }
+
+
+
+
+

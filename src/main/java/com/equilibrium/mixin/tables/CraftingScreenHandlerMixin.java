@@ -119,7 +119,7 @@ public abstract class CraftingScreenHandlerMixin extends AbstractRecipeScreenHan
 				for (int i = 0; i < 10; i++) {
 					int craftLevel = 0;
 					ItemStack itemStack = this.input.getStack(i);
-					this.player.sendMessage(Text.of((itemStack).toString()));
+					//this.player.sendMessage(Text.of((itemStack).toString()));
 					if (itemStack.isIn(ModItemTags.CRAFT_LEVEL1))
 						craftLevel = 1;
 					else if (itemStack.isIn(ModItemTags.CRAFT_LEVEL2))
@@ -158,7 +158,7 @@ public abstract class CraftingScreenHandlerMixin extends AbstractRecipeScreenHan
 
 
 				updateResult(this, world, this.player, this.input, this.result, (RecipeEntry) null);
-				this.player.sendMessage(this.result.getStack(0).getName());
+//				this.player.sendMessage(this.result.getStack(0).getName());
 
 
 			});
@@ -504,7 +504,7 @@ public abstract class CraftingScreenHandlerMixin extends AbstractRecipeScreenHan
 
 			if(itemStack.isIn(ModItemTags.SHOVELS)){
 				if(itemStack.isOf(Items.IRON_SHOVEL))
-					itemStack = Tools.IRON_AXE.getDefaultStack();
+					itemStack = Tools.IRON_SHOVEL.getDefaultStack();
 
 				if(itemStack.isOf(Items.GOLDEN_SHOVEL))
 					itemStack = Tools.GOLD_SHOVEL.getDefaultStack();
