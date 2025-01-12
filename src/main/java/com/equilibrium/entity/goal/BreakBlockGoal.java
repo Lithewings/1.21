@@ -144,8 +144,10 @@ public class BreakBlockGoal extends Goal {
 
 
                 BlockState pendingBreakState = this.mob.getWorld().getBlockState(pendingBreakPos);
-                if(!canBreakBlock(pendingBreakState))
+                if(!canBreakBlock(pendingBreakState)) {
+                    blockBreakProgressMap.put(pendingBreakPos, 0);
                     continue;
+                }
                 if (canBreakBlock(pendingBreakState) && this.mob.getNavigation().isIdle()) {
                     this.breakPos = pendingBreakPos;
                     this.breakState = pendingBreakState;

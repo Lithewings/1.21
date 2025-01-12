@@ -1,13 +1,10 @@
 package com.equilibrium.mixin.crafttime;
 
 import com.equilibrium.ITimeCraftPlayer;
-import com.equilibrium.MITEequilibrium;
 import com.equilibrium.util.CraftingDifficultyHelper;
-import com.llamalad7.mixinextras.utils.MixinExtrasLogger;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.navigation.GuiNavigation;
-import net.minecraft.client.gui.navigation.GuiNavigationPath;
 import net.minecraft.client.gui.navigation.NavigationDirection;
 import net.minecraft.client.gui.screen.ingame.CraftingScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -21,7 +18,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -54,7 +50,8 @@ public abstract class MixinCraftingScreen extends HandledScreen<CraftingScreenHa
 
 
 	@Unique
-	private boolean stopRenderArrow = false;
+	private boolean stopRenderArrow=true;
+
 
 
 	@Override

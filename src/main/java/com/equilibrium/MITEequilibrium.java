@@ -12,11 +12,17 @@ import com.equilibrium.item.ModItems;
 import com.equilibrium.item.Tools;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.resource.*;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.WorldSavePath;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +37,15 @@ import com.equilibrium.craft_time_worklevel.CraftingIngredients;
 import com.equilibrium.craft_time_worklevel.FurnaceIngredients;
 
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -66,11 +81,40 @@ public class MITEequilibrium implements ModInitializer {
 		}, 240, 240, TimeUnit.SECONDS);  // 30秒后首次运行，以后每隔30秒执行一次
 	}
 
+	private void onServerStarted(MinecraftServer server) {
+		ResourcePackManager resourcePackManager= new ResourcePackManager();
+
+		// 假设数据包放在服务器保存路径的 "datapacks" 目录中
+		File dataPacksDir = new File(server.getSavePath(WorldSavePath.DATAPACKS).toFile(), "custom_datapacks");
+		if (dataPacksDir.exists() && dataPacksDir.isDirectory()) {
+			for (File dataPack : Objects.requireNonNull(dataPacksDir.listFiles())) {
+				if (dataPack.isFile() && dataPack.getName().endsWith(".zip")) {
+					resourcePackManager.scanPacks();
+				}
+			}
+		}
+	}
+
+
+
+
 	@Override
 	public void onInitialize() {
+
+
+
+
+
+
+
+
+
+
+
 		init();
 		//物品栏添加
 		ModItemGroup.registerModItemGroup();
+
 
 
 		//物品添加测试

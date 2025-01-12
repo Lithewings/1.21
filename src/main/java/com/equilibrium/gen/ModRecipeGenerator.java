@@ -84,6 +84,16 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
                 criterion("has_item", RecipeProvider.conditionsFromItem(Metal.copper)).
                 offerTo(exporter, Identifier.of("miteequilibrium","copper_crafting_table"));
 
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, BlockInit.COPPER_CRAFTING_TABLE).
+                pattern("XZ").
+                pattern("YW").
+                input('X', Metal.silver).
+                input('Y', Items.STICK).
+                input('Z', Items.LEATHER).
+                input('W', ItemTags.LOGS).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.copper)).
+                offerTo(exporter, Identifier.of("miteequilibrium","another_copper_crafting_table"));
+
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, BlockInit.IRON_CRAFTING_TABLE).
                 pattern("XZ").
                 pattern("YW").

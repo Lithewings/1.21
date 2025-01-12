@@ -142,12 +142,13 @@ public abstract class CraftingScreenHandlerMixin extends AbstractRecipeScreenHan
 				boolean condition4=this.input.getStack(4).isIn(ModItemTags.INGOT)&&this.input.getStack(5).isOf(Items.LEATHER)&&this.input.getStack(7).isOf(Items.STICK)&&this.input.getStack(8).isIn(ItemTags.LOGS);
 				//是否在合成工作台
 				boolean craftTable = condition1||condition2||condition3||condition4;
-
+				if(craftTable)
+					maxCraftLevel--;
 				//等级是否合法?
 				boolean isLevelValid=maxCraftLevel<=craftTableLevel;
 
 
-				if(isLevelValid||craftTable){}
+				if(isLevelValid){}
 				else
 					return;
 
