@@ -48,7 +48,7 @@
                 "argument1": {
                   "type": "minecraft:y_clamped_gradient",
                   "from_y": 108,
-                  "to_y": 140,
+                  "to_y": 144,
                   "from_value": 0,
                   "to_value": 1.1
                 },
@@ -74,9 +74,9 @@
                           "type": "minecraft:add",
                           "argument1": {
                             "type": "minecraft:noise",
-                            "noise": "minecraft:erosion",
+                            "noise": "minecraft:erosion_large",
                             "xz_scale": 1,
-                            "y_scale": 16
+                            "y_scale": 256
                           },
                           "argument2": {
                             "type": "minecraft:add",

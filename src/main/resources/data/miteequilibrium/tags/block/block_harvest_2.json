@@ -1,0 +1,23 @@
+{
+  "values": [
+    "minecraft:obsidian",
+    "minecraft:crying_obsidian",
+
+
+    "minecraft:nether_quartz_ore",
+    "#minecraft:gold_ores",
+    "#minecraft:redstone_ores",
+    "#minecraft:iron_ores",
+
+    "miteequilibrium:copper_ore",
+    "miteequilibrium:silver_ore",
+    "miteequilibrium:gold_ore",
+
+
+    "minecraft:raw_iron_block",
+    "minecraft:raw_copper_block",
+    "minecraft:raw_gold_block"
+
+
+  ]
+}

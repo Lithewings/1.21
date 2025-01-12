@@ -1,15 +1,22 @@
 package com.equilibrium.util;
 
-public class WorldTimeHelper {
-    private static long worldTime=0;
+import net.minecraft.world.World;
 
-    public static void setWorldTime(long time) {
-        worldTime = time;
+public class WorldTimeHelper {
+    private static int day;
+    private static World entityWorld;
+
+    public static World getEntityWorld() {
+        return entityWorld;
     }
-    public static long getWorldTime() {
-        return worldTime;
+
+    public static void setDay(World world){
+        entityWorld=world;
+        long time = world.getTimeOfDay();
+        day =(int)( time / 24000L);
     }
-    public static int getMoonPhase(long time){
-        return (int)(time / 24000L) % 128;
+
+    public static int getDay() {
+        return day;
     }
 }

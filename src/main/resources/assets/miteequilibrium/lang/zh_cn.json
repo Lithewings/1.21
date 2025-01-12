@@ -1,5 +1,34 @@
 {
+
   "item.miteequilibrium.test": "测试物品",
   "block.miteequilibrium.example_block": "测试方块",
-  "itemgroup.testgroup": "测试物品栏"
+  "itemgroup.testgroup": "测试物品栏",
+  "teleport.overworld": "保持进入前的所处高度不变,你将会被传送至主世界",
+  "teleport.underworld": "保持进入前的所处高度不变,你将会被传送至地下世界",
+  "teleport.nether": "保持进入前的所处高度不变,你将会被传送至下界",
+
+
+  "block.miteequilibrium.flint_crafting_table": "燧石工作台",
+  "block.miteequilibrium.copper_crafting_table": "铜工作台",
+  "block.miteequilibrium.iron_crafting_table": "铁工作台",
+  "block.miteequilibrium.diamond_crafting_table": "钻石工作台",
+  "block.miteequilibrium.netherite_crafting_table": "下界合金工作台",
+  "aliveandwell.crafttable.info1": "该工作台等级不够，无法合成！！！",
+  "aliveandwell.crafttable.info2": "该物品在32天前无法合成！！！",
+  "aliveandwell.crafttable.info3": "该物品已禁用！！！",
+
+  "container.flint_crafting": "燧石工作台",
+  "container.copper_crafting": "铜工作台",
+  "container.iron_crafting": "铁工作台",
+  "container.diamond_crafting": "钻石工作台",
+  "container.netherite_crafting": "下界合金工作台",
+
+  "block.miteequilibrium.clay_furnace": "黏土熔炉",
+  "block.miteequilibrium.obsidian_furnace": "黑曜石熔炉",
+  "block.miteequilibrium.netherrack_furnace": "地狱岩熔炉",
+  "container.clay_furnace": "黏土熔炉",
+  "container.netherrack_furnace": "地狱岩熔炉",
+  "container.obsidian_furnace": "黑曜石熔炉",
+  "crafttime.join_info": "工作台和附魔台可越级合成。",
+  "crafttime.group": "合成耗时"
 }

@@ -1,7 +1,5 @@
 package com.equilibrium.block;
 
-import com.equilibrium.mixin.NetherPortalMixin;
-import com.equilibrium.mixin.PortalForcerMixin;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
@@ -14,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -36,8 +33,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.Optional;
-
-import static net.minecraft.world.TeleportTarget.missingSpawnBlock;
 
 public class UnderworldPortalBlock extends Block implements Portal{
 
