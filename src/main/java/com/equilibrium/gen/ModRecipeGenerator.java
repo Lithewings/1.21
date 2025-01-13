@@ -35,6 +35,7 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
 
     @Override
     public void generate(RecipeExporter exporter) {
+
         //furnace
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, BlockInit.CLAY_FURNACE).

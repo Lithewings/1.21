@@ -39,22 +39,11 @@ public abstract class MixinCraftingScreen extends HandledScreen<CraftingScreenHa
 	@Unique
 	private static final Identifier CRAFT_OVERLAY_TEXTURE = Identifier.of("miteequilibrium:textures/gui/crafting_table.png");
 
-
-	private GuiNavigation.Arrow getArrowNavigation(NavigationDirection direction) {
-		return new GuiNavigation.Arrow(direction);
-	}
-	private GuiNavigation.Tab getTabNavigation() {
-		boolean bl = !hasShiftDown();
-		return new GuiNavigation.Tab(bl);
-	}
-
-
 	@Unique
 	private boolean stopRenderArrow=true;
 
-
-
 	@Override
+	//在合成界面,对按下的键盘指令做出反应
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		if (keyCode != GLFW.GLFW_KEY_LEFT_SHIFT && this.shouldCloseOnEsc()) {
 			this.stopRenderArrow=true;
@@ -70,7 +59,7 @@ public abstract class MixinCraftingScreen extends HandledScreen<CraftingScreenHa
 
 	@Inject(method = "drawBackground", at = @At("TAIL"))
 	protected void timecraft$drawBackground(DrawContext context, float delta, int mouseX, int mouseY, CallbackInfo ci) {
-
+		//每秒渲染20次
 		assert this.client != null;
 		this.player = (ITimeCraftPlayer) this.client.player;
 
