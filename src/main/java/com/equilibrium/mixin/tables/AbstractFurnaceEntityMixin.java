@@ -186,64 +186,6 @@ public abstract class AbstractFurnaceEntityMixin extends BlockEntity {
             if(!checkValidity(block,blockItemStack,fuelItemStack)){
                 ca.setReturnValue(0);
                 MITEequilibrium.LOGGER.info("illegal condition for melting");}
-//            //接下来是获取燃料和物品的燃烧等级
-//            if(blockItemStack.isIn(ModItemTags.BLOCK_NEED_FUEL_LEVEL1)||blockItemStack.isIn(ModItemTags.ITEM_NEED_FUEL_LEVEL1))
-//                itemNeedFuelLevel = 1;
-//            else if (blockItemStack.isIn(ModItemTags.BLOCK_NEED_FUEL_LEVEL2)||blockItemStack.isIn(ModItemTags.ITEM_NEED_FUEL_LEVEL2))
-//                itemNeedFuelLevel = 2;
-//            else if (blockItemStack.isIn(ModItemTags.BLOCK_NEED_FUEL_LEVEL3)||blockItemStack.isIn(ModItemTags.ITEM_NEED_FUEL_LEVEL3))
-//                itemNeedFuelLevel = 3;
-//            else if (blockItemStack.isIn(ModItemTags.BLOCK_NEED_FUEL_LEVEL4)||blockItemStack.isIn(ModItemTags.ITEM_NEED_FUEL_LEVEL4))
-//                itemNeedFuelLevel = 4;
-//            else
-//                itemNeedFuelLevel = 0;
-//
-//            if(fuelItemStack.isIn(ModItemTags.FUEL_LEVEL1))
-//                fuelLevel = 1;
-//            else if (fuelItemStack.isIn(ModItemTags.FUEL_LEVEL2))
-//                fuelLevel = 2;
-//            else if (fuelItemStack.isIn(ModItemTags.FUEL_LEVEL3))
-//                fuelLevel = 3;
-//            else if (fuelItemStack.isIn(ModItemTags.FUEL_LEVEL4))
-//                fuelLevel = 4;
-//            else
-//                fuelLevel = 0;
-//            //没有提到的物品热值都是0
-//
-//
-//            //过滤器,热值不够无法燃烧
-//            if(itemNeedFuelLevel > fuelLevel)
-//                ca.setReturnValue(0);
-//
-//            MITEequilibrium.LOGGER.info("itemNeedFuelLevel:"+itemNeedFuelLevel);
-//            MITEequilibrium.LOGGER.info("fuelLevel:"+fuelLevel);
-//
-//            //燃料等级大于该熔炉等级不可燃烧:原版熔炉和高炉为一级熔炉
-//            if (block == BlockInit.CLAY_FURNACE) {
-//                //粘土炉子对燃料热值或方块热值大于0的物品不起作用
-//               if(itemNeedFuelLevel >0|| fuelLevel>0)
-//                   ca.setReturnValue(0);
-//            }
-//
-//            if (block == Blocks.FURNACE || block==Blocks.BLAST_FURNACE) {
-//                //原版熔炉的最大承受热值为1
-//                if(itemNeedFuelLevel >1 || fuelLevel>1)
-//                    ca.setReturnValue(0);
-//            }
-//
-//            if (block == BlockInit.OBSIDIAN_FURNACE) {
-//                //黑曜石熔炉的最大承受热值为2
-//                if(itemNeedFuelLevel >2 || fuelLevel>2)
-//                    ca.setReturnValue(0);
-//            }
-//
-//            if (block == BlockInit.NETHERRACK_FURNACE) {
-//                //下界石熔炉的最大承受热值为3
-//                if(itemNeedFuelLevel >3 || fuelLevel>3)
-//                    ca.setReturnValue(0);
-//            }
-
-
 
         }
     }

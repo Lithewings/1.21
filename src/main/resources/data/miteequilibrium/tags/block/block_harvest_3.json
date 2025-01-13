@@ -1,6 +1,7 @@
 {
   "values": [
-
+    "minecraft:obsidian",
+    "minecraft:crying_obsidian",
     "#minecraft:emerald_ores",
 
     "miteequilibrium:mithril_ore",
