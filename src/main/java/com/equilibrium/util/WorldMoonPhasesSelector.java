@@ -106,7 +106,7 @@ public class WorldMoonPhasesSelector {
         }else{
             fullMoon=false;
         }
-        if(day % 5 ==0){
+        if(day % 4 ==0){
             newMoon=true;
         }else{
             newMoon=false;

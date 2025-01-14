@@ -77,6 +77,10 @@ public class FlintShovel extends MiningToolItem {
         }
     }
     @Override
+    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        return true;
+    }
+    @Override
     public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         stack.damage(150, attacker, EquipmentSlot.MAINHAND);
     }

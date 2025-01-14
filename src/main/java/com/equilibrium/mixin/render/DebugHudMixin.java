@@ -40,6 +40,7 @@ import java.util.concurrent.CompletableFuture;
 @Mixin(DebugHud.class)
 
 public abstract class DebugHudMixin {
+    //没有加入mixin配置,若需要再加入
 
     @Shadow
     @Final

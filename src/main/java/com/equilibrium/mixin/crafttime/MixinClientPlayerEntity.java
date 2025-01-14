@@ -80,21 +80,14 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity implemen
 	public boolean craftTime$tick(ItemStack resultStack) {
 
 		if (this.craftTime$isCrafting()) {
-//			ItemStack cursorStack = this.getInventory().player.currentScreenHandler.getCursorStack();
-//			if (cursorStack.getItem() != Items.AIR) {
-//				return false;
-//			}
-
 			if(resultStack.isEmpty()){
 				return false;
 			}
-
-
 			if (this.craftTime$getCraftTime() < this.craftTime$getCraftPeriod()) {
 				this.craft_time += getCraftingSpeed(this);
 			}else if (this.craftTime$getCraftTime() >= this.craftTime$getCraftPeriod()) {
+				//合成结束播放声音
 				this.playSound(SoundEventRegistry.finishSound, 0.1F, 1f);
-
 				this.craftTime$startCraftWithNewPeriod(craft_period);
 				return true;
 			}

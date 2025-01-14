@@ -86,6 +86,7 @@ public abstract class EntitySpawner extends ChunkManager {
             if (this.world.shouldTick(chunkPos) && this.chunkLoadingManager.shouldTick(chunkPos)) {
                 worldChunk2.increaseInhabitedTime(m);
                 if (bl && (this.spawnMonsters || this.spawnAnimals) && this.world.getWorldBorder().contains(chunkPos)) {
+                    //蓝月不刷怪
                     if(Objects.equals(WorldMoonPhasesSelector.setAndGetMoonType(this.world), "blueMoon"))
                         SpawnHelper.spawn(this.world, worldChunk2, info, this.spawnAnimals, false, bl2);
                     else

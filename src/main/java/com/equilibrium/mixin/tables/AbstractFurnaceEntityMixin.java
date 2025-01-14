@@ -1,5 +1,6 @@
 package com.equilibrium.mixin.tables;
 
+import com.equilibrium.MITEequilibrium;
 import com.equilibrium.config.CommonConfig;
 
 import com.equilibrium.craft_time_register.BlockInit;
@@ -19,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.AbstractCookingRecipe;
 import net.minecraft.recipe.RecipeEntry;
+import net.minecraft.recipe.RecipeManager;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.input.SingleStackRecipeInput;
 import net.minecraft.registry.Registries;
@@ -30,13 +32,9 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -46,10 +44,9 @@ import java.util.Map;
 @Mixin(AbstractFurnaceBlockEntity.class)
 public abstract class AbstractFurnaceEntityMixin extends BlockEntity {
 
-    @Unique
-    int itemNeedFuelLevel = 0;//物品
-    @Unique
-    int fuelLevel = 0;//燃料
+
+    @Shadow @Final private RecipeManager.MatchGetter<SingleStackRecipeInput, ? extends AbstractCookingRecipe> matchGetter;
+
     @Shadow
     int burnTime;
 
@@ -91,6 +88,81 @@ public abstract class AbstractFurnaceEntityMixin extends BlockEntity {
     private static volatile Map<Item, Integer> fuelTimes;
 
 
+
+
+    private static int getBlockItemStackLevel(ItemStack blockItemStack){
+        //接下来是获取燃料和物品的燃烧等级
+        int itemNeedFuelLevel = 0;
+        if(blockItemStack.isIn(ModItemTags.BLOCK_NEED_FUEL_LEVEL1)||blockItemStack.isIn(ModItemTags.ITEM_NEED_FUEL_LEVEL1))
+            itemNeedFuelLevel = 1;
+        else if (blockItemStack.isIn(ModItemTags.BLOCK_NEED_FUEL_LEVEL2)||blockItemStack.isIn(ModItemTags.ITEM_NEED_FUEL_LEVEL2))
+            itemNeedFuelLevel = 2;
+        else if (blockItemStack.isIn(ModItemTags.BLOCK_NEED_FUEL_LEVEL3)||blockItemStack.isIn(ModItemTags.ITEM_NEED_FUEL_LEVEL3))
+            itemNeedFuelLevel = 3;
+        else if (blockItemStack.isIn(ModItemTags.BLOCK_NEED_FUEL_LEVEL4)||blockItemStack.isIn(ModItemTags.ITEM_NEED_FUEL_LEVEL4))
+            itemNeedFuelLevel = 4;
+        else
+            itemNeedFuelLevel = 0;
+
+        return itemNeedFuelLevel;
+
+    }
+    private static int getFuelItemStackLevel(ItemStack fuelItemStack) {
+        int fuelLevel = 0;
+        if (fuelItemStack.isIn(ModItemTags.FUEL_LEVEL1))
+            fuelLevel = 1;
+        else if (fuelItemStack.isIn(ModItemTags.FUEL_LEVEL2))
+            fuelLevel = 2;
+        else if (fuelItemStack.isIn(ModItemTags.FUEL_LEVEL3))
+            fuelLevel = 3;
+        else if (fuelItemStack.isIn(ModItemTags.FUEL_LEVEL4))
+            fuelLevel = 4;
+        else
+            fuelLevel = 0;
+        //没有提到的物品热值都是0
+        return fuelLevel;
+
+    }
+    private static int getFurnaceLevel(Block furnace) {
+        int furnaceLevel = 0;
+        //燃料等级大于该熔炉等级不可燃烧:原版熔炉和高炉为一级熔炉
+        if (furnace == BlockInit.CLAY_FURNACE) {
+            furnaceLevel = 0;
+        } else if (furnace == Blocks.FURNACE || furnace == Blocks.BLAST_FURNACE) {
+            //原版熔炉的最大承受热值为1
+            furnaceLevel = 1;
+        } else if (furnace == BlockInit.OBSIDIAN_FURNACE) {
+            //黑曜石熔炉的最大承受热值为2
+            furnaceLevel = 2;
+        } else if (furnace == BlockInit.NETHERRACK_FURNACE) {
+            furnaceLevel = 3;
+        }
+        return furnaceLevel;
+    }
+    private static boolean checkValidityForIgniting(Block furnace, ItemStack blockItemStack, ItemStack fuelItemStack){
+        //熔炉等级
+        int furnaceLevel = getFurnaceLevel(furnace);
+        //物品燃烧所需热值
+        int itemNeedFuelLevel = getBlockItemStackLevel(blockItemStack);
+        //燃料热值
+        int fuelLevel = getFuelItemStackLevel(fuelItemStack);
+
+        //过滤器,热值不够无法燃烧
+        if(itemNeedFuelLevel > fuelLevel)
+            return false;
+
+        //燃料热值或物品所需热值超过熔炉热值,也无法燃烧
+        if(fuelLevel>furnaceLevel||itemNeedFuelLevel>furnaceLevel)
+            return false;
+        //只有与熔炉等级相等的燃料才能燃烧该熔炉获得燃烧速度增益
+        if(fuelLevel==furnaceLevel)
+            return true;
+        else
+            return false;
+    };
+
+
+
     @Inject(at = @At("HEAD"), method = "getFuelTime", cancellable = true)
     public void getFuelTime(ItemStack fuel, CallbackInfoReturnable<Integer> ca) {
         ca.cancel();
@@ -98,78 +170,62 @@ public abstract class AbstractFurnaceEntityMixin extends BlockEntity {
             ca.setReturnValue(0);
         } else {
             Item item = fuel.getItem();
-            ca.setReturnValue(createFuelTimeMap().getOrDefault(item, 0));
-        }
-        //为0时燃烧条始终不动,也就达成了不燃烧的效果
 
-        //此处world必须判断是否为null，否则熔炉数据无法保存。
-        if (this.getWorld() != null) {
-            Block block = this.world.getBlockState(this.pos).getBlock();
+            //此处world必须判断是否为null，否则熔炉数据无法保存。
+            if (this.getWorld() != null) {
+                Block block = this.world.getBlockState(this.pos).getBlock();
 
-            // 这是熔炉空间的物品
-            ItemStack blockItemStack = this.inventory.getFirst();
-            itemNeedFuelLevel = 0;//物品等级初始化
-            //燃料物品
-            ItemStack fuelItemStack = fuel;
-            fuelLevel = 0;//燃料等级初始化
+                //这是熔炉空间的物品
+                ItemStack blockItemStack = this.inventory.getFirst();
+                //燃料物品
+                ItemStack fuelItemStack = fuel;
 
-            //接下来是获取燃料和物品的燃烧等级
-            if(blockItemStack.isIn(ModItemTags.BLOCK_NEED_FUEL_LEVEL1)||blockItemStack.isIn(ModItemTags.ITEM_NEED_FUEL_LEVEL1))
-                itemNeedFuelLevel = 1;
-            else if (blockItemStack.isIn(ModItemTags.BLOCK_NEED_FUEL_LEVEL2)||blockItemStack.isIn(ModItemTags.ITEM_NEED_FUEL_LEVEL2))
-                itemNeedFuelLevel = 2;
-            else if (blockItemStack.isIn(ModItemTags.BLOCK_NEED_FUEL_LEVEL3)||blockItemStack.isIn(ModItemTags.ITEM_NEED_FUEL_LEVEL3))
-                itemNeedFuelLevel = 3;
-            else if (blockItemStack.isIn(ModItemTags.BLOCK_NEED_FUEL_LEVEL4)||blockItemStack.isIn(ModItemTags.ITEM_NEED_FUEL_LEVEL4))
-                itemNeedFuelLevel = 4;
-            else
-                itemNeedFuelLevel = 0;
-
-            if(fuelItemStack.isIn(ModItemTags.FUEL_LEVEL1))
-                fuelLevel = 1;
-            else if (fuelItemStack.isIn(ModItemTags.FUEL_LEVEL2))
-                fuelLevel = 2;
-            else if (fuelItemStack.isIn(ModItemTags.FUEL_LEVEL3))
-                fuelLevel = 3;
-            else if (fuelItemStack.isIn(ModItemTags.FUEL_LEVEL4))
-                fuelLevel = 4;
-            else
-                fuelLevel = 0;
-
-            //过滤器,热值不够无法燃烧
-            if(itemNeedFuelLevel > fuelLevel)
-                ca.setReturnValue(0);
-
-
-            //燃料等级大于该熔炉等级不可燃烧:原版熔炉和高炉为一级熔炉
-            if (block == BlockInit.CLAY_FURNACE) {
-                //粘土炉子对燃料热值或方块热值大于0的物品不起作用
-               if(itemNeedFuelLevel >0|| fuelLevel>0)
-                   ca.setReturnValue(0);
-            }
-
-            if (block == Blocks.FURNACE || block==Blocks.BLAST_FURNACE) {
-                //只有煤炭才能点燃这个熔炉
-                if(itemNeedFuelLevel >1 || fuelLevel!=1)
+                if(!checkValidityForIgniting(block,blockItemStack,fuelItemStack)){
                     ca.setReturnValue(0);
+                    //造成这一原因的因素有:
+                    //热值不够无法燃烧
+                    //燃料热值或物品所需热值超过熔炉热值,也无法燃烧
+                    //只有与熔炉等级相等的燃料才能燃烧该熔炉
+                    //MITEequilibrium.LOGGER.info("illegal condition for melting");
+                }
+
+
+                else {
+                    ca.setReturnValue(createFuelTimeMap().getOrDefault(item, 0));}
             }
 
-            if (block == BlockInit.OBSIDIAN_FURNACE) {
-                //只有岩浆才能点燃这个熔炉
-                if(itemNeedFuelLevel >2 || fuelLevel!=2)
-                    ca.setReturnValue(0);
-            }
-            //燃料等级小于该熔炉等级不可燃烧
-            if (block == BlockInit.NETHERRACK_FURNACE) {
-                //只有烈焰棒才能点燃这个熔炉
-                if(itemNeedFuelLevel >3 || fuelLevel!=3)
-                    ca.setReturnValue(0);
-            }
+
+
 
 
 
         }
+        //为0时燃烧条始终不动,也就达成了不燃烧的效果
+
+
     }
+
+    @Inject(at = @At("TAIL"),method = "tick")
+    private static void tick(World world, BlockPos pos, BlockState state, AbstractFurnaceBlockEntity blockEntity, CallbackInfo ci) {
+        //燃烧过程的合法性判断
+        if (blockEntity.isBurning()){
+            //在熔炉燃烧时,获取物品和物品燃烧所需热值等级
+            ItemStack item=blockEntity.getStack(0);
+            //获取物品燃烧等级
+            int itemLevel = getBlockItemStackLevel(item);
+
+            //在熔炉燃烧时,获取熔炉等级
+            Block furnace = state.getBlock();
+            int furnaceLevel = getFurnaceLevel(furnace);
+            //物品燃烧所需热值大于熔炉等级,燃烧进度归0
+            if(itemLevel>furnaceLevel){
+                blockEntity.cookTime = 0;
+//                MITEequilibrium.LOGGER.info("can not continue melting");
+        }}
+    }
+
+
+
 
     @Inject(at = @At("HEAD"), method = "getCookTime", cancellable = true)
     private static void getCookTime(World world, AbstractFurnaceBlockEntity furnace, CallbackInfoReturnable<Integer> ca)  {
@@ -183,12 +239,18 @@ public abstract class AbstractFurnaceEntityMixin extends BlockEntity {
             String name0 = Registries.ITEM.getId(item0).toString();
 
             //燃料
-            ItemStack itemStack = mixin.inventory.get(1);
-            item = itemStack.getItem();
+            ItemStack itemStack1 = mixin.inventory.get(1);
+            item = itemStack1.getItem();
             String name = Registries.ITEM.getId(item).toString();
 
             //燃烧速度
             int time =160;
+
+//            //持续检查合法性,尤其是在燃料已经损耗的情况下,避免用煤炭点燃石头熔炉,然后迅速撤掉燃烧物换成艾德曼合金粗矿
+//            if(){
+//                time= (int) Double.POSITIVE_INFINITY;
+//                MITEequilibrium.LOGGER.info("illegal condition for  continue melting");
+//            }
 
             if(CommonConfig.itemCooktimeMap.containsKey(name0)){
                 time = CommonConfig.itemCooktimeMap.get(name0);

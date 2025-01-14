@@ -100,7 +100,9 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
         }
 
         Random random =new Random();
+        //时运附魔等级
         int furtuneLevel=EnchantmentHelper.getLevel(world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.FORTUNE).get(),itemStack);
+        //精准采集等级
         int slikTouch=EnchantmentHelper.getLevel(world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.SILK_TOUCH).get(),itemStack);
 
         if (state.isIn(BlockTags.LEAVES)) {
@@ -171,11 +173,6 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
                 world.spawnEntity(itemDrop);
             }
         }
-
-
-
-
-
         if (state.isIn(ModBlockTags.ORE)){
             //掉落个数,比如红石就应该多次掉落
             int dropTime = 1;
