@@ -92,9 +92,6 @@ public abstract class CraftingScreenHandlerMixin extends AbstractRecipeScreenHan
 		if (!this.filling) {
 			this.context.run((world, pos) -> {
 
-
-
-
 				//确定合成台的合成等级
 				int craftTableLevel = 0;
 				if (world.getBlockState(pos).getBlock() == BlockInit.FLINT_CRAFTING_TABLE) {
@@ -109,7 +106,6 @@ public abstract class CraftingScreenHandlerMixin extends AbstractRecipeScreenHan
 					craftTableLevel = 5;
 				} else
 					craftTableLevel = 0;
-
 
 
 				//确定9个输入物品的合成等级
@@ -152,16 +148,8 @@ public abstract class CraftingScreenHandlerMixin extends AbstractRecipeScreenHan
 				else
 					return;
 
-
-
-
-
-
-
 				updateResult(this, world, this.player, this.input, this.result, (RecipeEntry) null);
 //				this.player.sendMessage(this.result.getStack(0).getName());
-
-
 			});
 		}
 	}

@@ -1,6 +1,7 @@
 package com.equilibrium.mixin.crafttime;
 
 import com.equilibrium.ITimeCraftPlayer;
+import com.equilibrium.MITEequilibrium;
 import com.equilibrium.util.CraftingDifficultyHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.DrawContext;
@@ -14,11 +15,13 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 
@@ -34,6 +37,18 @@ public abstract class MixinInventoryScreen extends AbstractInventoryScreen<Playe
 
 	@Unique
 	private static final Identifier CRAFT_OVERLAY_TEXTURE = Identifier.of("miteequilibrium:textures/gui/inventory.png");
+
+	@Inject(method = "keyPressed", at = @At("HEAD"))
+	//在合成台界面,对按下的键盘指令做出反应
+	public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+		if (keyCode != GLFW.GLFW_KEY_LEFT_SHIFT && this.shouldCloseOnEsc()) {
+			//一旦中途退出,就失去所有进度渲染
+			MITEequilibrium.LOGGER.info("end crafting");
+			player.craftTime$setCraftTime(0);
+			this.close();
+		}
+	}
+
 
 	@Inject(method = "drawBackground", at = @At("TAIL"))
 	protected void timecraft$drawBackground(DrawContext context, float delta, int mouseX, int mouseY, CallbackInfo ci) {

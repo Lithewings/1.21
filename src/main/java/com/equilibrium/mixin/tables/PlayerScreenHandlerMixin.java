@@ -43,10 +43,10 @@ public abstract class PlayerScreenHandlerMixin extends AbstractRecipeScreenHandl
 
 
 
-    @Inject(method = "onClosed",at = @At(value = "HEAD"), cancellable = true)
-    public void onClosed(PlayerEntity player, CallbackInfo ci) {
-        ci.cancel();
-    }
+//    @Inject(method = "onClosed",at = @At(value = "HEAD"), cancellable = true)
+//    public void onClosed(PlayerEntity player, CallbackInfo ci) {
+//        ci.cancel();
+//    }
 
 
 
