@@ -13,7 +13,7 @@ public class MITEequilibriumDataGenerator implements DataGeneratorEntrypoint {
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator){
 		FabricDataGenerator.Pack pack=fabricDataGenerator.createPack();
-//		pack.addProvider(ModRecipeGenerator::new);
+		pack.addProvider(ModRecipeGenerator::new);
 //		pack.addProvider(ModModelProvider::new);
 //		pack.addProvider(ModLanguageTranslatorZhCn::new);
 //		pack.addProvider(TagsProvider::new);

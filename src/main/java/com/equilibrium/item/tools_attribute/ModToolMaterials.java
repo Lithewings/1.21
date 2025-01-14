@@ -19,11 +19,11 @@ public enum ModToolMaterials implements ToolMaterial {
     FLINT_KNIFE(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 360, 4.0F, 0.0F, 0, () -> Ingredient.ofItems(Items.FLINT)),
 
     COPPER_AXE(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 4800, 12.0F, 0.0F, 15, () -> Ingredient.ofItems(Metal.copper)),
-    COOPER_SHOVEL(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 1600, 4.0F, 0.0F, 15, () -> Ingredient.ofItems(Metal.copper)),
-    COOPER_DAGGER(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 1600, 12.0F, 0.0F, 15, () -> Ingredient.ofItems(Metal.copper)),
-    COOPER_PICKAXE(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 4800, 12.0F, 0.0F, 15, () -> Ingredient.ofItems(Metal.copper)),
-    COOPER_SWORD(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 3200, 12.0F, 0.0F, 15, () -> Ingredient.ofItems(Metal.copper)),
-    COOPER_HOE(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 3200, 12.0F, 0.0F, 15, () -> Ingredient.ofItems(Metal.copper)),
+    COPPER_SHOVEL(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 1600, 4.0F, 0.0F, 15, () -> Ingredient.ofItems(Metal.copper)),
+    COPPER_DAGGER(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 1600, 12.0F, 0.0F, 15, () -> Ingredient.ofItems(Metal.copper)),
+    COPPER_PICKAXE(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 4800, 12.0F, 0.0F, 15, () -> Ingredient.ofItems(Metal.copper)),
+    COPPER_SWORD(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 3200, 12.0F, 0.0F, 15, () -> Ingredient.ofItems(Metal.copper)),
+    COPPER_HOE(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 3200, 12.0F, 0.0F, 15, () -> Ingredient.ofItems(Metal.copper)),
 
     SILVER_AXE(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 4800, 12.0F, 0.0F, 15, () -> Ingredient.ofItems(Metal.silver)),
     SILVER_SHOVEL(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 1600, 4.0F, 0.0F, 15, () -> Ingredient.ofItems(Metal.silver)),

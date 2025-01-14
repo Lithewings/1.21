@@ -6,6 +6,7 @@ import com.equilibrium.tags.ModItemTags;
 import com.equilibrium.util.*;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.*;
@@ -15,6 +16,9 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.Monster;
+import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,8 +37,11 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
@@ -49,12 +56,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
 import java.util.Objects;
 
 import static com.equilibrium.event.MoonPhaseEvent.*;
 import static com.equilibrium.util.IsMinable.getBlockHarvertLevel;
 import static com.equilibrium.util.IsMinable.getItemHarvertLevel;
 import static java.lang.Math.max;
+import static net.minecraft.predicate.entity.EntityPredicates.VALID_LIVING_ENTITY;
 import static net.minecraft.util.math.MathHelper.nextBetween;
 
 @Mixin(PlayerEntity.class)
@@ -179,6 +188,11 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo ci) {
+//        moonType = getMoonType(this.getWorld());
+//        this.sendMessage(Text.of(moonType));
+
+//        this.sendMessage(Text.of(" the hit range is"+this.getEntityInteractionRange()));
+//        this.sendMessage(Text.of(" the pitch is"+this.getPitch()));
 //        this.getMainHandStack().damage((int) (this.getMainHandStack().getMaxDamage() * 0.25), this, EquipmentSlot.MAINHAND);
 //        this.sendMessage(Text.of(""+this.getEntityInteractionRange()));
 //        if (!this.getWorld().isClient) {
@@ -256,7 +270,12 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 //            this.sendMessage(Text.of("这是一个平凡的无法附魔的东西"));
             setEntityInteractBonus(0f);
         }
-        cir.setReturnValue(1.0 + entityInteractBonus);
+        //潜行向下看时,增加生物交互距离
+        if(this.isSneaking() && this.getPitch()>60)
+            cir.setReturnValue(2.0 + entityInteractBonus);
+        else{
+            cir.setReturnValue(1.0 + entityInteractBonus);
+        }
     }
 
 
@@ -428,6 +447,21 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @Inject(method = "tick", at = @At("HEAD"))
     public void tick(CallbackInfo ci) {
         if(this.getWorld().getTimeOfDay()%8000==0){
@@ -487,12 +521,12 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                     if (this.age % 100 == 0) {
                         //执行间隔事件
                         spawnMobNearPlayer((ServerWorld)this.getWorld());
-                        this.sendMessage(Text.of("血月升起,怪物刷新一次"));
+
                     }
                     if (this.age % this.random.nextBetween(50,64) == 0) {
                         //执行间隔事件
                         controlWeather((ServerWorld) this.getWorld());
-                        this.sendMessage(Text.of("雷电事件"));
+//                        this.sendMessage(Text.of("雷电事件"));
                     }
                 }
 
@@ -504,20 +538,25 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                 if (moonType.equals("harvestMoon") || (moonType.equals("haloMoon"))) {
                     if(this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED)!=4)
                         RandomTickModifier((ServerWorld) this.getWorld(), 4);
-                    if (this.age % 100 == 0) {
-                        //执行间隔事件
-                        this.sendMessage(Text.of("黄月/幻月升起,触发事件"));
+//                    if (this.age % 100 == 0) {
+//                        //执行间隔事件
+//                        this.sendMessage(Text.of("黄月/幻月升起,触发事件"));
 
-                    }
+//                    }
                 }
                 if (moonType.equals("fullMoon")) {
-                    if (this.age % 100 == 0)
+                    if (this.age % 100 == 0) {
                         this.sendMessage(Text.of("满月升起,触发事件"));
+                        applyStrengthToHostileMobs((ServerWorld) this.getWorld());
+                    }
                 }
                 if (moonType.equals("newMoon")) {
-                    if (this.age % 100 == 0)
+                    if (this.age % 100 == 0){
+                        applyWeaknessToHostileMobs((ServerWorld) this.getWorld());
                         this.sendMessage(Text.of("新月升起,触发事件"));
+                    }
                 }
+
                 //第一次蓝月,不改变随机刻速度
                 if (moonType.equals("blueMoon")) {
                     if(this.getWorld().getTimeOfDay()>24000){

@@ -127,10 +127,12 @@ public class MetalAxe extends ToolItem {
                 .map(block -> block.getDefaultState().with(PillarBlock.AXIS, (Direction.Axis)state.get(PillarBlock.AXIS)));
     }
 
-
-
+    @Override
+    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        return true;
+    }
     @Override
     public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        stack.damage(150, attacker, EquipmentSlot.MAINHAND);
+        stack.damage(300, attacker, EquipmentSlot.MAINHAND);
     }
 }

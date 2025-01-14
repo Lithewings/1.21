@@ -1,8 +1,8 @@
 accessWidener v1 named
 
-
-
-
+accessible field net/minecraft/block/entity/AbstractFurnaceBlockEntity cookTimeTotal I
+accessible field net/minecraft/block/entity/AbstractFurnaceBlockEntity cookTime I
+accessible method net/minecraft/block/entity/AbstractFurnaceBlockEntity isBurning ()Z
 accessible field net/minecraft/entity/damage/DamageTracker recentlyAttacked Z
 accessible method net/minecraft/entity/ai/TargetPredicate <init> (Z)V
 accessible method net/minecraft/entity/mob/ZombieEntity initCustomGoals ()V

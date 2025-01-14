@@ -7,10 +7,8 @@ import com.equilibrium.item.tools_attribute.ModToolMaterials;
 import com.equilibrium.item.tools_attribute.flint.FlintShovel;
 import com.equilibrium.item.tools_attribute.metal.*;
 import net.minecraft.item.*;
-import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.Identifier;
 
 public class Tools {
@@ -46,14 +44,14 @@ public class Tools {
     public static final Item ADAMANTIUM_AXE = createMetalAxeItem(ModToolMaterials.ADAMANTIUM_AXE,10,1f);
 
 
-    public static final Item COPPER_PICKAXE = createMetalPickAxeItem(ModToolMaterials.COOPER_PICKAXE,5,2f);
+    public static final Item COPPER_PICKAXE = createMetalPickAxeItem(ModToolMaterials.COPPER_PICKAXE,5,2f);
     public static final Item GOLD_PICKAXE = createMetalPickAxeItem(ModToolMaterials.GOLD_PICKAXE,5,2f);
     public static final Item SILVER_PICKAXE = createMetalPickAxeItem(ModToolMaterials.SILVER_PICKAXE,5,2f);
     public static final Item IRON_PICKAXE = createMetalPickAxeItem(ModToolMaterials.IRON_PICKAXE,6,2f);
     public static final Item MITHRIL_PICKAXE = createMetalPickAxeItem(ModToolMaterials.MITHRIL_PICKAXE,7,2f);
     public static final Item ADMANTIUM_PICKAXE = createMetalPickAxeItem(ModToolMaterials.ADAMANTIUM_PICKAXE,8,2f);
 
-    public static final Item COPPER_HOE = createMetalHoeItem(ModToolMaterials.COOPER_HOE,4,3f);
+    public static final Item COPPER_HOE = createMetalHoeItem(ModToolMaterials.COPPER_HOE,4,3f);
     public static final Item GOLD_HOE = createMetalHoeItem(ModToolMaterials.GOLD_HOE,4,3f);
     public static final Item SILVER_HOE = createMetalHoeItem(ModToolMaterials.SILVER_HOE,4,3f);
     public static final Item IRON_HOE = createMetalHoeItem(ModToolMaterials.IRON_HOE,5,3f);
@@ -61,21 +59,21 @@ public class Tools {
     public static final Item ADMANTIUM_HOE =createMetalHoeItem(ModToolMaterials.ADAMANTIUM_HOE,7,3f);
 
 
-    public static final Item COPPER_SHOVEL = createMetalShovelItem(ModToolMaterials.COOPER_SHOVEL,3,4f);
+    public static final Item COPPER_SHOVEL = createMetalShovelItem(ModToolMaterials.COPPER_SHOVEL,3,4f);
     public static final Item GOLD_SHOVEL = createMetalShovelItem(ModToolMaterials.GOLD_SHOVEL,3,4f);
     public static final Item SILVER_SHOVEL = createMetalShovelItem(ModToolMaterials.SILVER_SHOVEL,3,4f);
     public static final Item IRON_SHOVEL = createMetalShovelItem(ModToolMaterials.IRON_SHOVEL,4,4f);
     public static final Item MITHRIL_SHOVEL = createMetalShovelItem(ModToolMaterials.MITHRIL_SHOVEL,5,4f);
     public static final Item ADMANTIUM_SHOVEL =createMetalShovelItem(ModToolMaterials.ADAMANTIUM_SHOVEL,6,4f);
 
-    public static final Item COPPER_SWORD = createMetalSwordItem(ModToolMaterials.COOPER_SWORD,7,3f);
+    public static final Item COPPER_SWORD = createMetalSwordItem(ModToolMaterials.COPPER_SWORD,7,3f);
     public static final Item GOLD_SWORD = createMetalSwordItem(ModToolMaterials.GOLD_SWORD,7,3f);
     public static final Item SILVER_SWORD = createMetalSwordItem(ModToolMaterials.SILVER_SWORD,7,3f);
     public static final Item IRON_SWORD = createMetalSwordItem(ModToolMaterials.IRON_SWORD,8,3f);
     public static final Item MITHRIL_SWORD = createMetalSwordItem(ModToolMaterials.MITHRIL_SWORD,9,3f);
     public static final Item ADMANTIUM_SWORD =createMetalSwordItem(ModToolMaterials.ADAMANTIUM_SHOVEL,10,3f);
 
-    public static final Item COPPER_DAGGER = createMetalDaggerItem(ModToolMaterials.COOPER_DAGGER,6,4f);
+    public static final Item COPPER_DAGGER = createMetalDaggerItem(ModToolMaterials.COPPER_DAGGER,6,4f);
     public static final Item GOLD_DAGGER = createMetalDaggerItem(ModToolMaterials.GOLD_DAGGER,6,4f);
     public static final Item SILVER_DAGGER = createMetalDaggerItem(ModToolMaterials.SILVER_DAGGER,6,4f);
     public static final Item IRON_DAGGER = createMetalDaggerItem(ModToolMaterials.IRON_DAGGER,7,4f);
