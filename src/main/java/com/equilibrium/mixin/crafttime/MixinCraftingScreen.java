@@ -1,11 +1,10 @@
 package com.equilibrium.mixin.crafttime;
 
 import com.equilibrium.ITimeCraftPlayer;
+import com.equilibrium.MITEequilibrium;
 import com.equilibrium.util.CraftingDifficultyHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.navigation.GuiNavigation;
-import net.minecraft.client.gui.navigation.NavigationDirection;
 import net.minecraft.client.gui.screen.ingame.CraftingScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -39,14 +38,13 @@ public abstract class MixinCraftingScreen extends HandledScreen<CraftingScreenHa
 	@Unique
 	private static final Identifier CRAFT_OVERLAY_TEXTURE = Identifier.of("miteequilibrium:textures/gui/crafting_table.png");
 
-	@Unique
-	private boolean stopRenderArrow=true;
 
 	@Override
-	//在合成界面,对按下的键盘指令做出反应
+	//在合成台界面,对按下的键盘指令做出反应
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		if (keyCode != GLFW.GLFW_KEY_LEFT_SHIFT && this.shouldCloseOnEsc()) {
-			this.stopRenderArrow=true;
+			//一旦中途退出,就失去所有进度渲染
+			player.craftTime$setCraftTime(0);
 			this.close();
 			return true;
 		}else{
@@ -59,6 +57,8 @@ public abstract class MixinCraftingScreen extends HandledScreen<CraftingScreenHa
 
 	@Inject(method = "drawBackground", at = @At("TAIL"))
 	protected void timecraft$drawBackground(DrawContext context, float delta, int mouseX, int mouseY, CallbackInfo ci) {
+
+
 		//每秒渲染20次
 		assert this.client != null;
 		this.player = (ITimeCraftPlayer) this.client.player;
@@ -70,14 +70,6 @@ public abstract class MixinCraftingScreen extends HandledScreen<CraftingScreenHa
 
 		if (player.craftTime$isCrafting() && player.craftTime$getCraftPeriod() > 0) {
 			int l = (int) ((player.craftTime$getCraftTime() * 24.0F / player.craftTime$getCraftPeriod()));
-			//一旦中途退出,就失去所有进度渲染,直到再次摆出正确配方而且点击了目标合成物
-
-//			MITEequilibrium.LOGGER.info(String.valueOf(l));
-
-			if (this.stopRenderArrow){
-				return;
-			}
-
 			if (l >= 24) {
 				context.drawTexture(CRAFT_OVERLAY_TEXTURE, i + 89, j + 35, 0, 0, 25, 16, 24, 17);
 			} else {
@@ -125,7 +117,6 @@ public abstract class MixinCraftingScreen extends HandledScreen<CraftingScreenHa
 			player.craftTime$setCrafting(false);
 		}
 		if (invSlot == 0) {
-			this.stopRenderArrow=false;
 			if (!player.craftTime$isCrafting() ) {
 
 				player.craftTime$startCraftWithNewPeriod(CraftingDifficultyHelper.getCraftingDifficultyFromMatrix(this.handler, true,this));
