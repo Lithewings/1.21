@@ -12,6 +12,7 @@ import net.minecraft.item.ToolItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -44,10 +45,14 @@ public class MetalPickAxe extends ToolItem {
         );
     }
 
-
+    @Override
+    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        return true;
+    }
 
     @Override
     public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        stack.damage(150, attacker, EquipmentSlot.MAINHAND);
+        attacker.sendMessage(Text.of("击中实体的工具损伤"));
+        stack.damage(300, attacker, EquipmentSlot.MAINHAND);
     }
 }

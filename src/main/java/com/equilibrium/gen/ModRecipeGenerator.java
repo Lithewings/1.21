@@ -35,6 +35,18 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
 
     @Override
     public void generate(RecipeExporter exporter) {
+        //shield
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Items.SHIELD).
+                pattern("XYX").
+                pattern("XXX").
+                pattern(" X ").
+                input('X', ItemTags.PLANKS).
+                input('Y', Metal.copper).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.copper)).
+                offerTo(exporter, Identifier.of("miteequilibrium","shield"));
+
+
 
         //furnace
 
@@ -558,12 +570,12 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
                 criterion("has_item", RecipeProvider.conditionsFromItem(Metal.copper)).
                 offerTo(exporter, Identifier.of("miteequilibrium","copper"));
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Metal.silver_nugget).
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Metal.silver).
                 pattern("XXX").
                 pattern("XXX").
                 pattern("XXX").
                 input('X', Metal.silver_nugget).
-                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.silver_nugget)).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.silver)).
                 offerTo(exporter, Identifier.of("miteequilibrium","silver"));
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Metal.mithril).
