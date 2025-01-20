@@ -6,23 +6,41 @@ import com.equilibrium.craft_time_register.BlockInit;
 import com.equilibrium.craft_time_register.UseBlock;
 import com.equilibrium.entity.goal.BreakBlockGoal;
 import com.equilibrium.event.BreakBlockEvent;
+import com.equilibrium.event.CraftingMetalPickAxeCallback;
 import com.equilibrium.item.Metal;
 import com.equilibrium.item.ModItemGroup;
 import com.equilibrium.item.ModItems;
 import com.equilibrium.item.Tools;
+import com.equilibrium.persistent_state.State;
+import com.equilibrium.persistent_state.StateSaverAndLoader;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.datafixers.DataFixer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.command.CommandRegistryAccess;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.resource.*;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.CommandManager;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.WorldSavePath;
+import net.minecraft.world.PersistentStateManager;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,14 +56,6 @@ import com.equilibrium.craft_time_worklevel.FurnaceIngredients;
 
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -81,24 +91,76 @@ public class MITEequilibrium implements ModInitializer {
 		}, 240, 240, TimeUnit.SECONDS);  // 30秒后首次运行，以后每隔30秒执行一次
 	}
 
-	private void onServerStarted(MinecraftServer server) {
-		ResourcePackManager resourcePackManager= new ResourcePackManager();
 
-		// 假设数据包放在服务器保存路径的 "datapacks" 目录中
-		File dataPacksDir = new File(server.getSavePath(WorldSavePath.DATAPACKS).toFile(), "custom_datapacks");
-		if (dataPacksDir.exists() && dataPacksDir.isDirectory()) {
-			for (File dataPack : Objects.requireNonNull(dataPacksDir.listFiles())) {
-				if (dataPack.isFile() && dataPack.getName().endsWith(".zip")) {
-					resourcePackManager.scanPacks();
-				}
-			}
-		}
+
+
+
+	// 注册命令的标准方式，适配 CommandDispatcher 的签名
+	private void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
+		// 注册 /locate structure 指令
+//		dispatcher.register(
+//				CommandManager.literal("locate")
+//						.then(
+//								CommandManager.literal("structure")
+//										.then(
+//												CommandManager.argument("structure", StringArgumentType.word())
+//														.executes(context -> executeLocateStructure(context.getSource()))
+//										)
+//						)
+//		);
+
+//
+		dispatcher.register(
+				CommandManager.literal("village")
+						.executes
+								(this::isPickAxeCrafted)
+
+
+
+
+		);
+
+		// 监听右键点击事件，检查是否持有指南针
+//		ServerTickEvents.END_SERVER_TICK.register(server -> {
+//			for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+//				if (player.getMainHandStack().getItem() == Items.COMPASS) {
+//					// 当玩家右键点击指南针时，触发 locate 指令
+//					player.sendMessage(Text.literal("Right-clicked with compass! Locating fortress..."), false);
+//					try {
+//						executeLocateStructure(player.getCommandSource());
+//						player.sendMessage(Text.of("你右键了指南针!"));
+//					} catch (CommandSyntaxException e) {
+//						throw new RuntimeException(e);
+//					}
+//				}
+//			}
+//		});
 	}
 
 
+//
+//	 执行 locate structure 指令
+//	private static int executeLocateStructure(ServerCommandSource source) throws CommandSyntaxException {
+//        return 0;
+//    }
+public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
+	ServerCommandSource source = context.getSource();
+	MinecraftServer server = source.getServer();
+	StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(server);
+	if(serverState.savedValue)
+		if(context.getSource().getEntity().isPlayer())
+			context.getSource().getEntity().sendMessage(Text.of("村庄可以生成了"));
+	if(!serverState.savedValue)
+		if(context.getSource().getEntity().isPlayer())
+			context.getSource().getEntity().sendMessage(Text.of("村庄还不能生成"));
+	return 1;
+}
 
 
-	@Override
+
+
+
+
 	public void onInitialize() {
 
 
@@ -109,6 +171,51 @@ public class MITEequilibrium implements ModInitializer {
 
 
 
+
+
+		CraftingMetalPickAxeCallback.EVENT.register((world,player) -> {
+
+//			DataFixer dataFixer = client.getDataFixer();  // 你需要初始化 DataFixer 实例
+//			RegistryWrapper.WrapperLookup registryLookup = client.player.getRegistryManager();  // 同样初始化RegistryWrapper
+
+
+
+
+
+
+
+
+			StateSaverAndLoader serverState;
+			if(!world.isClient()){
+				serverState = StateSaverAndLoader.getServerState(world.getServer());
+			}else{
+				return ActionResult.PASS;
+			}
+
+			boolean craftedIronPickaxe = serverState.savedValue;
+
+			if(!craftedIronPickaxe){
+				if(!world.isClient()) {
+					serverState.savedValue=true;
+					player.sendMessage(Text.of("你第一次合成了铁镐"));
+				}
+				else
+					return ActionResult.PASS;
+			}else {
+				if(!world.isClient()) {
+					player.sendMessage(Text.of("你多次合成了铁镐"));
+					return ActionResult.PASS;
+				}
+				else
+					return ActionResult.PASS;
+			}
+			return ActionResult.PASS;
+		});
+
+
+
+
+		CommandRegistrationCallback.EVENT.register(this::registerCommands);
 
 
 		init();
@@ -148,6 +255,7 @@ public class MITEequilibrium implements ModInitializer {
 		PlayerBlockBreakEvents.AFTER.register(new BreakBlockEvent());
 
 
+
 		//创建标签
 		registerModBlockTags();
 		registerModItemTags();
@@ -178,5 +286,8 @@ public class MITEequilibrium implements ModInitializer {
 
 		LOGGER.info("Hello Fabric world!");
 	}
+
+
+
 
 }

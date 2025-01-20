@@ -21,6 +21,10 @@ public class ModBlockTags {
 
     public static final TagKey<Block> NORMAL_30 = of("normal_30");
 
+    //稿子加速挖掘
+    public static final TagKey<Block> NEED_PICKAXE = of("block_need_pickaxe.json");
+
+
 
     //1级采集等级,定义为原版可以空手采集但这里不行的方块
     public static final TagKey<Block> HARVEST_ONE = of("block_harvest_1");

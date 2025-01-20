@@ -2,6 +2,7 @@ package com.equilibrium.mixin.player;
 
 import com.equilibrium.event.MoonPhaseEvent;
 import com.equilibrium.status.registerStatusEffect;
+import com.equilibrium.tags.ModBlockTags;
 import com.equilibrium.tags.ModItemTags;
 import com.equilibrium.util.*;
 import com.mojang.authlib.GameProfile;
@@ -329,6 +330,10 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     }
 
 
+    @Shadow public abstract boolean shouldCancelInteraction();
+
+    @Shadow public abstract boolean shouldDamagePlayer(PlayerEntity player);
+
     //修改挖掘速度
     @Inject(method = "getBlockBreakingSpeed", at = @At("HEAD"), cancellable = true)
     public void getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> cir) {
@@ -363,7 +368,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
 
 
-        if (stack.isSuitableFor(block)) {
+        if (stack.isSuitableFor(block)||(stack.isIn(ModItemTags.PICKAXES)&&block.isIn(ModBlockTags.ORE))) {
             f = f * 4;
 
         }

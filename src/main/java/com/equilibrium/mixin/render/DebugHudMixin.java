@@ -197,24 +197,25 @@ public abstract class DebugHudMixin {
                     string3
 
             );
-            list.add(
-                    String.format(
-                            Locale.ROOT, "X: %.1f",this.client.getCameraEntity().getX()
-                    )
+            //坐标显示
+//            list.add(
+//                    String.format(
+//                            Locale.ROOT, "X: %.1f",this.client.getCameraEntity().getX()
+//                    )
+//
+//            );
+//            list.add(
+//                    String.format(
+//                            Locale.ROOT, "Y: %.1f",this.client.getCameraEntity().getY()
+//                    )
+//
+//            );
+//            list.add(
+//                    String.format(
+//                            Locale.ROOT, "Z: %.1f", this.client.getCameraEntity().getZ()
+//                    )
 
-            );
-            list.add(
-                    String.format(
-                            Locale.ROOT, "Y: %.1f",this.client.getCameraEntity().getY()
-                    )
-
-            );
-            list.add(
-                    String.format(
-                            Locale.ROOT, "Z: %.1f", this.client.getCameraEntity().getZ()
-                    )
-
-            );
+//            );
             return list;
         }
 

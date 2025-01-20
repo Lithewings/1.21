@@ -1,18 +1,22 @@
 package com.equilibrium.item.tools_attribute.metal;
 
+import com.equilibrium.event.CraftingMetalPickAxeCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ToolComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MiningToolItem;
 import net.minecraft.item.ToolItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -55,4 +59,14 @@ public class MetalPickAxe extends ToolItem {
         attacker.sendMessage(Text.of("击中实体的工具损伤"));
         stack.damage(300, attacker, EquipmentSlot.MAINHAND);
     }
+    @Override
+    public void onCraftByPlayer(ItemStack stack, World world, PlayerEntity player) {
+        ActionResult result = CraftingMetalPickAxeCallback.EVENT.invoker().interact(world,player);
+
+        if(result == ActionResult.FAIL) {
+            return;
+        }
+
+    }
+
 }

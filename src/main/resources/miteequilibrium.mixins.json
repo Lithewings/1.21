@@ -36,6 +36,7 @@
     "portal.NetherPortalBlockMixin",
     "portal.NetherPortalMixin",
     "portal.PortalForcerMixin",
+    "structure.CompassItemMixin",
     "structure.RandomSpreadStructurePlacementMixin",
     "structure.strong_hold.ConcentricRingsStructurePlacementMixin",
     "structure.strong_hold.StrongholdGeneratorMixin",
@@ -60,6 +61,7 @@
     "crafttime.MixinClientPlayerEntity",
     "crafttime.MixinCraftingScreen",
     "crafttime.MixinInventoryScreen",
+    "render.DebugHudMixin",
     "render.InGameHudMixin",
     "render.WorldRendererMixin",
     "world.EditGameRulesScreenMixin"
