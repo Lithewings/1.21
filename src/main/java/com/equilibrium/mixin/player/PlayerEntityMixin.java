@@ -1,6 +1,7 @@
 package com.equilibrium.mixin.player;
 
 import com.equilibrium.event.MoonPhaseEvent;
+import com.equilibrium.persistent_state.StateSaverAndLoader;
 import com.equilibrium.status.registerStatusEffect;
 import com.equilibrium.tags.ModBlockTags;
 import com.equilibrium.tags.ModItemTags;
@@ -61,6 +62,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.equilibrium.event.MoonPhaseEvent.*;
+
 import static com.equilibrium.util.IsMinable.getBlockHarvertLevel;
 import static com.equilibrium.util.IsMinable.getItemHarvertLevel;
 import static java.lang.Math.max;
@@ -189,6 +191,16 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo ci) {
+        if(!this.getWorld().isClient()){
+            StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(this.getWorld().getServer());
+            boolean j =serverState.isPickAxeCrafted;
+            boolean i = ServerInfoRecorder.getDay() >= 16;
+            this.sendMessage(Text.of("Server is loaded ? "+ServerInfoRecorder.isServerInstanceSet()));
+            this.sendMessage(Text.of("Day is more than 16 ? "+i));
+            this.sendMessage(Text.of("isPickAxeCrafted ? "+j));
+        }
+
+//        this.sendMessage(Text.of("Day is "+WorldTimeRecorder.getDay()));
 //        moonType = getMoonType(this.getWorld());
 //        this.sendMessage(Text.of(moonType));
 
@@ -334,6 +346,12 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Shadow public abstract boolean shouldDamagePlayer(PlayerEntity player);
 
+    @Shadow public abstract boolean shouldFilterText();
+
+    @Shadow public abstract void tick();
+
+    @Shadow public abstract boolean isPlayer();
+
     //修改挖掘速度
     @Inject(method = "getBlockBreakingSpeed", at = @At("HEAD"), cancellable = true)
     public void getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> cir) {
@@ -446,9 +464,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     private String moonType;
 
-    //随机刻增益持续时长,用世界时间来记录是否过去了增益时间
-    private long randomTickBonusStart;
-    private long randomTickBonusShouldEnd;
+
 
 
 

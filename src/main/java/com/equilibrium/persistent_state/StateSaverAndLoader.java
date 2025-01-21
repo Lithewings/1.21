@@ -1,11 +1,8 @@
 package com.equilibrium.persistent_state;
 
-import net.minecraft.datafixer.DataFixTypes;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.village.raid.RaidManager;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.PersistentStateManager;
 import net.minecraft.world.World;
@@ -15,20 +12,20 @@ import static com.equilibrium.MITEequilibrium.MOD_ID;
 public class StateSaverAndLoader extends PersistentState {
 
 
-    public boolean savedValue=false;
+    public boolean isPickAxeCrafted =false;
 
     //写入一个关键字为"savedValue"的int变量
     @Override
     public NbtCompound writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         ;
-        nbt.putBoolean("savedValue", savedValue);
+        nbt.putBoolean("savedValue", isPickAxeCrafted);
         return nbt;
     }
 
     //若使用这个函数,则读取一个关键字为savedValue的变量,这个变量被初始化进StateSaverAndLoader对象中
     public static StateSaverAndLoader createFromNbt(NbtCompound tag) {
         StateSaverAndLoader stateSaverAndLoader = new StateSaverAndLoader();
-        stateSaverAndLoader.savedValue = tag.getBoolean("savedValue");
+        stateSaverAndLoader.isPickAxeCrafted = tag.getBoolean("savedValue");
         return stateSaverAndLoader;
     }
 
@@ -36,7 +33,7 @@ public class StateSaverAndLoader extends PersistentState {
             StateSaverAndLoader::new, // 使用 lambda 创建实例
             (nbt, lookup) -> {
                 StateSaverAndLoader state = new StateSaverAndLoader();
-                state.savedValue = nbt.getBoolean("savedValue");
+                state.isPickAxeCrafted = nbt.getBoolean("savedValue");
                 return state;
             },
             null

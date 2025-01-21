@@ -42,15 +42,15 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
 
         ItemStack itemStack =player.getMainHandStack();
 
-        player.sendMessage(Text.of("Block Harvest Level is :"+IsMinable.getBlockHarvertLevel(state)));
-        player.sendMessage(Text.of("Item Harvest Level is :"+IsMinable.getItemHarvertLevel(itemStack)));
-        player.sendMessage(Text.of(""+state.getBlock().toString()));
-
-        if(IsMinable.getBlockHarvertLevel(state)<=IsMinable.getItemHarvertLevel(itemStack))
-            player.sendMessage(Text.of("Is Minable"));
-        else{
-            player.sendMessage(Text.of("Not Minable"));
-        }
+//        player.sendMessage(Text.of("Block Harvest Level is :"+IsMinable.getBlockHarvertLevel(state)));
+//        player.sendMessage(Text.of("Item Harvest Level is :"+IsMinable.getItemHarvertLevel(itemStack)));
+//        player.sendMessage(Text.of(""+state.getBlock().toString()));
+//
+//        if(IsMinable.getBlockHarvertLevel(state)<=IsMinable.getItemHarvertLevel(itemStack))
+//            player.sendMessage(Text.of("Is Minable"));
+//        else{
+//            player.sendMessage(Text.of("Not Minable"));
+//        }
 
 
         if(state.isIn(ModBlockTags.LOG_120)){

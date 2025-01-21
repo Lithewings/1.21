@@ -51,6 +51,7 @@
     "tool.ShovelItemMixin",
     "tool.ToolMaterialDurabilityMixin",
     "world.ServerWorldMixin"
+
   ],
   "injectors": {
     "defaultRequire": 1

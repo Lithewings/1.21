@@ -8,7 +8,7 @@ accessible method net/minecraft/entity/ai/TargetPredicate <init> (Z)V
 accessible method net/minecraft/entity/mob/ZombieEntity initCustomGoals ()V
 accessible class net/minecraft/entity/mob/ZombieEntity$DestroyEggGoal
 
-
+accessible class net/minecraft/structure/pool/StructurePoolBasedGenerator$StructurePoolGenerator
 accessible field net/minecraft/server/world/ServerChunkManager$ChunkWithHolder holder Lnet/minecraft/server/world/ChunkHolder;
 
 accessible class net/minecraft/server/world/ServerChunkManager$ChunkWithHolder

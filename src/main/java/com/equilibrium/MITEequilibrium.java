@@ -11,36 +11,24 @@ import com.equilibrium.item.Metal;
 import com.equilibrium.item.ModItemGroup;
 import com.equilibrium.item.ModItems;
 import com.equilibrium.item.Tools;
-import com.equilibrium.persistent_state.State;
 import com.equilibrium.persistent_state.StateSaverAndLoader;
+import com.equilibrium.util.ServerInfoRecorder;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.datafixers.DataFixer;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.PersistentStateManager;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +43,6 @@ import com.equilibrium.craft_time_worklevel.CraftingIngredients;
 import com.equilibrium.craft_time_worklevel.FurnaceIngredients;
 
 
-import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -70,6 +57,7 @@ import static com.equilibrium.tags.ModItemTags.registerModItemTags;
 import static com.equilibrium.util.LootTableModifier.modifierLootTables;
 
 import static com.equilibrium.ore_generator.ModPlacementGenerator.registerModOre;
+import static com.equilibrium.util.ServerInfoRecorder.isServerInstanceSet;
 
 
 public class MITEequilibrium implements ModInitializer {
@@ -147,10 +135,10 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 	ServerCommandSource source = context.getSource();
 	MinecraftServer server = source.getServer();
 	StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(server);
-	if(serverState.savedValue)
+	if(serverState.isPickAxeCrafted)
 		if(context.getSource().getEntity().isPlayer())
 			context.getSource().getEntity().sendMessage(Text.of("村庄可以生成了"));
-	if(!serverState.savedValue)
+	if(!serverState.isPickAxeCrafted)
 		if(context.getSource().getEntity().isPlayer())
 			context.getSource().getEntity().sendMessage(Text.of("村庄还不能生成"));
 	return 1;
@@ -158,12 +146,62 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 
 
+	private static final int TICK_INTERVAL = 500; // 每隔500 tick检查一次
+	private int tickCount = 0; // 记录当前 tick
+	// 判断世界是否进入新的一天
+	private boolean hasNewDayPassed(long worldTime) {
+		return worldTime % 24000L < 1000L; // 假设新的一天发生在世界时间的0到1000tick之间
+	}
 
+	// 新的一天到来时触发的事件
+	private void onNewDay(MinecraftServer server, ServerWorld world, long worldTime) {
+		// 触发新的一天事件
+//		server.getPlayerManager().getPlayerList().forEach(player -> {
+//			player.sendMessage(Text.literal("新的一天开始了！"), false);
+//		});
+
+
+
+	}
 
 
 	public void onInitialize() {
 
+		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+			ServerInfoRecorder.setServerInstance(server);  // 保存服务器实例
+		});
 
+
+		// 注册服务器 tick 事件
+		ServerTickEvents.START_SERVER_TICK.register(server -> {
+			// 记录服务器实例
+			if(!isServerInstanceSet() )
+				ServerInfoRecorder.setServerInstance(server);
+			// 每隔 TICK_INTERVAL 次 tick 触发一次检查
+			tickCount++;
+			if (tickCount >= TICK_INTERVAL) {
+				// 获取所有世界并检查时间
+
+				for (ServerWorld world : server.getWorlds()) {
+					long worldTime = world.getTimeOfDay();
+					//不管是哪个世界,总之先记录时间
+					ServerInfoRecorder.setDay((int) worldTime);
+					// 记录服务器实例
+					ServerInfoRecorder.setServerInstance(server);
+
+					// 检查是否为主世界
+					if (world.getRegistryKey() == World.OVERWORLD) {
+						// 只有在主世界才执行下面的逻辑
+						// 执行主世界的相关逻辑
+						if (hasNewDayPassed(worldTime)) {
+							onNewDay(server, world,worldTime);
+						}
+					}
+				}
+
+				tickCount = 0; // 重置 tick 计数器
+			}
+		});
 
 
 
@@ -187,16 +225,16 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 			StateSaverAndLoader serverState;
 			if(!world.isClient()){
-				serverState = StateSaverAndLoader.getServerState(world.getServer());
+				serverState = StateSaverAndLoader.getServerState(ServerInfoRecorder.getServerInstance());
 			}else{
 				return ActionResult.PASS;
 			}
 
-			boolean craftedIronPickaxe = serverState.savedValue;
+			boolean craftedIronPickaxe = serverState.isPickAxeCrafted;
 
 			if(!craftedIronPickaxe){
 				if(!world.isClient()) {
-					serverState.savedValue=true;
+					serverState.isPickAxeCrafted =true;
 					player.sendMessage(Text.of("你第一次合成了铁镐"));
 				}
 				else
