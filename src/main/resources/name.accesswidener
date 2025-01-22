@@ -1,4 +1,12 @@
 accessWidener v1 named
+accessible field net/minecraft/recipe/BrewingRecipeRegistry itemRecipes Ljava/util/List;
+accessible field net/minecraft/recipe/BrewingRecipeRegistry potionRecipes Ljava/util/List;
+
+accessible class net/minecraft/recipe/BrewingRecipeRegistry$Recipe
+accessible field net/minecraft/recipe/BrewingRecipeRegistry$Recipe from Lnet/minecraft/registry/entry/RegistryEntry;
+
+accessible field net/minecraft/recipe/BrewingRecipeRegistry$Recipe ingredient Lnet/minecraft/recipe/Ingredient;
+accessible field net/minecraft/recipe/BrewingRecipeRegistry$Recipe to Lnet/minecraft/registry/entry/RegistryEntry;
 
 accessible method net/minecraft/world/gen/chunk/placement/StructurePlacement getSalt ()I
 accessible field net/minecraft/block/entity/AbstractFurnaceBlockEntity cookTimeTotal I

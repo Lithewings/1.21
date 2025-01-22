@@ -11,6 +11,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.component.type.FoodComponent;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -38,6 +39,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.text.Texts;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
@@ -60,12 +62,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 import static com.equilibrium.event.MoonPhaseEvent.*;
 
 import static com.equilibrium.util.IsMinable.getBlockHarvertLevel;
 import static com.equilibrium.util.IsMinable.getItemHarvertLevel;
 import static java.lang.Math.max;
+import static net.minecraft.component.DataComponentTypes.ITEM_NAME;
+import static net.minecraft.component.DataComponentTypes.POTION_CONTENTS;
+import static net.minecraft.entity.effect.StatusEffects.SPEED;
+import static net.minecraft.potion.Potions.SWIFTNESS;
 import static net.minecraft.predicate.entity.EntityPredicates.VALID_LIVING_ENTITY;
 import static net.minecraft.util.math.MathHelper.nextBetween;
 
@@ -191,6 +199,10 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo ci) {
+        //202501230630 完成了测试,直接把不可合成的药水名字换成迅捷药水之类的即可,不过最好用translate的那种
+        this.getMainHandStack().set(POTION_CONTENTS, new PotionContentsComponent(Optional.empty(),Optional.empty(),List.of(new StatusEffectInstance(SPEED, 20, 0, true, true))));
+        this.getMainHandStack().set(ITEM_NAME,Text.of("dd"));
+
 
 
 
