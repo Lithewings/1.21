@@ -36,6 +36,7 @@
     "portal.NetherPortalBlockMixin",
     "portal.NetherPortalMixin",
     "portal.PortalForcerMixin",
+    "potion.BrewingStandBlockEntityMixin",
     "structure.CompassItemMixin",
     "structure.RandomSpreadStructurePlacementMixin",
     "structure.strong_hold.ConcentricRingsStructurePlacementMixin",
@@ -51,7 +52,6 @@
     "tool.ShovelItemMixin",
     "tool.ToolMaterialDurabilityMixin",
     "world.ServerWorldMixin"
-
   ],
   "injectors": {
     "defaultRequire": 1

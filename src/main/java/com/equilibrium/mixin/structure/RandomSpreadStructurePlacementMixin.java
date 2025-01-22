@@ -68,7 +68,8 @@ public class RandomSpreadStructurePlacementMixin {
         boolean generate = getStructureGenerateValidity(server);
         int spacing = this.spacing;
         int separation = this.separation;
-        if(-3200<chunkX&&chunkX<3200 && -3200<chunkZ&&chunkZ<3200) {
+        int day = ServerInfoRecorder.getDay();
+        if((-3200<chunkX&&chunkX<3200 && -3200<chunkZ&&chunkZ<3200)) {
             spacing = generate?spacing:spacing+128;
             separation = (int) (spacing/1.7);
 //            if(server!=null)

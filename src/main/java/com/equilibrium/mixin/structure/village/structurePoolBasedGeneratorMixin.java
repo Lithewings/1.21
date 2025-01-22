@@ -4,6 +4,8 @@ import com.equilibrium.MITEequilibrium;
 import com.equilibrium.persistent_state.StateSaverAndLoader;
 import com.equilibrium.util.ServerInfoRecorder;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
@@ -113,33 +115,19 @@ public class structurePoolBasedGeneratorMixin {
 
 //        cir.setReturnValue(Optional.empty());
 //        cir.cancel();
-//        MinecraftServer server = ServerInfoRecorder.getServerInstance();
-//
-//
-//        if (server != null && ServerInfoRecorder.getDay() >= 16 && getStructureGenerateValidity(server)) {
-//            //正常生成结构,包括村庄
-//        } else {
-//            //对村庄进行拦截
-//            if (regEntryContains(structurePool, "village")) {
-//                cir.setReturnValue(Optional.empty());
-//                cir.cancel();
-//            }  if (regEntryContains(structurePool, "ruined")) {
-//                cir.setReturnValue(Optional.empty());
-//                cir.cancel();
-//            }
-//            if (regEntryContains(structurePool, "pyramid")) {
-//                cir.setReturnValue(Optional.empty());
-//                cir.cancel();
-//            }
-//            //接着生成其他结构
-//        }
+        MinecraftServer server = ServerInfoRecorder.getServerInstance();
 
 
-
-
-
-
-
+        if (server != null && ServerInfoRecorder.getDay() >= 16 && getStructureGenerateValidity(server)) {
+            //正常生成结构,包括村庄
+        } else {
+            //对村庄进行拦截
+            if (regEntryContains(structurePool, "village")) {
+                cir.setReturnValue(Optional.empty());
+                cir.cancel();
+            }
+            //接着生成其他结构
+        }
     }
 
 
@@ -164,7 +152,7 @@ public class structurePoolBasedGeneratorMixin {
     @Mixin(StructurePoolBasedGenerator.StructurePoolGenerator.class)
     private static class StructurePoolGeneratorMixin {
         //        private static MinecraftServer server;
-        @Inject(method = "generatePiece", at = @At("HEAD"), cancellable = true)
+        @Inject(method = "generatePiece", at = @At("HEAD"))
         void generatePiece(PoolStructurePiece piece, MutableObject<VoxelShape> pieceShape, int minY, boolean modifyBoundingBox, HeightLimitView world, NoiseConfig noiseConfig, StructurePoolAliasLookup aliasLookup, StructureLiquidSettings liquidSettings, CallbackInfo ci) {
 //            if(ServerInfoRecorder.getDay() <=8)
 //                ci.cancel();
@@ -182,6 +170,7 @@ public class structurePoolBasedGeneratorMixin {
 //                }
 //                //接着生成其他结构
 //            }
+
         }
 
     }}

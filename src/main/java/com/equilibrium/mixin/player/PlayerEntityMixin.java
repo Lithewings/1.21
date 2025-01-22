@@ -191,14 +191,23 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo ci) {
-        if(!this.getWorld().isClient()){
-            StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(this.getWorld().getServer());
-            boolean j =serverState.isPickAxeCrafted;
-            boolean i = ServerInfoRecorder.getDay() >= 16;
-            this.sendMessage(Text.of("Server is loaded ? "+ServerInfoRecorder.isServerInstanceSet()));
-            this.sendMessage(Text.of("Day is more than 16 ? "+i));
-            this.sendMessage(Text.of("isPickAxeCrafted ? "+j));
-        }
+
+
+
+
+
+
+
+
+
+//        if(!this.getWorld().isClient()){
+//            StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(this.getWorld().getServer());
+//            boolean j =serverState.isPickAxeCrafted;
+//            boolean i = ServerInfoRecorder.getDay() >= 16;
+//            this.sendMessage(Text.of("Server is loaded ? "+ServerInfoRecorder.isServerInstanceSet()));
+//            this.sendMessage(Text.of("Day is more than 16 ? "+i));
+//            this.sendMessage(Text.of("isPickAxeCrafted ? "+j));
+//        }
 
 //        this.sendMessage(Text.of("Day is "+WorldTimeRecorder.getDay()));
 //        moonType = getMoonType(this.getWorld());
