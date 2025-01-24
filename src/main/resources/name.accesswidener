@@ -1,4 +1,8 @@
 accessWidener v1 named
+
+accessible field net/minecraft/block/entity/BrewingStandBlockEntity itemBrewing Lnet/minecraft/item/Item;
+
+
 accessible field net/minecraft/recipe/BrewingRecipeRegistry itemRecipes Ljava/util/List;
 accessible field net/minecraft/recipe/BrewingRecipeRegistry potionRecipes Ljava/util/List;
 

@@ -1,5 +1,6 @@
 package com.equilibrium.mixin.potion;
 
+import com.mojang.datafixers.kinds.IdF;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.BrewingStandBlockEntity;
@@ -7,32 +8,42 @@ import net.minecraft.block.entity.LockableContainerBlockEntity;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SidedInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.potion.Potions;
 import net.minecraft.recipe.BrewingRecipeRegistry;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.text.Text;
 import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.TranslatableOption;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+import static net.minecraft.component.DataComponentTypes.ITEM_NAME;
 import static net.minecraft.component.DataComponentTypes.POTION_CONTENTS;
 import static net.minecraft.entity.effect.StatusEffects.SPEED;
 import static net.minecraft.potion.Potions.SWIFTNESS;
 
 @Mixin(BrewingStandBlockEntity.class)
 public abstract class BrewingStandBlockEntityMixin extends LockableContainerBlockEntity implements SidedInventory {
+    @Shadow @Final private static int[] TOP_SLOTS;
+
+    @Shadow private Item itemBrewing;
+
     protected BrewingStandBlockEntityMixin(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
     }
@@ -75,14 +86,98 @@ public abstract class BrewingStandBlockEntityMixin extends LockableContainerBloc
         return new PotionContentsComponent(Optional.empty(), Optional.empty(), List.of());
     }
 
+    private static String translateFromEffectToPotion(String key, Boolean splash,Boolean lingering) {
+        Map<String, String> translate = new HashMap<>();
+
+        translate.put("night_vision", "item.minecraft.potion.effect.night_vision");
+        translate.put("invisibility", "item.minecraft.potion.effect.invisibility");
+        translate.put("jump_boost", "item.minecraft.potion.effect.leaping");
+        translate.put("fire_resistance", "item.minecraft.potion.effect.fire_resistance");
+        translate.put("speed", "item.minecraft.potion.effect.swiftness");
+        translate.put("slowness", "item.minecraft.potion.effect.slowness");
+        translate.put("water_breathing", "item.minecraft.potion.effect.water_breathing");
+        translate.put("instant_health", "item.minecraft.potion.effect.healing");
+        translate.put("instant_damage", "item.minecraft.potion.effect.harming");
+        translate.put("poison", "item.minecraft.potion.effect.poison");
+        translate.put("regeneration", "item.minecraft.potion.effect.regeneration");
+        translate.put("strength", "item.minecraft.potion.effect.strength");
+        translate.put("weakness", "item.minecraft.potion.effect.weakness");
+        translate.put("levitation", "item.minecraft.potion.effect.levitation");
+        translate.put("luck", "item.minecraft.potion.effect.luck");
+        translate.put("slow_falling", "item.minecraft.potion.effect.slow_falling");
+        translate.put("infested", "item.minecraft.potion.effect.infestation");
+        translate.put("oozing", "item.minecraft.potion.effect.oozing");
+        translate.put("weaving", "item.minecraft.potion.effect.weaving");
+        translate.put("wind_charged", "item.minecraft.potion.effect.wind_charging");
 
 
-//    @Inject(method = "tick",at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/BrewingStandBlockEntity;craft(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/collection/DefaultedList;)V",shift = At.Shift.AFTER))
-//    private static void tick(World world, BlockPos pos, BlockState state, BrewingStandBlockEntity blockEntity, CallbackInfo ci) {
-//        ItemStack potion = blockEntity.getStack(0);
-//        if (potion.get(POTION_CONTENTS) != null){
-//            potion.get(POTION_CONTENTS).forEachEffect();
-//        }
+        //字符串插入
+        StringBuilder stringBuilder = new StringBuilder(translate.getOrDefault(key, "item.minecraft.potion.effect.empty"));
+        if(splash) {
+            stringBuilder.insert(15, "splash_");
+            return stringBuilder.toString();
+        }
+        else if (lingering) {
+            stringBuilder.insert( 15, "lingering_");
+            return stringBuilder.toString();
+        }else
+            return stringBuilder.toString();
+
+
+
+
+    };
+
+
+
+
+
+
+    @Inject(method = "tick",at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/BrewingStandBlockEntity;craft(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/collection/DefaultedList;)V",shift = At.Shift.AFTER))
+    private static void tick(World world, BlockPos pos, BlockState state, BrewingStandBlockEntity blockEntity, CallbackInfo ci) {
+        if(!(blockEntity.itemBrewing==Items.REDSTONE || (blockEntity.itemBrewing==Items.GLOWSTONE_DUST)))
+                return;
+            for(int i =0 ;i<3;i++){
+                ItemStack potion = blockEntity.getStack(i);
+                PotionContentsComponent potionContentsComponent =potion.get(POTION_CONTENTS);
+
+                if (potionContentsComponent.hasEffects()) {
+                    Iterator<StatusEffectInstance> iterator = potionContentsComponent.getEffects().iterator();
+                    StatusEffectInstance statusEffectInstance = iterator.next();
+                    String s = potion.getTranslationKey();
+                    boolean splash = s.contains("minecraft.splash_potion");
+                    boolean lingering = s.contains("minecraft.lingering_potion");
+                    if (iterator.hasNext())
+                        //神龟药水不改动
+                        return;
+                    if (lingering)
+                        //滞留药水不改动
+                        return;
+                    int duration = statusEffectInstance.getDuration();
+                    int amplify = statusEffectInstance.getAmplifier();
+                    //去掉"minecraft:"
+                    String effectName = statusEffectInstance.getEffectType().getIdAsString().substring(10);
+
+
+                    if (blockEntity.itemBrewing == Items.REDSTONE) {
+                        duration = duration * 2;
+                    }
+                    RegistryEntry<StatusEffect> StatusEffect = statusEffectInstance.getEffectType();
+                    if (blockEntity.itemBrewing == Items.GLOWSTONE_DUST)
+                        //不对最后的等级进行增益,只动增益时间
+                        duration = (int) (duration * 1.5);
+                    for (PlayerEntity playerEntity : world.getPlayers()) {
+                        playerEntity.sendMessage(Text.of("这是一个有效果的药水"));
+                        playerEntity.sendMessage(Text.of("它的效果是" + effectName));
+                    }
+
+                    StatusEffectInstance newstatusEffectInstance = new StatusEffectInstance(StatusEffect, duration, amplify, false, true, true);
+                    PotionContentsComponent newPotionContentsComponent = new PotionContentsComponent(Optional.empty(), Optional.empty(), List.of(newstatusEffectInstance));
+                    blockEntity.getStack(i).set(POTION_CONTENTS, newPotionContentsComponent);
+                    blockEntity.getStack(i).set(ITEM_NAME, Text.translatable(translateFromEffectToPotion(effectName, splash, lingering)));
+                }
+        }
+    }
 
 //            ItemStack newPotion = Items.POTION.getDefaultStack();
 //            blockEntity.setStack(0, newPotion);
@@ -132,42 +227,42 @@ public abstract class BrewingStandBlockEntityMixin extends LockableContainerBloc
 
 
 
-    @Inject(method = "craft",at = @At("HEAD"), cancellable = true)
+    @Inject(method = "craft",at = @At("HEAD"))
     private static void craft(World world, BlockPos pos, DefaultedList<ItemStack> slots, CallbackInfo ci) {
-        ci.cancel();
-        ItemStack itemStack = slots.get(3);
-        BrewingRecipeRegistry brewingRecipeRegistry = world.getBrewingRecipeRegistry();
-
-        for (int i = 0; i < 3; i++) {
-//            ItemStack newPotion = Items.POTION.getDefaultStack();
-            slots.get(i).set(POTION_CONTENTS, new PotionContentsComponent(Optional.of(SWIFTNESS), Optional.empty(), List.of(new StatusEffectInstance(SPEED, 16000, 4, true, true))));
-//            ItemStack oldPotion = brewingRecipeRegistry.craft(itemStack, slots.get(i));
-//            if(oldPotion.get(POTION_CONTENTS)!=null) {
+//        ci.cancel();
+//        ItemStack itemStack = slots.get(3);
+//        BrewingRecipeRegistry brewingRecipeRegistry = world.getBrewingRecipeRegistry();
+//
+//        for (int i = 0; i < 3; i++) {
+////            ItemStack newPotion = Items.POTION.getDefaultStack();
+//            slots.get(i).set(POTION_CONTENTS, new PotionContentsComponent(Optional.of(SWIFTNESS), Optional.empty(), List.of(new StatusEffectInstance(SPEED, 16000, 4, true, true))));
+////            ItemStack oldPotion = brewingRecipeRegistry.craft(itemStack, slots.get(i));
+////            if(oldPotion.get(POTION_CONTENTS)!=null) {
+////
+////
+////
+////            }
 //
 //
 //
+//
+//
+//
+//
+//
+//        }
+//
+//        itemStack.decrement(1);
+//        if (itemStack.getItem().hasRecipeRemainder()) {
+//            ItemStack itemStack2 = new ItemStack(itemStack.getItem().getRecipeRemainder());
+//            if (itemStack.isEmpty()) {
+//                itemStack = itemStack2;
+//            } else {
+//                ItemScatterer.spawn(world, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), itemStack2);
 //            }
-
-
-
-
-
-
-
-
-        }
-
-        itemStack.decrement(1);
-        if (itemStack.getItem().hasRecipeRemainder()) {
-            ItemStack itemStack2 = new ItemStack(itemStack.getItem().getRecipeRemainder());
-            if (itemStack.isEmpty()) {
-                itemStack = itemStack2;
-            } else {
-                ItemScatterer.spawn(world, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), itemStack2);
-            }
-        }
-
-        slots.set(3, itemStack);
-        world.syncWorldEvent(WorldEvents.BREWING_STAND_BREWS, pos, 0);
-    }
-}
+//        }
+//
+//        slots.set(3, itemStack);
+//        world.syncWorldEvent(WorldEvents.BREWING_STAND_BREWS, pos, 0);
+//    }
+    }}

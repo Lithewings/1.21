@@ -200,8 +200,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo ci) {
         //202501230630 完成了测试,直接把不可合成的药水名字换成迅捷药水之类的即可,不过最好用translate的那种
-        this.getMainHandStack().set(POTION_CONTENTS, new PotionContentsComponent(Optional.empty(),Optional.empty(),List.of(new StatusEffectInstance(SPEED, 20, 0, true, true))));
-        this.getMainHandStack().set(ITEM_NAME,Text.of("dd"));
+//        this.getMainHandStack().set(POTION_CONTENTS, new PotionContentsComponent(Optional.empty(),Optional.empty(),List.of(new StatusEffectInstance(SPEED, 20, 0, true, true))));
+//        this.getMainHandStack().set(ITEM_NAME,Text.of("dd"));
 
 
 
