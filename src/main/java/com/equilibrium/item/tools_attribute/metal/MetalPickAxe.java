@@ -1,7 +1,7 @@
 package com.equilibrium.item.tools_attribute.metal;
 
 import com.equilibrium.event.CraftingMetalPickAxeCallback;
-import net.minecraft.block.Block;
+import com.equilibrium.item.Metal;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ToolComponent;
@@ -9,12 +9,10 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.MiningToolItem;
 import net.minecraft.item.ToolItem;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
@@ -28,6 +26,14 @@ public class MetalPickAxe extends ToolItem {
 
     public MetalPickAxe(ToolMaterial material,Settings settings) {
         super(material,settings.component(DataComponentTypes.TOOL, createToolComponent()));
+    }
+
+    @Override
+    public boolean canRepair(ItemStack stack, ItemStack ingredient) {
+        if(stack.getItem().getName().getString().contains("copper")||ingredient.isOf(Metal.copper_nugget))
+            return true;
+        else
+            return false;
     }
 
     @Override

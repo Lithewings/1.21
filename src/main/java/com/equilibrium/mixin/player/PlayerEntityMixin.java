@@ -8,6 +8,8 @@ import com.equilibrium.tags.ModItemTags;
 import com.equilibrium.util.*;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.ChestBlock;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.component.type.FoodComponent;
@@ -32,6 +34,7 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
@@ -83,6 +86,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
+
+
 
     //植物营养素
     @Unique
@@ -202,7 +207,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         //202501230630 完成了测试,直接把不可合成的药水名字换成迅捷药水之类的即可,不过最好用translate的那种
 //        this.getMainHandStack().set(POTION_CONTENTS, new PotionContentsComponent(Optional.empty(),Optional.empty(),List.of(new StatusEffectInstance(SPEED, 20, 0, true, true))));
 //        this.getMainHandStack().set(ITEM_NAME,Text.of("dd"));
-
+//        if(this.getMainHandStack().isIn(ModItemTags.CRAFT_TABLE))
+//            this.sendMessage(Text.of("是合成台物品"));
 
 
 
@@ -405,11 +411,11 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         if (!this.isOnGround()) {
             f /= 5.0F;
         }
-
+        if(block.isOf(Blocks.CHEST))
+            f= f * 7;
 
         if (stack.isSuitableFor(block)||(stack.isIn(ModItemTags.PICKAXES)&&block.isIn(ModBlockTags.ORE))) {
             f = f * 4;
-
         }
 
         this.itemHarvest = getItemHarvertLevel(stack);
