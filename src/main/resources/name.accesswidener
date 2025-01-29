@@ -1,5 +1,30 @@
 accessWidener v1 named
+accessible field net/minecraft/client/gui/widget/TabNavigationWidget tabButtons Lcom/google/common/collect/ImmutableList;
+accessible class net/minecraft/client/gui/screen/world/CreateWorldScreen$WorldTab
+accessible field net/minecraft/client/gui/widget/TabNavigationWidget tabs Lcom/google/common/collect/ImmutableList;
+accessible class net/minecraft/client/gui/screen/world/CreateWorldScreen$MoreTab
 
+accessible field net/minecraft/client/gui/tab/GridScreenTab grid Lnet/minecraft/client/gui/widget/GridWidget;
+accessible field net/minecraft/client/gui/screen/world/CreateWorldScreen ALLOW_COMMANDS_INFO_TEXT Lnet/minecraft/text/Text;
+
+accessible class net/minecraft/client/gui/screen/world/CreateWorldScreen$GameTab
+accessible field net/minecraft/client/gui/screen/world/CreateWorldScreen worldCreator Lnet/minecraft/client/gui/screen/world/WorldCreator;
+
+accessible method net/minecraft/client/gui/screen/world/WorldCreator updateDataConfiguration (Lnet/minecraft/resource/DataConfiguration;)Z
+
+accessible field net/minecraft/block/entity/BrewingStandBlockEntity itemBrewing Lnet/minecraft/item/Item;
+
+
+accessible field net/minecraft/recipe/BrewingRecipeRegistry itemRecipes Ljava/util/List;
+accessible field net/minecraft/recipe/BrewingRecipeRegistry potionRecipes Ljava/util/List;
+
+accessible class net/minecraft/recipe/BrewingRecipeRegistry$Recipe
+accessible field net/minecraft/recipe/BrewingRecipeRegistry$Recipe from Lnet/minecraft/registry/entry/RegistryEntry;
+
+accessible field net/minecraft/recipe/BrewingRecipeRegistry$Recipe ingredient Lnet/minecraft/recipe/Ingredient;
+accessible field net/minecraft/recipe/BrewingRecipeRegistry$Recipe to Lnet/minecraft/registry/entry/RegistryEntry;
+
+accessible method net/minecraft/world/gen/chunk/placement/StructurePlacement getSalt ()I
 accessible field net/minecraft/block/entity/AbstractFurnaceBlockEntity cookTimeTotal I
 accessible field net/minecraft/block/entity/AbstractFurnaceBlockEntity cookTime I
 accessible method net/minecraft/block/entity/AbstractFurnaceBlockEntity isBurning ()Z
@@ -8,7 +33,7 @@ accessible method net/minecraft/entity/ai/TargetPredicate <init> (Z)V
 accessible method net/minecraft/entity/mob/ZombieEntity initCustomGoals ()V
 accessible class net/minecraft/entity/mob/ZombieEntity$DestroyEggGoal
 
-
+accessible class net/minecraft/structure/pool/StructurePoolBasedGenerator$StructurePoolGenerator
 accessible field net/minecraft/server/world/ServerChunkManager$ChunkWithHolder holder Lnet/minecraft/server/world/ChunkHolder;
 
 accessible class net/minecraft/server/world/ServerChunkManager$ChunkWithHolder

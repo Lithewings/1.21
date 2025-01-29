@@ -27,13 +27,13 @@ public abstract class ConcentricRingsStructurePlacementMixin implements Structur
 
     @Final
     @Shadow
-    private int distance = 64;
+    private int distance = 16;
 
     @Final
     @Shadow
-    private int spread = 3;
+    private int spread = 1;
 
     @Final
     @Shadow
-    private int count =128;
+    private int count =4095;
 }

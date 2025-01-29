@@ -89,6 +89,7 @@ public abstract class CraftingScreenHandlerMixin extends AbstractRecipeScreenHan
 	public void onContentChanged(Inventory inventory, CallbackInfo ci) {
 		ci.cancel();
 		this.result.clear();
+
 		if (!this.filling) {
 			this.context.run((world, pos) -> {
 
@@ -132,21 +133,23 @@ public abstract class CraftingScreenHandlerMixin extends AbstractRecipeScreenHan
 				}
 				int maxCraftLevel =  Collections.max(list);
 
-				boolean condition1=this.input.getStack(0).isIn(ModItemTags.INGOT)&&this.input.getStack(1).isOf(Items.LEATHER)&&this.input.getStack(3).isOf(Items.STICK)&&this.input.getStack(4).isIn(ItemTags.LOGS);
-				boolean condition2=this.input.getStack(1).isIn(ModItemTags.INGOT)&&this.input.getStack(2).isOf(Items.LEATHER)&&this.input.getStack(4).isOf(Items.STICK)&&this.input.getStack(5).isIn(ItemTags.LOGS);
-				boolean condition3=this.input.getStack(3).isIn(ModItemTags.INGOT)&&this.input.getStack(4).isOf(Items.LEATHER)&&this.input.getStack(6).isOf(Items.STICK)&&this.input.getStack(7).isIn(ItemTags.LOGS);
-				boolean condition4=this.input.getStack(4).isIn(ModItemTags.INGOT)&&this.input.getStack(5).isOf(Items.LEATHER)&&this.input.getStack(7).isOf(Items.STICK)&&this.input.getStack(8).isIn(ItemTags.LOGS);
+				boolean condition1=this.input.getStack(0).isIn(ModItemTags.CRAFT_TABLE)&&this.input.getStack(1).isOf(Items.LEATHER)&&this.input.getStack(3).isOf(Items.STICK)&&this.input.getStack(4).isIn(ItemTags.LOGS);
+				boolean condition2=this.input.getStack(1).isIn(ModItemTags.CRAFT_TABLE)&&this.input.getStack(2).isOf(Items.LEATHER)&&this.input.getStack(4).isOf(Items.STICK)&&this.input.getStack(5).isIn(ItemTags.LOGS);
+				boolean condition3=this.input.getStack(3).isIn(ModItemTags.CRAFT_TABLE)&&this.input.getStack(4).isOf(Items.LEATHER)&&this.input.getStack(6).isOf(Items.STICK)&&this.input.getStack(7).isIn(ItemTags.LOGS);
+				boolean condition4=this.input.getStack(4).isIn(ModItemTags.CRAFT_TABLE)&&this.input.getStack(5).isOf(Items.LEATHER)&&this.input.getStack(7).isOf(Items.STICK)&&this.input.getStack(8).isIn(ItemTags.LOGS);
 				//是否在合成工作台
-				boolean craftTable = condition1||condition2||condition3||condition4;
-				if(craftTable)
+
+				if(condition1||condition2||condition3||condition4)
 					maxCraftLevel--;
 				//等级是否合法?
 				boolean isLevelValid=maxCraftLevel<=craftTableLevel;
 
 
-				if(isLevelValid){}
+				if(isLevelValid){
+				}
 				else
 					return;
+
 
 				updateResult(this, world, this.player, this.input, this.result, (RecipeEntry) null);
 //				this.player.sendMessage(this.result.getStack(0).getName());
@@ -189,6 +192,7 @@ public abstract class CraftingScreenHandlerMixin extends AbstractRecipeScreenHan
 	}
 
 
+	@Shadow public abstract boolean matches(RecipeEntry<CraftingRecipe> recipe);
 
 	@Inject(method = "updateResult",at = @At(value = "HEAD"),cancellable = true)
 	private static void updateResults(

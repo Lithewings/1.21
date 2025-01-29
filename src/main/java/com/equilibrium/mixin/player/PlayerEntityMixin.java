@@ -1,14 +1,19 @@
 package com.equilibrium.mixin.player;
 
 import com.equilibrium.event.MoonPhaseEvent;
+import com.equilibrium.persistent_state.StateSaverAndLoader;
 import com.equilibrium.status.registerStatusEffect;
+import com.equilibrium.tags.ModBlockTags;
 import com.equilibrium.tags.ModItemTags;
 import com.equilibrium.util.*;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.ChestBlock;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.component.type.FoodComponent;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -24,18 +29,22 @@ import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.FishingBobberEntity;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.text.Texts;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
@@ -58,11 +67,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 import static com.equilibrium.event.MoonPhaseEvent.*;
+
 import static com.equilibrium.util.IsMinable.getBlockHarvertLevel;
 import static com.equilibrium.util.IsMinable.getItemHarvertLevel;
 import static java.lang.Math.max;
+import static net.minecraft.component.DataComponentTypes.ITEM_NAME;
+import static net.minecraft.component.DataComponentTypes.POTION_CONTENTS;
+import static net.minecraft.entity.effect.StatusEffects.SPEED;
+import static net.minecraft.potion.Potions.SWIFTNESS;
 import static net.minecraft.predicate.entity.EntityPredicates.VALID_LIVING_ENTITY;
 import static net.minecraft.util.math.MathHelper.nextBetween;
 
@@ -72,6 +88,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
+
+
+
 
     //植物营养素
     @Unique
@@ -155,6 +174,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     }
 
 
+
+
     //服务端调用
     @Inject(method = "readCustomDataFromNbt", at = @At(value = "TAIL"))
     public void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
@@ -188,6 +209,30 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo ci) {
+        //202501230630 完成了测试,直接把不可合成的药水名字换成迅捷药水之类的即可,不过最好用translate的那种
+//        this.getMainHandStack().set(POTION_CONTENTS, new PotionContentsComponent(Optional.empty(),Optional.empty(),List.of(new StatusEffectInstance(SPEED, 20, 0, true, true))));
+//        this.getMainHandStack().set(ITEM_NAME,Text.of("dd"));
+//        if(this.getMainHandStack().isIn(ModItemTags.CRAFT_TABLE))
+//            this.sendMessage(Text.of("是合成台物品"));
+
+
+
+
+
+
+
+
+
+//        if(!this.getWorld().isClient()){
+//            StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(this.getWorld().getServer());
+//            boolean j =serverState.isPickAxeCrafted;
+//            boolean i = ServerInfoRecorder.getDay() >= 16;
+//            this.sendMessage(Text.of("Server is loaded ? "+ServerInfoRecorder.isServerInstanceSet()));
+//            this.sendMessage(Text.of("Day is more than 16 ? "+i));
+//            this.sendMessage(Text.of("isPickAxeCrafted ? "+j));
+//        }
+
+//        this.sendMessage(Text.of("Day is "+WorldTimeRecorder.getDay()));
 //        moonType = getMoonType(this.getWorld());
 //        this.sendMessage(Text.of(moonType));
 
@@ -329,6 +374,16 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     }
 
 
+    @Shadow public abstract boolean shouldCancelInteraction();
+
+    @Shadow public abstract boolean shouldDamagePlayer(PlayerEntity player);
+
+    @Shadow public abstract boolean shouldFilterText();
+
+    @Shadow public abstract void tick();
+
+    @Shadow public abstract boolean isPlayer();
+
     //修改挖掘速度
     @Inject(method = "getBlockBreakingSpeed", at = @At("HEAD"), cancellable = true)
     public void getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> cir) {
@@ -361,11 +416,11 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         if (!this.isOnGround()) {
             f /= 5.0F;
         }
+        if(block.isOf(Blocks.CHEST))
+            f= f * 7;
 
-
-        if (stack.isSuitableFor(block)) {
+        if (stack.isSuitableFor(block)||(stack.isIn(ModItemTags.PICKAXES)&&block.isIn(ModBlockTags.ORE))) {
             f = f * 4;
-
         }
 
         this.itemHarvest = getItemHarvertLevel(stack);
@@ -441,9 +496,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     private String moonType;
 
-    //随机刻增益持续时长,用世界时间来记录是否过去了增益时间
-    private long randomTickBonusStart;
-    private long randomTickBonusShouldEnd;
+
 
 
 
@@ -546,14 +599,14 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                 }
                 if (moonType.equals("fullMoon")) {
                     if (this.age % 100 == 0) {
-                        this.sendMessage(Text.of("满月升起,触发事件"));
+//                        this.sendMessage(Text.of("满月升起,触发事件"));
                         applyStrengthToHostileMobs((ServerWorld) this.getWorld());
                     }
                 }
                 if (moonType.equals("newMoon")) {
                     if (this.age % 100 == 0){
                         applyWeaknessToHostileMobs((ServerWorld) this.getWorld());
-                        this.sendMessage(Text.of("新月升起,触发事件"));
+//                        this.sendMessage(Text.of("新月升起,触发事件"));
                     }
                 }
 

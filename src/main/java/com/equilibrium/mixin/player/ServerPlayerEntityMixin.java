@@ -20,4 +20,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     @Shadow private int joinInvulnerabilityTicks = 0;
 
 
+
+
 }

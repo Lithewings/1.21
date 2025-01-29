@@ -32,6 +32,10 @@ public class MetalDagger extends ToolItem {
         );
     }
 
+
+
+
+
     public static AttributeModifiersComponent createAttributeModifiers(ToolMaterial material, int baseAttackDamage, float attackSpeed) {
         return AttributeModifiersComponent.builder()
                 .add(

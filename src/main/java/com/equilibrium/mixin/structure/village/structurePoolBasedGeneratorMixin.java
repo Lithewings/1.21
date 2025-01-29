@@ -1,8 +1,14 @@
 package com.equilibrium.mixin.structure.village;
 
-import com.equilibrium.util.WorldTimeHelper;
+import com.equilibrium.MITEequilibrium;
+import com.equilibrium.persistent_state.StateSaverAndLoader;
+import com.equilibrium.util.ServerInfoRecorder;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.PoolStructurePiece;
 import net.minecraft.structure.StructureLiquidSettings;
@@ -32,14 +38,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
-import static com.equilibrium.MITEequilibrium.LOGGER;
+import static com.equilibrium.util.ServerInfoRecorder.isServerInstanceSet;
 
 @Mixin(StructurePoolBasedGenerator.class)
 public class structurePoolBasedGeneratorMixin {
 
     @Shadow @Final private static Logger LOGGER;
 
+
+
     private static Optional<? extends RegistryKey<?>> key;
+
+
+
 
     private static boolean regEntryContains(@NotNull RegistryEntry<?> entry, String pattern) {
         key = entry.getKey();
@@ -47,39 +58,108 @@ public class structurePoolBasedGeneratorMixin {
         return false;
     }
 
+    private static boolean getStructureGenerateValidity(MinecraftServer server){
+        StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(server);
+        return serverState.isPickAxeCrafted;
+
+    }
+
+
     @Inject(method = "generate(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/registry/entry/RegistryEntry;Lnet/minecraft/util/Identifier;ILnet/minecraft/util/math/BlockPos;Z)Z", at = @At("HEAD"), cancellable = true)
     private static void generate(ServerWorld world, RegistryEntry<StructurePool> structurePool, Identifier id, int size, BlockPos pos, boolean keepJigsaws, CallbackInfoReturnable<Boolean> cir) {
-        if(WorldTimeHelper.getDay()>=32){
+//        cir.cancel();
+
+//        if(ServerInfoRecorder.getDay() <=8)
+//            cir.cancel();
+        //        MinecraftServer server = ServerInfoRecorder.getServerInstance();
+//        if (server != null && ServerInfoRecorder.getDay() >= 16 && getStructureGenerateValidity(server)) {
+//            //正常生成结构,包括村庄
+//        } else {
+//            //对村庄进行拦截
 //            if (regEntryContains(structurePool, "village")) {
 //                cir.setReturnValue(false);
 //                cir.cancel();
 //            }
-        }else{
-        cir.setReturnValue(false);
-        cir.cancel();
-        }
+//            //接着生成其他结构
+//            cir.setReturnValue(false);
+//            cir.cancel();
+//        }
 
     }
+
+
+
+
+
+//        if (ServerInfoRecorder.getDay() < 16 && server != null) {
+//            //不生成村庄的逻辑
+//            if (regEntryContains(structurePool, "village")) {
+//                cir.setReturnValue(false);
+//                cir.cancel();
+//            } else if (server != null && getStructureGenerateValidity(server)) {
+//                //合成金属镐检查
+//                //不生成村庄的逻辑
+//                if (regEntryContains(structurePool, "village")) {
+//                    cir.setReturnValue(false);
+//                    cir.cancel();
+//                }
+//            } else {
+//                //什么都不做
+//            }
+//
+//        }
+
 
     @Inject(method = "generate(Lnet/minecraft/world/gen/structure/Structure$Context;Lnet/minecraft/registry/entry/RegistryEntry;Ljava/util/Optional;ILnet/minecraft/util/math/BlockPos;ZLjava/util/Optional;ILnet/minecraft/structure/pool/alias/StructurePoolAliasLookup;Lnet/minecraft/world/gen/structure/DimensionPadding;Lnet/minecraft/structure/StructureLiquidSettings;)Ljava/util/Optional;", at = @At("HEAD"), cancellable = true)
     private static void generate(Structure.Context context, RegistryEntry<StructurePool> structurePool, Optional<Identifier> id, int size, BlockPos pos, boolean useExpansionHack, Optional<Heightmap.Type> projectStartToHeightmap, int maxDistanceFromCenter, StructurePoolAliasLookup aliasLookup, DimensionPadding dimensionPadding, StructureLiquidSettings liquidSettings, CallbackInfoReturnable<Optional<Structure.StructurePosition>> cir) {
-        if(WorldTimeHelper.getDay()>=32) {
-//            if (regEntryContains(structurePool, "village")) {
-//                cir.setReturnValue(Optional.empty());
-//                cir.cancel();
-//            }
-        }
-        else{
-            cir.setReturnValue(Optional.empty());
-            cir.cancel();
+
+//        cir.setReturnValue(Optional.empty());
+//        cir.cancel();
+        MinecraftServer server = ServerInfoRecorder.getServerInstance();
+
+
+        if (server != null && ServerInfoRecorder.getDay() >= 16 && getStructureGenerateValidity(server)) {
+            //正常生成结构,包括村庄
+        } else {
+            //对村庄进行拦截
+            if (regEntryContains(structurePool, "village")) {
+                cir.setReturnValue(Optional.empty());
+                cir.cancel();
+            }
+            //接着生成其他结构
         }
     }
 
+
+
+
+
+//        if(ServerInfoRecorder.getDay()<16 && server!=null) {
+//            //检查生成村庄条件
+//            if(!getStructureGenerateValidity(server))
+//                if (regEntryContains(structurePool, "village")) {
+//                    cir.setReturnValue(Optional.empty());
+//                    cir.cancel();
+//                }
+//            //能运行到这里就是正常生成
+//        }
+//        else{
+//            cir.setReturnValue(Optional.empty());
+//            cir.cancel();
+//        }
+
+
     @Mixin(StructurePoolBasedGenerator.StructurePoolGenerator.class)
     private static class StructurePoolGeneratorMixin {
-        @Inject(method = "generatePiece", at = @At("HEAD"), cancellable = true)
+        //        private static MinecraftServer server;
+        @Inject(method = "generatePiece", at = @At("HEAD"))
         void generatePiece(PoolStructurePiece piece, MutableObject<VoxelShape> pieceShape, int minY, boolean modifyBoundingBox, HeightLimitView world, NoiseConfig noiseConfig, StructurePoolAliasLookup aliasLookup, StructureLiquidSettings liquidSettings, CallbackInfo ci) {
-            if(WorldTimeHelper.getDay()>=32) {
+//            if(ServerInfoRecorder.getDay() <=8)
+//                ci.cancel();
+//            if (server != null && ServerInfoRecorder.getDay() >= 16 && getStructureGenerateValidity(server)) {
+//                //不修改任何代码,正常生成结构,包括村庄
+//            } else {
+//                //对村庄进行拦截
 //                if (piece == null) return;
 //                StructurePoolElement element = piece.getPoolElement();
 //                if (element == null) return;
@@ -88,11 +168,34 @@ public class structurePoolBasedGeneratorMixin {
 //                if (type.toString().contains("village")) {
 //                    ci.cancel();
 //                }
-            }else
-                ci.cancel();
+//                //接着生成其他结构
+//            }
+
         }
-    }
+
+    }}
 
 
 
-}
+
+
+
+//            if(ServerInfoRecorder.getDay()<16 && server!=null) {
+//                if(!getStructureGenerateValidity(server)){
+//                    if (piece == null) return;
+//                    StructurePoolElement element = piece.getPoolElement();
+//                    if (element == null) return;
+//                    StructurePoolElementType<?> type = element.getType();
+//                    if (type == null) return;
+//                    if (type.toString().contains("village")) {
+//                        ci.cancel();
+//                    }
+//                }
+//            }else
+//                ci.cancel();
+//        }
+//    }
+//
+//
+//
+//}
