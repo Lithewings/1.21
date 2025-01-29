@@ -25,8 +25,9 @@ public class CompassItemMixin extends Item {
         ItemStack itemStack = user.getStackInHand(hand);
         if(!user.getWorld().isClient()) {
             user.sendMessage(Text.of(
-                            "[x]: " + (int)user.getX()+
-                            "[z]: " + (int)user.getZ()
+                            "[x]: " + (int) user.getX() +
+                                    "[y]:" + (int) user.getY() +
+                                    "[z]: " + (int) user.getZ()
                     )
             );
             return TypedActionResult.success(itemStack);

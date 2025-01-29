@@ -29,6 +29,7 @@ import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.FishingBobberEntity;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -37,6 +38,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -86,6 +88,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
+
 
 
 
@@ -169,6 +172,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
 
     }
+
+
 
 
     //服务端调用
@@ -594,14 +599,14 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                 }
                 if (moonType.equals("fullMoon")) {
                     if (this.age % 100 == 0) {
-                        this.sendMessage(Text.of("满月升起,触发事件"));
+//                        this.sendMessage(Text.of("满月升起,触发事件"));
                         applyStrengthToHostileMobs((ServerWorld) this.getWorld());
                     }
                 }
                 if (moonType.equals("newMoon")) {
                     if (this.age % 100 == 0){
                         applyWeaknessToHostileMobs((ServerWorld) this.getWorld());
-                        this.sendMessage(Text.of("新月升起,触发事件"));
+//                        this.sendMessage(Text.of("新月升起,触发事件"));
                     }
                 }
 

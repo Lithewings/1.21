@@ -1,6 +1,7 @@
 package com.equilibrium.gen;
 
 import com.equilibrium.block.ModBlocks;
+import com.equilibrium.item.Armors;
 import com.equilibrium.item.Metal;
 import com.equilibrium.item.Tools;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
@@ -8,6 +9,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.client.Models;
+import net.minecraft.item.ArmorItem;
 
 public class ModModelProvider extends FabricModelProvider {
     public ModModelProvider(FabricDataOutput output) {
@@ -48,13 +50,14 @@ public class ModModelProvider extends FabricModelProvider {
     @Override
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
 
-        itemModelGenerator.register(Metal.ADAMANTIUM_RAW, Models.GENERATED);
-        itemModelGenerator.register(Metal.MITHRIL_RAW, Models.GENERATED);
-        itemModelGenerator.register(Metal.SILVER_RAW, Models.GENERATED);
+//        itemModelGenerator.register(Metal.ADAMANTIUM_RAW, Models.GENERATED);
+//        itemModelGenerator.register(Metal.MITHRIL_RAW, Models.GENERATED);
+//        itemModelGenerator.register(Metal.SILVER_RAW, Models.GENERATED);
 
-
-
-
+        itemModelGenerator.registerArmor((ArmorItem) Armors.COPPER_BOOTS);
+        itemModelGenerator.registerArmor((ArmorItem) Armors.COPPER_CHEST_PLATE);
+        itemModelGenerator.registerArmor((ArmorItem) Armors.COPPER_HELMET);
+        itemModelGenerator.registerArmor((ArmorItem)Armors.COPPER_LEGGINGS);
 
 //        itemModelGenerator.register(Metal.adamantium_nugget, Models.GENERATED);
 //        itemModelGenerator.register(Metal.ancient_metal_nugget, Models.GENERATED);

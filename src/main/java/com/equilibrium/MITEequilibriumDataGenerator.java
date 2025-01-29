@@ -1,9 +1,6 @@
 package com.equilibrium;
 
-import com.equilibrium.gen.ModLootTableProvider;
-import com.equilibrium.gen.ModModelProvider;
-import com.equilibrium.gen.ModRecipeGenerator;
-import com.equilibrium.gen.TagsProvider;
+import com.equilibrium.gen.*;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 

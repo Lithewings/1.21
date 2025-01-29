@@ -30,7 +30,7 @@ public class ModItemGroup {
 
     //工具栏
     public static final ItemGroup modTools = Registry.register(Registries.ITEM_GROUP, Identifier.of(MITEequilibrium.MOD_ID,"toolsgroup"),
-            FabricItemGroup.builder().displayName(Text.translatable("itemgroup.toolsgroup"))
+            FabricItemGroup.builder().displayName(Text.of("Metal Craft"))
                     .icon(()->new ItemStack(Tools.ADAMANTIUM_AXE)).entries((displayContext, entries) ->
                             {
                             }
@@ -38,7 +38,7 @@ public class ModItemGroup {
 
     //金属栏
     public static final ItemGroup modIngots = Registry.register(Registries.ITEM_GROUP, Identifier.of(MITEequilibrium.MOD_ID,"metalgroup"),
-            FabricItemGroup.builder().displayName(Text.translatable("itemgroup.metalgroup"))
+            FabricItemGroup.builder().displayName(Text.of("Metal Craft"))
                     .icon(()->new ItemStack(Metal.adamantium)).entries((displayContext, entries) ->
                             {
                                 entries.add(Metal.adamantium);
@@ -121,8 +121,10 @@ public class ModItemGroup {
                                 entries.add(Metal.MITHRIL_RAW);
                                 entries.add(Metal.SILVER_RAW);
 
-
-
+                                entries.add(Armors.COPPER_HELMET);
+                                entries.add(Armors.COPPER_BOOTS);
+                                entries.add(Armors.COPPER_CHEST_PLATE);
+                                entries.add(Armors.COPPER_LEGGINGS);
 
                             }
                     ).build());

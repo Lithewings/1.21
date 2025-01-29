@@ -2,6 +2,7 @@ package com.equilibrium.gen;
 
 import com.equilibrium.block.ModBlocks;
 import com.equilibrium.craft_time_register.BlockInit;
+import com.equilibrium.item.Armors;
 import com.equilibrium.item.Metal;
 import com.equilibrium.item.ModItems;
 import com.equilibrium.item.Tools;
@@ -35,6 +36,39 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
 
     @Override
     public void generate(RecipeExporter exporter) {
+
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Armors.COPPER_BOOTS).
+                pattern("X X").
+                pattern("X X").
+                input('X', Metal.copper).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.copper)).
+                offerTo(exporter, Identifier.of("miteequilibrium","copper_boots"));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Armors.COPPER_HELMET).
+                pattern("XXX").
+                pattern("X X").
+                input('X', Metal.copper).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.copper)).
+                offerTo(exporter, Identifier.of("miteequilibrium","copper_helmet"));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Armors.COPPER_CHEST_PLATE).
+                pattern("X X").
+                pattern("XXX").
+                pattern("XXX").
+                input('X', Metal.copper).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.copper)).
+                offerTo(exporter, Identifier.of("miteequilibrium","copper_chest_plate"));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Armors.COPPER_LEGGINGS).
+                pattern("XXX").
+                pattern("X X").
+                pattern("X X").
+                input('X', Metal.copper).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.copper)).
+                offerTo(exporter, Identifier.of("miteequilibrium","copper_leggings"));
+
+
         //shield
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Items.SHIELD).

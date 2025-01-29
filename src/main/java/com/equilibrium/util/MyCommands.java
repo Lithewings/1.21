@@ -1,7 +1,9 @@
 package com.equilibrium.util;
 
+import com.equilibrium.entity.goal.AStarPathfinder;
 import com.equilibrium.persistent_state.StateSaverAndLoader;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
@@ -9,11 +11,19 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.loader.impl.launch.server.FabricServerLauncher;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameRules;
+import net.minecraft.world.World;
 
+import java.util.List;
+
+import static com.equilibrium.MITEequilibrium.updatePlayerArmor;
 import static com.equilibrium.event.MoonPhaseEvent.getMoonType;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 
 public class MyCommands {
 
@@ -59,6 +69,65 @@ public class MyCommands {
                     return 1;
                 })
         );
+        // 注册 protection命令
+        dispatcher.register(ClientCommandManager.literal("protection")
+                .executes(context -> {
+                    PlayerEntity player = context.getSource().getPlayer();
+                    Text text = updatePlayerArmor(player);
+                    player.sendMessage(text);
+
+                    return 1;
+                })
+        );
+
+
+        // 注册 tickSpeed 命令
+        dispatcher.register(ClientCommandManager.literal("randomTickSpeed")
+                .executes(context -> {
+                    PlayerEntity player = context.getSource().getPlayer();
+                    int speed = context.getSource().getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED);
+
+                    player.sendMessage(Text.of("Random tick speed is"+speed));
+
+                    return 1;
+                })
+        );
+
+        // 注册 A星算法 命令
+        dispatcher.register(ClientCommandManager.literal("findPath")
+                .then(argument("x1", IntegerArgumentType.integer())
+                        .then(argument("y1", IntegerArgumentType.integer())
+                                .then(argument("z1", IntegerArgumentType.integer())
+                                        .then(argument("x2", IntegerArgumentType.integer())
+                                                .then(argument("y2", IntegerArgumentType.integer())
+                                                        .then(argument("z2", IntegerArgumentType.integer())
+                .executes(context -> {
+                    int x1 = IntegerArgumentType.getInteger(context, "x1");
+                    int y1 = IntegerArgumentType.getInteger(context, "y1");
+                    int z1 = IntegerArgumentType.getInteger(context, "z1");
+
+                    int x2 = IntegerArgumentType.getInteger(context, "x2");
+                    int y2 = IntegerArgumentType.getInteger(context, "y2");
+                    int z2 = IntegerArgumentType.getInteger(context, "z2");
+                    BlockPos start = new BlockPos(x1,y1,z1);
+                    BlockPos goal = new BlockPos(x2,y2,z2);
+                    List<BlockPos> path = AStarPathfinder.findPath(context.getSource().getWorld(),start,goal);
+
+                    if (path != null) {
+                        // 找到可通行路径 => 屋顶到床连通 => 房屋不封闭
+                        context.getSource().getPlayer().sendMessage(Text.of("找到路径"));
+                    } else {
+                        // 未找到路径 => 屋顶与床被阻隔 => 房屋真正封闭
+                        context.getSource().getPlayer().sendMessage(Text.of("没有找到路径"));
+                    }
+                    return 1;
+                }))))))));
+    }
+
+
+
+
+
 // 注册 locate 命令
 //        dispatcher.register(ClientCommandManager.literal("locate")
 //                .requires(source -> source.hasPermissionLevel(2))  // 设置权限
@@ -78,7 +147,7 @@ public class MyCommands {
 
 
     }
-}
+
 
 
     // 继续注册更多客户端命令...

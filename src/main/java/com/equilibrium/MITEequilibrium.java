@@ -21,11 +21,19 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.command.CommandRegistryAccess;
+import net.minecraft.component.ComponentType;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -43,6 +51,8 @@ import com.equilibrium.craft_time_worklevel.CraftingIngredients;
 import com.equilibrium.craft_time_worklevel.FurnaceIngredients;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -50,6 +60,7 @@ import java.util.concurrent.TimeUnit;
 import static com.equilibrium.entity.ModEntities.registerModEntities;
 
 
+import static com.equilibrium.item.Armors.registerArmors;
 import static com.equilibrium.item.Metal.registerModItemRaw;
 import static com.equilibrium.status.registerStatusEffect.registerStatusEffects;
 import static com.equilibrium.tags.ModBlockTags.registerModBlockTags;
@@ -58,6 +69,7 @@ import static com.equilibrium.util.LootTableModifier.modifierLootTables;
 
 import static com.equilibrium.ore_generator.ModPlacementGenerator.registerModOre;
 import static com.equilibrium.util.ServerInfoRecorder.isServerInstanceSet;
+import static net.minecraft.component.DataComponentTypes.ATTRIBUTE_MODIFIERS;
 
 
 public class MITEequilibrium implements ModInitializer {
@@ -125,6 +137,123 @@ public class MITEequilibrium implements ModInitializer {
 //		});
 	}
 
+	// Logistic 曲线参数，可根据需求调整
+	private static final double K = 10.0; // 陡峭度
+	private static final double M = 0.5;  // 中点
+
+
+	//玩家护甲值下降
+	public static Text updatePlayerArmor(PlayerEntity player) {
+
+
+
+		ArrayList<ItemStack> armorItemList = new ArrayList<>();
+		player.getArmorItems().forEach(element->{
+			if(element.getItem() instanceof ArmorItem)
+				armorItemList.add(element);
+				}
+		);
+		//空护甲时直接返回
+		if(armorItemList.isEmpty()) {
+			player.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).setBaseValue(0.0D);
+			return Text.of("The armor equipment is empty");
+		}
+
+		//由于耐久损耗,实际获得的护甲值
+		double protection = 0;
+		//最大护甲值,或者说满耐久护甲值
+		double maxProtection = 0;
+
+		for(ItemStack itemStack : armorItemList){
+			if(itemStack.getItem() instanceof ArmorItem){
+				ArmorItem armorItem = (ArmorItem) itemStack.getItem();
+				//最大护甲值
+				int baseProtection = armorItem.getProtection();
+				//加到理论最大护甲值里面
+				maxProtection = maxProtection + baseProtection;
+				//最大耐久
+				int baseDurability = itemStack.getMaxDamage();
+				//目前耐久
+				int durability = baseDurability - itemStack.getDamage();
+				//满耐久一定获得满护甲值
+				if (durability==baseDurability) {
+					protection = protection + baseProtection;
+				} else {
+					//计算线性耐久度比例
+					float linearRatio = (float) durability / baseDurability;
+					//应用 S 型曲线 (Logistic) 做非线性衰减
+					float sCurveRatio = (float) logisticFunction(linearRatio, K, M);
+					//实际获得的护甲值
+					double exactProtection = baseProtection * (sCurveRatio);
+					//加到获得的总护甲值里面
+					protection = protection + exactProtection;
+				}
+			}
+		}
+		//总护甲损耗
+		double protectionReduction = maxProtection-protection;
+
+
+		//设定玩家护甲
+		player.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).setBaseValue(-protectionReduction);
+
+		Text text =Text.literal(String.format(
+					"满耐久护甲=%.2f, 衰减系数=%.2f%%, 实际护甲=%.2f",
+					maxProtection,
+					100*(float)(1-protection/maxProtection),
+					protection));
+
+//		if(!player.getWorld().isClient())
+//			player.sendMessage(text);
+		return text;
+
+
+
+
+		// 6. 可选：发送提示给玩家
+//		if(!player.getWorld().isClient())
+//			player.sendMessage(Text.literal(String.format(
+//					"满耐久护甲=%.2f, 衰减系数=%.2f%%, 实际护甲=%.2f",
+//					maxProtection,
+//					100*(float)(1-protection/maxProtection),
+//					protection
+//			)), true);
+	}
+
+
+
+
+//        // 给玩家发送调试信息（可选）
+//        player.sendMessage(Text.literal(
+//                String.format(
+//                        "当前耐久: %.0f%% -> 护甲系数(S曲线): %.1f%%",
+//                        100 * linearRatio,
+//                        100 * sCurveRatio
+//                )
+//        ), true);
+
+
+	/**
+	 * logisticFunction(r, k, m):
+	 *   r: 线性比例 (0 ~ 1)
+	 *   k: 陡峭度 (越大曲线越陡)
+	 *   m: 中点 (0 ~ 1)
+	 */
+	private static double logisticFunction(double r, double k, double m) {
+		// 避免溢出，可做一些极值保护
+		// 例如 r 超过 [0,1] 范围时先 clamp 到 [0,1]
+		r = Math.max(0.0, Math.min(1.0, r));
+
+		return 1.0 / (1.0 + Math.exp(-k * (r - m)));
+	}
+
+
+
+
+
+
+
+
 
 //
 //	 执行 locate structure 指令
@@ -135,12 +264,14 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 	ServerCommandSource source = context.getSource();
 	MinecraftServer server = source.getServer();
 	StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(server);
-	if(serverState.isPickAxeCrafted)
+	boolean isVillageCanGenerate=serverState.isPickAxeCrafted && ServerInfoRecorder.getDay()>=16;
+	if(isVillageCanGenerate){
 		if(context.getSource().getEntity().isPlayer())
-			context.getSource().getEntity().sendMessage(Text.of("村庄可以生成了"));
-	if(!serverState.isPickAxeCrafted)
+			context.getSource().getEntity().sendMessage(Text.of("村庄可以生成了"));}
+	else{
 		if(context.getSource().getEntity().isPlayer())
 			context.getSource().getEntity().sendMessage(Text.of("村庄还不能生成"));
+	}
 	return 1;
 }
 
@@ -179,6 +310,12 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 				ServerInfoRecorder.setServerInstance(server);
 			// 每隔 TICK_INTERVAL 次 tick 触发一次检查
 			tickCount++;
+			//护甲更新
+			if (tickCount >= TICK_INTERVAL/10) {
+				for(ServerPlayerEntity serverPlayerEntity : server.getPlayerManager().getPlayerList())
+					updatePlayerArmor(serverPlayerEntity);
+			}
+
 			if (tickCount >= TICK_INTERVAL) {
 				// 获取所有世界并检查时间
 
@@ -241,7 +378,7 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 					return ActionResult.PASS;
 			}else {
 				if(!world.isClient()) {
-					player.sendMessage(Text.of("你多次合成了铁镐"));
+//					player.sendMessage(Text.of("你多次合成了铁镐"));
 					return ActionResult.PASS;
 				}
 				else
@@ -257,6 +394,12 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 
 		init();
+
+		//护甲添加
+		registerArmors();
+
+
+
 		//物品栏添加
 		ModItemGroup.registerModItemGroup();
 
