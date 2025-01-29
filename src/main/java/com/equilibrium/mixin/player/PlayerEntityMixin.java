@@ -6,7 +6,9 @@ import com.equilibrium.status.registerStatusEffect;
 import com.equilibrium.tags.ModBlockTags;
 import com.equilibrium.tags.ModItemTags;
 import com.equilibrium.util.*;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.authlib.GameProfile;
+import com.mojang.datafixers.util.Either;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
@@ -47,6 +49,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.Texts;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypeFilter;
+import net.minecraft.util.Unit;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
@@ -64,6 +67,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.List;
 import java.util.Objects;
@@ -72,6 +76,7 @@ import java.util.function.Consumer;
 
 import static com.equilibrium.event.MoonPhaseEvent.*;
 
+import static com.equilibrium.item.tools_attribute.ExtraDamageFromExperienceLevel.getDamageLevel;
 import static com.equilibrium.util.IsMinable.getBlockHarvertLevel;
 import static com.equilibrium.util.IsMinable.getItemHarvertLevel;
 import static java.lang.Math.max;
@@ -90,7 +95,30 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     }
 
 
+    @Inject(method = "attack",at = @At("HEAD"))
+    public void attackStart(Entity target, CallbackInfo ci) {
+        //经验攻击特效
+        float experienceBonus = getDamageLevel(this.experienceLevel);
+        //工具攻击特效
+        float otherBonus = 1.0F;
+        if(this.getMainHandStack().isIn(ModItemTags.DAGGERS)||target instanceof PassiveEntity) {
+            otherBonus=1.5F;
+        }
+        //非独立乘区
+        this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(experienceBonus*otherBonus);
 
+        //例子: 玩家等级为5级,铜短剑的伤害为额外伤害为5点,使用跳斩伤害猪(10点生命)再获得1.5倍率伤害增益
+        //基础伤害,面板伤害=(1.25*1.5+5)=6.875
+        //最终伤害 = 6.
+
+
+
+    }
+
+    @Inject(method = "attack",at = @At("TAIL"))
+    public void attackEnd(Entity target, CallbackInfo ci) {
+        this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(1.0);
+    }
 
     //植物营养素
     @Unique
@@ -305,7 +333,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                 setEntityInteractBonus(0.5f);
             } else if (itemstack.isIn(ModItemTags.DAGGERS)) {
                 //小刀、匕首
-                setEntityInteractBonus(0.35f);
+                setEntityInteractBonus(0.5f);
             }
 
         } else if (itemstack.isOf(Items.STICK) || itemstack.isOf(Items.BONE)) {
@@ -317,9 +345,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
         //潜行向下看时,增加生物交互距离
         if(this.isSneaking() && this.getPitch()>60)
-            cir.setReturnValue(2.0 + entityInteractBonus);
+            cir.setReturnValue( 2.5 + entityInteractBonus);
         else{
-            cir.setReturnValue(1.0 + entityInteractBonus);
+            cir.setReturnValue((1.5 + entityInteractBonus));
         }
     }
 
@@ -335,7 +363,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                         .add(EntityAttributes.GENERIC_LUCK)
                         .add(EntityAttributes.GENERIC_MAX_HEALTH, 20)
                         .add(EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE)
-                        .add(EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE)
+                        .add(EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE,1.5)
                         .add(EntityAttributes.PLAYER_BLOCK_BREAK_SPEED)
                         .add(EntityAttributes.PLAYER_SUBMERGED_MINING_SPEED)
                         .add(EntityAttributes.PLAYER_SNEAKING_SPEED)
@@ -384,6 +412,16 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Shadow public abstract boolean isPlayer();
 
+    @Shadow public abstract PlayerAbilities getAbilities();
+
+    @Shadow public abstract void attack(Entity target);
+
+    @Shadow public abstract void onDeath(DamageSource damageSource);
+
+    @Shadow public abstract Either<PlayerEntity.SleepFailureReason, Unit> trySleep(BlockPos pos);
+
+    @Shadow public abstract ItemStack eatFood(World world, ItemStack stack, FoodComponent foodComponent);
+
     //修改挖掘速度
     @Inject(method = "getBlockBreakingSpeed", at = @At("HEAD"), cancellable = true)
     public void getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> cir) {
@@ -416,8 +454,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         if (!this.isOnGround()) {
             f /= 5.0F;
         }
-        if(block.isOf(Blocks.CHEST))
-            f= f * 7;
+        if(block.isIn(ModBlockTags.CATEGORY))
+            f= f * 8;
 
         if (stack.isSuitableFor(block)||(stack.isIn(ModItemTags.PICKAXES)&&block.isIn(ModBlockTags.ORE))) {
             f = f * 4;
@@ -516,7 +554,12 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
 
     @Inject(method = "tick", at = @At("HEAD"))
-    public void tick(CallbackInfo ci) {
+    public void tick(CallbackInfo ci){
+        //你也许可以用这个方法来改进生命值上限/饱食度上限
+        //不要在这里使用这个代码,这会使得无时无刻玩家基础伤害固定为这个值从而打不出跳劈伤害,请到武器栏使用这个
+//        this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(Math.min(1.0 + (this.experienceLevel * 0.01), 1.5));
+
+
         if(this.getWorld().getTimeOfDay()%8000==0){
             addExhaustion(4f);
         }

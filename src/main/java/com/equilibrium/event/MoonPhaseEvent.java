@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LightningEntity;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.CreeperEntity;
@@ -78,6 +79,7 @@ public class MoonPhaseEvent {
 
                 // 为每个敌对生物添加力量效果
                 for (HostileEntity mob : hostileMobs) {
+                    mob.getAttributeInstance(EntityAttributes.GENERIC_FOLLOW_RANGE).setBaseValue(256);
                     // 创建力量效果实例，持续时间单位为tick（20 ticks = 1秒），这里设为300 ticks, 即15秒
                     StatusEffectInstance strength = new StatusEffectInstance(StatusEffects.STRENGTH, 6000, 0); // 0 为效果等级，0 级即为 I 级
                     mob.addStatusEffect(strength);
@@ -273,11 +275,11 @@ public class MoonPhaseEvent {
             startThunderstorm(world);
             if (playerEntity != null)
                 if (playerEntity.getRandom().nextInt(4) == 0) {
-                    playerEntity.sendMessage(Text.of("雷声"));
+//                    playerEntity.sendMessage(Text.of("雷声"));
                     playerEntity.getWorld().playSound(null, BlockPos.ofFloored(playerEntity.getPos()), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.WEATHER, 1.0F, 1.0F);
                 } else {
                     spawnLighteningNearPlayer(world, playerEntity);
-                    playerEntity.sendMessage(Text.of("雷电"));
+//                    playerEntity.sendMessage(Text.of("雷电"));
                 }
 
 

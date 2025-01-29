@@ -1,0 +1,23 @@
+{
+  "values": [
+    "miteequilibrium:flint_crafting_table",
+    "miteequilibrium:copper_crafting_table",
+    "miteequilibrium:iron_crafting_table",
+    "miteequilibrium:diamond_crafting_table",
+    "miteequilibrium:netherite_crafting_table",
+    "miteequilibrium:clay_furnace",
+    "miteequilibrium:obsidian_furnace",
+    "miteequilibrium:netherrack_furnace",
+
+    "minecraft:chest",
+    "minecraft:anvil",
+    "minecraft:chipped_anvil",
+    "minecraft:damaged_anvil",
+    "minecraft:furnace",
+    "minecraft:blast_furnace",
+    "minecraft:smoker"
+
+
+
+  ]
+}

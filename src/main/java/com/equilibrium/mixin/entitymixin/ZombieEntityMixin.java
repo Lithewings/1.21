@@ -5,10 +5,7 @@ import com.equilibrium.entity.goal.AttackPassiveEntitiesGoal;
 import com.equilibrium.entity.goal.BreakBlockGoal;
 import com.equilibrium.entity.goal.LookAtTargetGoal;
 import com.mojang.serialization.Decoder;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -19,10 +16,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.mob.ZombifiedPiglinEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.passive.MerchantEntity;
-import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.passive.TurtleEntity;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
@@ -43,7 +37,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import static com.equilibrium.util.WorldMoonPhasesSelector.setAndGetMoonType;
 
@@ -68,7 +64,7 @@ public abstract class ZombieEntityMixin extends HostileEntity {
     private static void createZombieAttributes(CallbackInfoReturnable<DefaultAttributeContainer.Builder> cir) {
         cir.cancel();
         cir.setReturnValue(HostileEntity.createHostileAttributes()
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 64.0)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.30F)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 3.0)
                 .add(EntityAttributes.GENERIC_ARMOR, 2.0)
@@ -84,6 +80,11 @@ public abstract class ZombieEntityMixin extends HostileEntity {
 
     StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.STRENGTH, -1, 2, false, true, false);
 
+
+
+
+
+
     @Inject(method = "initCustomGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/goal/MoveThroughVillageGoal;<init>(Lnet/minecraft/entity/mob/PathAwareEntity;DZILjava/util/function/BooleanSupplier;)V", shift = At.Shift.AFTER), cancellable = true)
     protected void initCustomGoalss(CallbackInfo ci) {
         ci.cancel();
@@ -95,9 +96,9 @@ public abstract class ZombieEntityMixin extends HostileEntity {
         this.goalSelector.add(1, new BreakBlockGoal(this, 800, difficulty -> difficulty == Difficulty.NORMAL || difficulty == Difficulty.HARD));
         this.targetSelector.add(4, new ActiveTargetGoal(this, MerchantEntity.class, false));
         this.targetSelector.add(4, new ActiveTargetGoal(this, IronGolemEntity.class, true));
-        this.targetSelector.add(4, new AdvanceActiveTargetGoal<>(this,PassiveEntity.class, true));
+        this.targetSelector.add(4, new AdvanceActiveTargetGoal<>(this, PassiveEntity.class, true));
         this.targetSelector.add(5, new ActiveTargetGoal(this, TurtleEntity.class, 10, true, false, TurtleEntity.BABY_TURTLE_ON_LAND_FILTER));
-        this.targetSelector.add(3, new ActiveTargetGoal<>(this, PassiveEntity.class, true, false));
+
 
         // 添加盯着目标的目标选择器
         this.goalSelector.add(3, new LookAtTargetGoal(this));

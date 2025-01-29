@@ -1,12 +1,16 @@
 package com.equilibrium.entity.goal;
 
 import java.util.EnumSet;
+import java.util.Set;
 import java.util.function.Predicate;
+
+import com.equilibrium.mixin.entitymixin.ZombieEntityMixin;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.TrackTargetGoal;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Box;
@@ -50,11 +54,14 @@ public class AdvanceActiveTargetGoal<T extends LivingEntity> extends TrackTarget
             @Nullable Predicate<LivingEntity> targetPredicate
     ) {
         super(mob, checkVisibility, checkCanNavigate);
+
         this.targetClass = targetClass;
         this.reciprocalChance = toGoalTicks(reciprocalChance);
         this.setControls(EnumSet.of(Goal.Control.TARGET));
         this.targetPredicate = AdvanceTargetPredicate.createAttackable().setBaseMaxDistance(this.getFollowRange()).setPredicate(targetPredicate);
     }
+
+
 
     @Override
     public boolean canStart() {
@@ -62,7 +69,7 @@ public class AdvanceActiveTargetGoal<T extends LivingEntity> extends TrackTarget
             return false;
         } else {
             this.findClosestTarget();
-            return this.targetEntity != null;
+            return (this.targetEntity != null && !(this.targetEntity instanceof CatEntity));
         }
     }
 

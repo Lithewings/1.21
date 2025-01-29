@@ -38,6 +38,8 @@ public class ModBlockTags {
 
     public static final TagKey<Block> ORE = of("ore");
 
+    //功能性方块
+    public static final TagKey<Block> CATEGORY = of("category");
 
 
     private static TagKey<Block> of(String id) {
