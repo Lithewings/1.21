@@ -1,5 +1,6 @@
 package com.equilibrium.gen;
 
+import com.equilibrium.item.Armors;
 import com.equilibrium.item.Metal;
 import com.equilibrium.tags.ModItemTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
@@ -9,7 +10,10 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.text.html.HTML;
 import java.util.concurrent.CompletableFuture;
+
+import static com.equilibrium.tags.ModItemTags.registerModItemTags;
 
 public class TagsProvider extends FabricTagProvider.ItemTagProvider {
 
@@ -26,6 +30,27 @@ public class TagsProvider extends FabricTagProvider.ItemTagProvider {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
-        getOrCreateTagBuilder(ModItemTags.FUEL_LEVEL1).add(Items.COAL);
+        registerModItemTags();
+        getOrCreateTagBuilder(ItemTags.HEAD_ARMOR_ENCHANTABLE).
+                add(Armors.COPPER_HELMET);
+        getOrCreateTagBuilder(ItemTags.LEG_ARMOR_ENCHANTABLE).
+                add(Armors.COPPER_LEGGINGS);
+        getOrCreateTagBuilder(ItemTags.CHEST_ARMOR_ENCHANTABLE).
+                add(Armors.COPPER_CHEST_PLATE);
+        getOrCreateTagBuilder(ItemTags.FOOT_ARMOR_ENCHANTABLE).
+                add(Armors.COPPER_BOOTS);
+
+        getOrCreateTagBuilder(ItemTags.MINING_ENCHANTABLE).
+                add(Armors.COPPER_CHEST_PLATE);
+
+        getOrCreateTagBuilder(ItemTags.SWORD_ENCHANTABLE).
+                add(Armors.COPPER_CHEST_PLATE);
+
+
+
+
+
+
+
     }
 }

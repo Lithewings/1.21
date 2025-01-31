@@ -25,6 +25,8 @@ import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
@@ -142,7 +144,7 @@ public class MITEequilibrium implements ModInitializer {
 	private static final double M = 0.5;  // 中点
 
 
-	//玩家护甲值下降
+	//玩家护甲值下降,套装集齐效果
 	public static Text updatePlayerArmor(PlayerEntity player) {
 
 
@@ -196,6 +198,16 @@ public class MITEequilibrium implements ModInitializer {
 
 		//设定玩家护甲
 		player.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).setBaseValue(-protectionReduction);
+		//拥有至少10点护甲时,获得抗性提升效果
+		if(protection>10) {
+			boolean hasResistance = player.hasStatusEffect(StatusEffects.RESISTANCE);
+			if (!hasResistance)
+				player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 120, 0, false, false, false));
+			else if (player.getStatusEffect(StatusEffects.RESISTANCE).getDuration()<=20) {
+				player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 120, 0, false, false, false));
+			}
+		}
+
 
 		Text text =Text.literal(String.format(
 					"满耐久护甲=%.2f, 衰减系数=%.2f%%, 实际护甲=%.2f",
@@ -311,7 +323,7 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 			// 每隔 TICK_INTERVAL 次 tick 触发一次检查
 			tickCount++;
 			//护甲更新
-			if (tickCount >= TICK_INTERVAL/10) {
+			if (tickCount %(TICK_INTERVAL/10) == 0) {
 				for(ServerPlayerEntity serverPlayerEntity : server.getPlayerManager().getPlayerList())
 					updatePlayerArmor(serverPlayerEntity);
 			}
@@ -372,7 +384,7 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 			if(!craftedIronPickaxe){
 				if(!world.isClient()) {
 					serverState.isPickAxeCrafted =true;
-					player.sendMessage(Text.of("你第一次合成了铁镐"));
+					player.sendMessage(Text.of("你第一次合成了金属镐"));
 				}
 				else
 					return ActionResult.PASS;

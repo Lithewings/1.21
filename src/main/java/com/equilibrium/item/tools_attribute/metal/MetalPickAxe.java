@@ -28,13 +28,13 @@ public class MetalPickAxe extends ToolItem {
         super(material,settings.component(DataComponentTypes.TOOL, createToolComponent()));
     }
 
-    @Override
-    public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-        if(stack.getItem().getName().getString().contains("copper")||ingredient.isOf(Metal.copper_nugget))
-            return true;
-        else
-            return false;
-    }
+//    @Override
+//    public boolean canRepair(ItemStack stack, ItemStack ingredient) {
+//        if(stack.getItem().getName().getString().contains("copper")||ingredient.isOf(Metal.copper_nugget))
+//            return true;
+//        else
+//            return false;
+//    }
 
     @Override
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {

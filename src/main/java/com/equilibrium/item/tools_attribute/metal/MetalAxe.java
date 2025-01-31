@@ -4,6 +4,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.*;
+import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ToolComponent;
 import net.minecraft.entity.EquipmentSlot;
@@ -62,6 +63,11 @@ public class MetalAxe extends ToolItem {
                 List.of(ToolComponent.Rule.ofAlwaysDropping(BlockTags.AXE_MINEABLE, 4F)), 1.0F, 0
         );
     }
+
+
+
+
+
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
         World world = context.getWorld();

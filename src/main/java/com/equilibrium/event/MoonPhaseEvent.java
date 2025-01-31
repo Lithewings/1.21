@@ -104,9 +104,10 @@ public class MoonPhaseEvent {
                     // 获取敌对生物列表
                     List<HostileEntity> hostileMobs = world.getEntitiesByType(hostileFilter, searchBox, HostileEntity::isAlive);
 
-                    // 为每个敌对生物添加虚弱效果
+                    // 为每个敌对生物添加虚弱效果并削弱追踪距离
                     for (HostileEntity mob : hostileMobs) {
                         // 创建虚弱效果实例，持续时间单位为tick（20 ticks = 1秒），这里设为300 ticks, 即15秒
+                        mob.getAttributeInstance(EntityAttributes.GENERIC_FOLLOW_RANGE).setBaseValue(16);
                         StatusEffectInstance weakness = new StatusEffectInstance(StatusEffects.WEAKNESS, 6000, 0); // 0 为效果等级，0 级即为 I 级
                         StatusEffectInstance slowness = new StatusEffectInstance(StatusEffects.SLOWNESS, 6000, 1); // 0 为效果等级，0 级即为 I 级
                         mob.addStatusEffect(weakness);

@@ -1,6 +1,7 @@
 package com.equilibrium.mixin.player;
 
 import com.equilibrium.event.MoonPhaseEvent;
+import com.equilibrium.item.Tools;
 import com.equilibrium.persistent_state.StateSaverAndLoader;
 import com.equilibrium.status.registerStatusEffect;
 import com.equilibrium.tags.ModBlockTags;
@@ -69,6 +70,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import javax.tools.Tool;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -85,6 +87,7 @@ import static net.minecraft.component.DataComponentTypes.POTION_CONTENTS;
 import static net.minecraft.entity.effect.StatusEffects.SPEED;
 import static net.minecraft.potion.Potions.SWIFTNESS;
 import static net.minecraft.predicate.entity.EntityPredicates.VALID_LIVING_ENTITY;
+import static net.minecraft.registry.tag.EntityTypeTags.UNDEAD;
 import static net.minecraft.util.math.MathHelper.nextBetween;
 
 @Mixin(PlayerEntity.class)
@@ -101,7 +104,10 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         float experienceBonus = getDamageLevel(this.experienceLevel);
         //工具攻击特效
         float otherBonus = 1.0F;
-        if(this.getMainHandStack().isIn(ModItemTags.DAGGERS)||target instanceof PassiveEntity) {
+        if(this.getMainHandStack().isIn(ModItemTags.DAGGERS) && target instanceof PassiveEntity) {
+            otherBonus=1.5F;
+        }
+        if((this.getMainHandStack().isOf(Tools.SILVER_SWORD)||this.getMainHandStack().isOf(Tools.SILVER_DAGGER) ) && target.getType().isIn(UNDEAD)) {
             otherBonus=1.5F;
         }
         //非独立乘区
@@ -109,7 +115,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
         //例子: 玩家等级为5级,铜短剑的伤害为额外伤害为5点,使用跳斩伤害猪(10点生命)再获得1.5倍率伤害增益
         //基础伤害,面板伤害=(1.25*1.5+5)=6.875
-        //最终伤害 = 6.
+        //最终伤害 = 6.875*1.5 ~ 10.8
 
 
 

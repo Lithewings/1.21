@@ -172,7 +172,7 @@ public abstract class LightmapTextureManagerMixin {
                             //伽马值修正
                             vector3f2.lerp(vector3f5, 0.1F+nightVision);
 //                            LOGGER.info("Blue Moonlight rendering.");
-                            vector3f2.lerp(new Vector3f(0F, 0F, factor), 0.04F);
+                            vector3f2.lerp(new Vector3f(0F, 0F, factor), 0.07F);
                         } else if (Objects.equals(moonType, "harvestMoon")) {
                             //伽马值修正
                             vector3f2.lerp(vector3f5, 0.1F+nightVision);
@@ -184,7 +184,7 @@ public abstract class LightmapTextureManagerMixin {
                             vector3f2.lerp(vector3f5, 0F+nightVision);
                             //红色月亮渲染
 //                            LOGGER.info("Blood Moonlight rendering.");
-                            vector3f2.lerp(new Vector3f(factor,0F, 0F), 0F);}
+                            vector3f2.lerp(new Vector3f(factor,0F, 0F), 0.08F);}
 
                         else if (Objects.equals(moonType, "newMoon")) {
                                 //伽马值修正

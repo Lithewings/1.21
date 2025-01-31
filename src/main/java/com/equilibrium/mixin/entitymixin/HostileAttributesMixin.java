@@ -35,6 +35,6 @@ public abstract class HostileAttributesMixin extends PathAwareEntity implements 
         cir.cancel();
         cir.setReturnValue(MobEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 64.0));
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0));
     }
 }

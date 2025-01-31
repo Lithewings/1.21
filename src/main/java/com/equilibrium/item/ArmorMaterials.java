@@ -26,7 +26,7 @@ public class ArmorMaterials {
         map.put(ArmorItem.Type.CHESTPLATE, 5);
         map.put(ArmorItem.Type.HELMET, 2);
         map.put(ArmorItem.Type.BODY, 4);
-    }), 16, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0.0F, 0.0F, () -> Ingredient.ofItems(Metal.copper_nugget));
+    }), 16, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0F, 0.0F, () -> Ingredient.ofItems(Metal.copper_nugget));
 
     public static final RegistryEntry<ArmorMaterial> MITHRIL = register("mithril", Util.make(new EnumMap(ArmorItem.Type.class), map -> {
         map.put(ArmorItem.Type.BOOTS, 3);

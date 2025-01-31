@@ -58,6 +58,13 @@ public class ModLanguageTranslatorZhCn extends FabricLanguageProvider {
         translationBuilder.add(Tools.ADMANTIUM_PICKAXE,"艾德曼镐");
         translationBuilder.add(Tools.ADMANTIUM_SHOVEL,"艾德曼铲");
         translationBuilder.add(Tools.ADMANTIUM_SWORD,"艾德曼剑");
+        translationBuilder.add(Tools.SILVER_AXE,"银斧");
+        translationBuilder.add(Tools.SILVER_SWORD,"银剑");
+        translationBuilder.add(Tools.SILVER_SHOVEL,"银剑");
+        translationBuilder.add(Tools.SILVER_DAGGER,"银短剑");
+        translationBuilder.add(Tools.SILVER_HOE,"银锄");
+        translationBuilder.add(Tools.SILVER_PICKAXE,"银镐");
+
         translationBuilder.add(Tools.COPPER_AXE,"铜斧");
         translationBuilder.add(Tools.COPPER_DAGGER,"铜短剑");
         translationBuilder.add(Tools.COPPER_HOE,"铜锄");

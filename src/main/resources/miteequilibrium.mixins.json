@@ -26,6 +26,7 @@
     "entitymixin.VillagerEntityMixin",
     "entitymixin.WitherSkeletonEntityMixin",
     "entitymixin.ZombieEntityMixin",
+    "entitymixin.ZombieVillagerEntityMixin",
     "entitymixin.goal_mixin.ActiveTargetMixin",
     "entitymixin.goal_mixin.EscapeDangerGoalMixin",
     "entitymixin.goal_mixin.LookAtEntityGoalMixin",

@@ -101,6 +101,7 @@ public class AdvanceActiveTargetGoal<T extends LivingEntity> extends TrackTarget
     }
     @Override
     public double getFollowRange() {
+        //其他维度下的怪物追踪距离被大幅减小
         return this.mob.getWorld().getRegistryKey()== World.OVERWORLD ? this.mob.getAttributeValue(EntityAttributes.GENERIC_FOLLOW_RANGE): 0.25* (this.mob.getAttributeValue(EntityAttributes.GENERIC_FOLLOW_RANGE));
     }
 

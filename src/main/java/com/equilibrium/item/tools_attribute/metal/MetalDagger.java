@@ -81,19 +81,7 @@ public class MetalDagger extends ToolItem {
 
     @Override
     public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-//        float extraAttackDamage = 0;
-//        //来自经验值的攻击特效
-//        if(attacker instanceof PlayerEntity player) {
-//            extraAttackDamage += getDamageLevel(player);
-//            target.
-//            attacker.sendMessage(Text.of("经验特效攻击伤害: " + getDamageLevel(player)));
-//        }
-//        //屠宰攻击特效
-//        if (target instanceof PassiveEntity) { // 判断是否是中立/消极生物
-//            extraAttackDamage += 2;
-//            attacker.sendMessage(Text.of("屠宰效果攻击伤害: " + 2));
-//        }
-//        target.setHealth(target.getHealth()-);
+
         stack.damage(50, attacker, EquipmentSlot.MAINHAND);
     }
 
