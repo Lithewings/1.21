@@ -1,5 +1,6 @@
 package com.equilibrium.mixin.player;
 
+import com.equilibrium.MITEequilibrium;
 import com.equilibrium.event.MoonPhaseEvent;
 import com.equilibrium.item.Tools;
 import com.equilibrium.persistent_state.StateSaverAndLoader;
@@ -15,8 +16,10 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.component.type.PotionContentsComponent;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -46,19 +49,19 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.stat.Stat;
+import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.text.Texts;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.Unit;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.dimension.DimensionTypes;
+import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -95,6 +98,52 @@ import static net.minecraft.util.math.MathHelper.nextBetween;
 public abstract class PlayerEntityMixin extends LivingEntity {
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
+    }
+    @Shadow
+    public void resetStat(Stat<?> stat) {
+    }
+    @Shadow
+    public void incrementStat(Identifier stat) {
+        this.incrementStat(Stats.CUSTOM.getOrCreateStat(stat));
+    }
+    @Shadow
+    public void incrementStat(Stat<?> stat) {
+        this.increaseStat(stat, 1);
+    }
+    @Shadow
+    public void increaseStat(Stat<?> stat, int amount) {
+    }
+    @Shadow
+    public void setLastDeathPos(Optional<GlobalPos> lastDeathPos) {
+        this.lastDeathPos = lastDeathPos;
+    }
+    @Shadow
+    private Optional<GlobalPos> lastDeathPos;
+    @Shadow
+    protected void vanishCursedItems() {
+        for (int i = 0; i < this.inventory.size(); i++) {
+            ItemStack itemStack = this.inventory.getStack(i);
+            if (!itemStack.isEmpty() && EnchantmentHelper.hasAnyEnchantmentsWith(itemStack, EnchantmentEffectComponentTypes.PREVENT_EQUIPMENT_DROP)) {
+                this.inventory.removeStack(i);
+            }
+        }
+    }
+
+
+
+
+
+    @Override
+    public void dropInventory() {
+        super.dropInventory();
+        if ((this.experienceLevel<5)) {
+            this.getWorld().getGameRules().get(GameRules.KEEP_INVENTORY).set(false,this.getServer());
+            this.vanishCursedItems();
+            this.inventory.dropAll();
+        }else{
+            this.getWorld().getGameRules().get(GameRules.KEEP_INVENTORY).set(true,this.getServer());
+            this.experienceLevel = this.experienceLevel>35 ? 35 :0;
+        }
     }
 
 
@@ -422,7 +471,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Shadow public abstract void attack(Entity target);
 
-    @Shadow public abstract void onDeath(DamageSource damageSource);
 
     @Shadow public abstract Either<PlayerEntity.SleepFailureReason, Unit> trySleep(BlockPos pos);
 

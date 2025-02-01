@@ -39,6 +39,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -312,6 +313,7 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 			ServerInfoRecorder.setServerInstance(server);  // 保存服务器实例
+			server.setDifficultyLocked(true);
 		});
 
 
@@ -320,8 +322,16 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 			// 记录服务器实例
 			if(!isServerInstanceSet() )
 				ServerInfoRecorder.setServerInstance(server);
+
 			// 每隔 TICK_INTERVAL 次 tick 触发一次检查
 			tickCount++;
+
+			//规则更新
+//			if (tickCount %(TICK_INTERVAL/10) == 0) {
+//				if(!server.getGameRules().getBoolean(GameRules.KEEP_INVENTORY))
+//					server.getGameRules().get(GameRules.KEEP_INVENTORY).set(true,server);
+//			}
+
 			//护甲更新
 			if (tickCount %(TICK_INTERVAL/10) == 0) {
 				for(ServerPlayerEntity serverPlayerEntity : server.getPlayerManager().getPlayerList())

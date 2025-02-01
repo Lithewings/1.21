@@ -139,7 +139,9 @@
 
     "#minecraft:stone_bricks",
 
-    "#minecraft:logs"
+    "#minecraft:logs",
+
+    "#minecraft:walls"
 
   ]
 }

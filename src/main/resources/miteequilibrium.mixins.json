@@ -62,6 +62,7 @@
     "tables.PlayerManagerMixin",
     "tables.PlayerScreenHandlerAccessor",
     "tables.PlayerScreenHandlerMixin",
+    "tool.ShearsItemMixin",
     "tool.ShovelItemMixin",
     "tool.ToolMaterialDurabilityMixin",
     "world.ServerWorldMixin"

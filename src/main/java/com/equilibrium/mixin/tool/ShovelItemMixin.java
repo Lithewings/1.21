@@ -3,10 +3,7 @@ package com.equilibrium.mixin.tool;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.MiningToolItem;
-import net.minecraft.item.ShovelItem;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.*;
 import net.minecraft.registry.tag.TagKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -26,5 +23,7 @@ public class ShovelItemMixin extends MiningToolItem {
     @Override
     public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         stack.damage(50, attacker, EquipmentSlot.MAINHAND);
+
+
     }
 }

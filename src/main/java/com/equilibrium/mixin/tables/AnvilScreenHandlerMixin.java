@@ -44,9 +44,9 @@ public abstract  class AnvilScreenHandlerMixin extends ForgingScreenHandler {
     @Inject(method = "onTakeOutput",at = @At("HEAD"),cancellable = true)
     protected void onTakeOutput(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
         ci.cancel();
-        if (!player.getAbilities().creativeMode) {
-            player.addExperienceLevels(-this.levelCost.get());
-        }
+//        if (!player.getAbilities().creativeMode) {
+//            player.addExperienceLevels(-this.levelCost.get());
+//        }
 
         this.input.setStack(0, ItemStack.EMPTY);
         if (this.repairItemUsage > 0) {
