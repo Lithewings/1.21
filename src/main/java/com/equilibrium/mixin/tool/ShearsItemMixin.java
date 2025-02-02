@@ -13,6 +13,7 @@ public class ShearsItemMixin extends Item {
         super(settings);
     }
 
+    //修改默认工具属性
     @ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;<init>(Lnet/minecraft/item/Item$Settings;)V"))
     private static Settings ShearsItem(Settings settings) {
         return new Item.Settings().maxDamage(6400).component(DataComponentTypes.TOOL, ShearsItem.createToolComponent());

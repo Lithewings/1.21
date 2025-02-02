@@ -358,7 +358,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     //以下是修改方块交互距离
     @Inject(method = "getBlockInteractionRange", at = @At("HEAD"), cancellable = true)
     public void getBlockInteractionRange(CallbackInfoReturnable<Double> cir) {
-        cir.setReturnValue(3.0);
+        cir.setReturnValue(this.getAttributeValue(EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE)-1);
 
     }
 
@@ -519,7 +519,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         this.blockHarvest = getBlockHarvertLevel(block);
         if (this.itemHarvest >= this.blockHarvest) {
 
-            cir.setReturnValue(f * (0.040F) * (1 + this.experienceLevel * 0.02F));
+            cir.setReturnValue(f * (0.040F) * (this.experienceLevel<35?1 + this.experienceLevel * 0.1F :1 + this.experienceLevel * 0.02F));
         } else {
             cir.setReturnValue(0f);
         }

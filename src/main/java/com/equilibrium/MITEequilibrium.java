@@ -60,6 +60,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static com.equilibrium.enchantments.EnchantmentsCodec.registerAllOfEnchantments;
+import static com.equilibrium.enchantments.RegisterEnchantments.registerEnchantments;
 import static com.equilibrium.entity.ModEntities.registerModEntities;
 
 
@@ -415,6 +417,12 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 		CommandRegistrationCallback.EVENT.register(this::registerCommands);
 
 
+		//附魔注册(记得把数据驱动部分也做好)
+		registerAllOfEnchantments();
+
+
+
+		//僵尸破坏方块进度列表
 		init();
 
 		//护甲添加
