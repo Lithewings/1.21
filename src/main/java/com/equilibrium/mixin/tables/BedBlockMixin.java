@@ -96,7 +96,7 @@ public abstract class BedBlockMixin extends HorizontalFacingBlock implements Blo
             return;
         }
         if(Objects.equals(WorldMoonPhasesSelector.getMoonType(), "bloodMoon")) {
-            player.sendMessage(Text.of("血月让你无法休息或设置出生点"), true);
+            player.sendMessage(Text.of("血月让你无法休息"), true);
             cir.setReturnValue(ActionResult.SUCCESS);
             return;
         }
@@ -119,7 +119,7 @@ public abstract class BedBlockMixin extends HorizontalFacingBlock implements Blo
                 // 向玩家发送找到的坐标信息
 //                player.sendMessage(Text.literal("找到的空气方块位置: " + firstAirPos+"并以此计算休息位置的安全程度"), true);
                 if(!(findPath(world,pos,firstAirPos)==null)){
-                    player.sendMessage(Text.of("这里并不安全,你无法入睡或设置重生点,尝试彻底封闭周围空间"),true);
+                    player.sendMessage(Text.of("这里并不安全,你无法入睡,尝试彻底封闭周围空间"),true);
                     cir.setReturnValue(ActionResult.SUCCESS);
                 }
                 else{

@@ -56,8 +56,8 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
         if(state.isIn(ModBlockTags.LOG_120)){
             itemStack.damage(120,player, EquipmentSlot.MAINHAND);
             player.sendMessage(Text.of("-120"));
-        }else
-
+        }
+        else
         if(state.isIn(ModBlockTags.STONE_LIKE_240)){
             itemStack.damage(240,player, EquipmentSlot.MAINHAND);
             player.sendMessage(Text.of("-240"));
@@ -76,18 +76,19 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
         //240 360 480其余没有列出的,但是确实比较硬的物品,而且在三者子集里容易冲突
         else
         if(state.isIn(BlockTags.NEEDS_STONE_TOOL)){
-            itemStack.damage(240,player, EquipmentSlot.MAINHAND);
-            player.sendMessage(Text.of("-240"));}
+            itemStack.damage(120,player, EquipmentSlot.MAINHAND);
+            player.sendMessage(Text.of("-120"));}
         else
         if(state.isIn(BlockTags.NEEDS_IRON_TOOL)) {
-            itemStack.damage(360, player, EquipmentSlot.MAINHAND);
-            player.sendMessage(Text.of("-360"));
+            itemStack.damage(180, player, EquipmentSlot.MAINHAND);
+            player.sendMessage(Text.of("-180"));
         }
         else
         if(state.isIn(BlockTags.NEEDS_DIAMOND_TOOL)) {
-            itemStack.damage(480, player, EquipmentSlot.MAINHAND);
-            player.sendMessage(Text.of("-480"));
+            itemStack.damage(240, player, EquipmentSlot.MAINHAND);
+            player.sendMessage(Text.of("-240"));
         }
+        //这些都是玩家空手即可采集的方块
         else
         if(state.isIn(ModBlockTags.NORMAL_30)){
             itemStack.damage(30,player, EquipmentSlot.MAINHAND);

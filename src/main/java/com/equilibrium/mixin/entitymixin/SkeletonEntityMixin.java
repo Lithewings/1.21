@@ -3,6 +3,7 @@ package com.equilibrium.mixin.entitymixin;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.RangedAttackMob;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -21,9 +22,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AbstractSkeletonEntity.class)
 public abstract class SkeletonEntityMixin extends HostileEntity implements RangedAttackMob {
+
     protected SkeletonEntityMixin(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
     }
+
+    @Inject(method = "<init>",at = @At("TAIL"))
+    protected void AbstractSkeletonEntity(EntityType entityType, World world, CallbackInfo ci) {
+        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(8);
+        this.getAttributeInstance(EntityAttributes.GENERIC_FALL_DAMAGE_MULTIPLIER).setBaseValue(16);
+
+    }
+
+
+
+
     @Shadow
     protected PersistentProjectileEntity createArrowProjectile(ItemStack arrow, float damageModifier, @Nullable ItemStack shotFrom) {
         return ProjectileUtil.createArrowProjectile(this, arrow, damageModifier, shotFrom);

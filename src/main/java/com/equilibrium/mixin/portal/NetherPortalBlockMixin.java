@@ -23,16 +23,19 @@ import net.minecraft.network.message.SentMessage;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import net.minecraft.world.border.WorldBorder;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.feature.EndPlatformFeature;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
@@ -77,11 +80,15 @@ public abstract class NetherPortalBlockMixin extends Block implements Portal{
             return "Not an illegal transportation";
         } else {
             boolean atBottom = Math.abs(entity.getY()-world.getBottomY())<5;
+            //3格的缓冲区,防止玩家在地下世界本应该传送到下界的时候跳跃造成y变化导致传送到了主世界
+            boolean buffer = Math.abs(entity.getY()-world.getBottomY())>=5 && Math.abs(entity.getY()-world.getBottomY())<8;
+
             if(world.getRegistryKey()==overworld && atBottom){
                 teleport=underworld;
-            } else if (world.getRegistryKey()==overworld && !atBottom) {
+            }
+            else if (world.getRegistryKey()==overworld && !atBottom && !buffer) {
                 teleport=overworld;
-            } else if (world.getRegistryKey()==underworld && !atBottom) {
+            } else if (world.getRegistryKey()==underworld && !atBottom && !buffer ) {
                 teleport=overworld;
             } else if (world.getRegistryKey()==underworld &&  atBottom) {
                 teleport=nether;
@@ -89,6 +96,7 @@ public abstract class NetherPortalBlockMixin extends Block implements Portal{
                 teleport=underworld;
             }
             else {
+                //不传,获取目前世界,因为在缓冲区上
                 teleport=world.getRegistryKey();
             }
             String worldType;
@@ -115,21 +123,25 @@ public abstract class NetherPortalBlockMixin extends Block implements Portal{
     protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo ci) {
         ci.cancel();
 
-        if (entity.canUsePortals(false)) {
+//        public boolean canUsePortals(boolean allowVehicles) {
+//            return (allowVehicles || !this.hasVehicle()) && this.isAlive();
+//        }
+
+        if (entity.canUsePortals(true)) {
             entity.tryUsePortal(this, pos);
-                if(ShouldSentText.count>=170) {
-                    String teleport = getTeleportWorld(world, entity);
-                    if (Objects.equals(teleport, TRANSPORT_TARGET1)){
-                        entity.sendMessage(Text.of(Text.translatable("teleport.overworld").formatted(Formatting.YELLOW)));
-                    }else if(Objects.equals(teleport, TRANSPORT_TARGET2)){
-                        entity.sendMessage(Text.of(Text.translatable("teleport.underworld").formatted(Formatting.YELLOW)));
-                    }else if(Objects.equals(teleport, TRANSPORT_TARGET3))
-                        entity.sendMessage(Text.of(Text.translatable("teleport.nether").formatted(Formatting.YELLOW)));
-                    else{
-                        entity.sendMessage(Text.of("You shouldn't receive the mesaage, it might you will teleport to the wrong dimension that no supporting"));
-                    }
-                    ShouldSentText.count=0;
+            if (entity instanceof PlayerEntity player) {
+                String teleport = getTeleportWorld(world, entity);
+                if (Objects.equals(teleport, TRANSPORT_TARGET1)) {
+                    player.sendMessage(Text.of(Text.translatable("teleport.overworld").formatted(Formatting.YELLOW)),true);
+                } else if (Objects.equals(teleport, TRANSPORT_TARGET2)) {
+                    player.sendMessage(Text.of(Text.translatable("teleport.underworld").formatted(Formatting.YELLOW)),true);
+                } else if (Objects.equals(teleport, TRANSPORT_TARGET3))
+                    player.sendMessage(Text.of(Text.translatable("teleport.nether").formatted(Formatting.YELLOW)),true);
+                else {
+                    player.sendMessage(Text.of("You shouldn't receive the mesaage, it might you will teleport to the wrong dimension that no supporting"),true);
                 }
+            }
+
 
         }
     }
@@ -140,6 +152,33 @@ public abstract class NetherPortalBlockMixin extends Block implements Portal{
     private static RegistryKey<World> overworld = World.OVERWORLD;
     private static RegistryKey<World> nether = World.NETHER;
     private static RegistryKey<World> underworld = RegistryKey.of(RegistryKeys.WORLD, Identifier.of("miteequilibrium", "underworld"));
+
+
+
+
+
+    public TeleportTarget toSpawn(ServerWorld world, Entity entity) {
+        RegistryKey<World> registryKey = world.getRegistryKey();
+        ServerWorld serverWorld = world.getServer().getWorld(registryKey);
+        if (serverWorld == null) {
+            return null;
+        } else {
+            BlockPos blockPos = serverWorld.getSpawnPos();
+            float f = entity.getYaw();
+            if (entity instanceof ServerPlayerEntity serverPlayerEntity) {
+                return serverPlayerEntity.getRespawnTarget(false, TeleportTarget.NO_OP);
+            }
+            Vec3d vec3d = entity.getWorldSpawnPos(serverWorld, blockPos).toBottomCenterPos();
+            return new TeleportTarget(
+                    serverWorld,
+                    vec3d,
+                    entity.getVelocity(),
+                    f,
+                    entity.getPitch(),
+                    TeleportTarget.SEND_TRAVEL_THROUGH_PORTAL_PACKET.then(TeleportTarget.ADD_PORTAL_CHUNK_TICKET)
+            );
+        }
+    }
 
 
 
@@ -166,6 +205,8 @@ public abstract class NetherPortalBlockMixin extends Block implements Portal{
 
             boolean atBottom = Math.abs(entity.getY()-world.getBottomY())<5;
 
+            //3格的缓冲区,比如防止玩家在地下世界本应该传送到下界的时候跳跃造成y变化导致传送到了主世界
+            boolean buffer = Math.abs(entity.getY()-world.getBottomY())>=5 && Math.abs(entity.getY()-world.getBottomY())<8;
 
 
             //world.getRegistryKey()获取现在的世界
@@ -178,9 +219,10 @@ public abstract class NetherPortalBlockMixin extends Block implements Portal{
 
             if(world.getRegistryKey()==overworld && atBottom){
                 teleport=underworld;
-            } else if (world.getRegistryKey()==overworld && !atBottom) {
+            } else if (world.getRegistryKey()==overworld && !atBottom && !buffer) {
+                //不在底部,且不在缓冲区上
                 teleport=overworld;
-                if(entity.isPlayer()){
+                if(entity instanceof ServerPlayerEntity player){
                     serverWorld=world.getServer().getWorld(teleport);
 
                     StatusEffectInstance statusEffectInstance1 = new StatusEffectInstance(StatusEffects.BLINDNESS, 60,255, false,false,false);
@@ -193,32 +235,27 @@ public abstract class NetherPortalBlockMixin extends Block implements Portal{
                     StatusEffectUtil.addEffectToPlayersWithinDistance(world, entity, entity.getPos(), 4, statusEffectInstance3,100);
 
 
+                    player.teleportTo(toSpawn(serverWorld,player));
 
-                    BlockPos spawnPos=world.getSpawnPos();
-
-
-                    for(int i=0;i<=3;i++){
-                        world.breakBlock(spawnPos.add(1,i,1),true);
-                        world.breakBlock(spawnPos.add(1,i,0),true);
-                        world.breakBlock(spawnPos.add(1,i,-1),true);
-                        world.breakBlock(spawnPos.add(0,i,1),true);
-                        world.breakBlock(spawnPos.add(0,i,0),true);
-                        world.breakBlock(spawnPos.add(0,i,-1),true);
-                        world.breakBlock(spawnPos.add(-1,i,1),true);
-                        world.breakBlock(spawnPos.add(-1,i,0),true);
-                        world.breakBlock(spawnPos.add(-1,i,-1),true);
-                    }
-
-
-
-                    entity.teleport(serverWorld,spawnPos.getX(),spawnPos.getY(),spawnPos.getZ(), Set.of(),entity.getYaw(), entity.getPitch());
+//                    for(int i=0;i<=3;i++){
+//                        world.breakBlock(spawnPos.add(1,i,1),true);
+//                        world.breakBlock(spawnPos.add(1,i,0),true);
+//                        world.breakBlock(spawnPos.add(1,i,-1),true);
+//                        world.breakBlock(spawnPos.add(0,i,1),true);
+//                        world.breakBlock(spawnPos.add(0,i,0),true);
+//                        world.breakBlock(spawnPos.add(0,i,-1),true);
+//                        world.breakBlock(spawnPos.add(-1,i,1),true);
+//                        world.breakBlock(spawnPos.add(-1,i,0),true);
+//                        world.breakBlock(spawnPos.add(-1,i,-1),true);
+//                    }
 
                     return;
                 }
                 else{
                     teleport=underworld;
                 }
-            } else if (world.getRegistryKey()==underworld && !atBottom) {
+            } else if (world.getRegistryKey()==underworld && !atBottom &&!buffer) {
+                //不在底部,也不在缓冲区上,传送到主世界
                 teleport=overworld;
 
 
@@ -236,8 +273,7 @@ public abstract class NetherPortalBlockMixin extends Block implements Portal{
 
             serverWorld=world.getServer().getWorld(teleport);
 
-            //传送信息冷却
-            ShouldSentText.count=-100;
+
             cir.setReturnValue(this.getOrCreateExitPortalTarget(serverWorld, entity, pos, blockPos, inNether, worldBorder));
 
         }}

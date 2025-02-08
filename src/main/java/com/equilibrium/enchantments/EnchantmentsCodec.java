@@ -12,6 +12,8 @@ public class EnchantmentsCodec {
 
     public static final MapCodec<?extends EnchantmentEntityEffect> REACHING = register("reaching",WaterBucketEnchantment.CODEC);
 
+
+
     private static MapCodec<? extends EnchantmentEntityEffect> register(String name,MapCodec<? extends EnchantmentEntityEffect> codec){
         return Registry.register(Registries.ENCHANTMENT_ENTITY_EFFECT_TYPE, Identifier.of(MOD_ID,name),codec);
     }

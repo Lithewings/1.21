@@ -71,9 +71,6 @@ public abstract class LootTableModifier {
                 return LootTable.builder().build();
             }
 
-            if (Blocks.EMERALD_ORE.getLootTableKey() == key && source.isBuiltin()) {
-                return LootTable.builder().build();
-            }
 
             if (Blocks.NETHER_QUARTZ_ORE.getLootTableKey() == key && source.isBuiltin()) {
                 return LootTable.builder().build();
@@ -83,9 +80,6 @@ public abstract class LootTableModifier {
                 return LootTable.builder().build();
             }
 
-            if (Blocks.DEEPSLATE_EMERALD_ORE.getLootTableKey() == key && source.isBuiltin()) {
-                return LootTable.builder().build();
-            }
             if (Blocks.EMERALD_ORE.getLootTableKey() == key && source.isBuiltin()) {
                 return LootTable.builder().build();
             }
@@ -111,9 +105,6 @@ public abstract class LootTableModifier {
                 return LootTable.builder().build();
             }
 
-            if (Blocks.DEEPSLATE_REDSTONE_ORE.getLootTableKey() == key && source.isBuiltin()) {
-                return LootTable.builder().build();
-            }
 
             if (Blocks.GILDED_BLACKSTONE.getLootTableKey() == key && source.isBuiltin()) {
                 return LootTable.builder().build();

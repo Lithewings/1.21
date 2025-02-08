@@ -1,4 +1,7 @@
 {
+  "container.repair.require":"等级要求",
+
+
   "You will transport to nether": "该传送门会将你传送至下界",
   "You will transport to overworld": "该传送门会将你传送至主世界",
   "You will transport to underworld": "该传送门会将你传送至地下世界",
@@ -74,9 +77,9 @@
 
   "block.miteequilibrium.example_block": "TestBlock",
   "itemgroup.testgroup": "MITEequilibrium",
-  "teleport.overworld": "You will teleport to overworld if staying still now",
-  "teleport.underworld": "You will teleport to underworld if staying still now",
-  "teleport.nether": "You will teleport to nether if staying still now",
+  "teleport.overworld": "你将被传送至主世界",
+  "teleport.underworld": "你将被传送至地下世界",
+  "teleport.nether": "你将被传送至下界",
   "block.miteequilibrium.flint_crafting_table": "燧石合成台",
   "block.miteequilibrium.copper_crafting_table": "铜/银合成台",
   "block.miteequilibrium.iron_crafting_table": "铁合成台",

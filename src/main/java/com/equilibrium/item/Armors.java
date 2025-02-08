@@ -1,6 +1,5 @@
 package com.equilibrium.item;
 
-import com.equilibrium.item.tools_attribute.ModToolMaterials;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -10,10 +9,10 @@ import net.minecraft.util.Identifier;
 public class Armors {
 
 
-    public static final Item COPPER_HELMET =new ArmorItem(ArmorMaterials.COPPER, ArmorItem.Type.HELMET,new Item.Settings().maxDamage(5*32));
-    public static final Item COPPER_CHEST_PLATE =new ArmorItem(ArmorMaterials.COPPER, ArmorItem.Type.CHESTPLATE,new Item.Settings().maxDamage(8*32));
-    public static final Item COPPER_LEGGINGS =new ArmorItem(ArmorMaterials.COPPER, ArmorItem.Type.LEGGINGS,new Item.Settings().maxDamage(7*32));
-    public static final Item COPPER_BOOTS =new ArmorItem(ArmorMaterials.COPPER, ArmorItem.Type.BOOTS,new Item.Settings().maxDamage(4*32));
+    public static final Item COPPER_HELMET =new ArmorItem(ModArmorMaterials.COPPER, ArmorItem.Type.HELMET,new Item.Settings().maxDamage(5*32));
+    public static final Item COPPER_CHEST_PLATE =new ArmorItem(ModArmorMaterials.COPPER, ArmorItem.Type.CHESTPLATE,new Item.Settings().maxDamage(8*32));
+    public static final Item COPPER_LEGGINGS =new ArmorItem(ModArmorMaterials.COPPER, ArmorItem.Type.LEGGINGS,new Item.Settings().maxDamage(7*32));
+    public static final Item COPPER_BOOTS =new ArmorItem(ModArmorMaterials.COPPER, ArmorItem.Type.BOOTS,new Item.Settings().maxDamage(4*32));
 
 
 

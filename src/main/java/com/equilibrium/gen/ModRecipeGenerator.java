@@ -175,9 +175,9 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
 
 
         offerSmelting(exporter,ADAMANTIUM_RAW,RecipeCategory.MISC,Metal.adamantium,100,200,"adamantium_raw");
-        offerSmelting(exporter,COPPER_INGOT,RecipeCategory.MISC,Metal.copper,10,200,"copper_ingot");
-        offerSmelting(exporter,MITHRIL_RAW,RecipeCategory.MISC,Metal.mithril,50,200,"mithril_raw");
-        offerSmelting(exporter,SILVER_RAW,RecipeCategory.MISC,Metal.silver,10,200,"silver_raw");
+        offerSmelting(exporter,COPPER_INGOT,RecipeCategory.MISC,Metal.copper,20,200,"copper_ingot");
+        offerSmelting(exporter,MITHRIL_RAW,RecipeCategory.MISC,Metal.mithril,80,200,"mithril_raw");
+        offerSmelting(exporter,SILVER_RAW,RecipeCategory.MISC,Metal.silver,30,200,"silver_raw");
 
         //piece->flint
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Items.FLINT).

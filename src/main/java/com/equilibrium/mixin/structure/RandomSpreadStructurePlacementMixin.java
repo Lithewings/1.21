@@ -69,8 +69,8 @@ public class RandomSpreadStructurePlacementMixin {
         int spacing = this.spacing;
         int separation = this.separation;
         if((-3200<chunkX&&chunkX<3200 && -3200<chunkZ&&chunkZ<3200)) {
-            spacing = generate?spacing:spacing+128;
-            separation = (int) (spacing/1.7);
+            spacing = generate?spacing:spacing+160;
+            separation = (int) (spacing/1.2);
 //            if(server!=null)
 //                for(ServerWorld world :server.getWorlds()) {
 //                    if (!world.getPlayers().isEmpty()) {

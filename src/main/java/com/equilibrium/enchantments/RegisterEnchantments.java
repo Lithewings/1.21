@@ -23,6 +23,7 @@ public class RegisterEnchantments {
 
     public static final RegistryKey<Enchantment> REACHING = of("reaching");
 
+    public static final RegistryKey<Enchantment> ENCHANTED_FOOD= of("enchanted_food");
 
     private static void register(Registerable<Enchantment> registry, RegistryKey<Enchantment> key, Enchantment.Builder builder) {
         registry.register(key, builder.build(key.getValue()));
@@ -33,13 +34,13 @@ public class RegisterEnchantments {
     public static void bootstrap(Registerable<Enchantment> registry){
         RegistryEntryLookup<Enchantment> registryEntryLookup2 = registry.getRegistryLookup(RegistryKeys.ENCHANTMENT);
         RegistryEntryLookup<Item> registryEntryLookup3 = registry.getRegistryLookup(RegistryKeys.ITEM);
-        RegistryEntryList<Item> supportedItems = RegistryEntryList.of(Items.BUCKET.getRegistryEntry());
+
         register(
                 registry,
                 REACHING,
                 Enchantment.builder(
                                 Enchantment.definition(
-                                        supportedItems,
+                                        RegistryEntryList.of(Items.BUCKET.getRegistryEntry()),
                                         2,
                                         1,
                                         Enchantment.leveledCost(5, 9),
@@ -57,6 +58,22 @@ public class RegisterEnchantments {
                                 EntityAttributeModifier.Operation.ADD_VALUE
                         ))
 
+        );
+        register(
+                registry,
+                ENCHANTED_FOOD,
+                Enchantment.builder(
+                        Enchantment.definition(
+                                RegistryEntryList.of(Items.GOLDEN_APPLE.getRegistryEntry()),
+                                2,
+                                1,
+                                Enchantment.leveledCost(5, 9),
+                                Enchantment.leveledCost(65, 9),
+                                20,
+                                AttributeModifierSlot.ANY
+                        )
+
+                )
         );
 
 

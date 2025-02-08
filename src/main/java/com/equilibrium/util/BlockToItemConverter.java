@@ -54,6 +54,8 @@ public class BlockToItemConverter {
         blockItemMap.put(Blocks.GILDED_BLACKSTONE, Items.GOLD_NUGGET);
 
 
+        blockItemMap.put(Blocks.NETHER_QUARTZ_ORE, Items.QUARTZ);
+
 
 
 

@@ -223,8 +223,9 @@ public abstract class CraftingScreenHandlerMixin extends AbstractRecipeScreenHan
 			if(itemStack.isIn(ModItemTags.REMOVEITEM))
 				itemStack = ItemStack.EMPTY;
 
-
-
+			//金苹果至少需要200xp才能合成
+			if(itemStack.isOf(Items.GOLDEN_APPLE) && player.totalExperience<200 && !player.isCreative())
+				itemStack = ItemStack.EMPTY;
 
 
 			//斧子中,替换铁,金

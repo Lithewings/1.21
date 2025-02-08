@@ -7,29 +7,38 @@ import com.equilibrium.craft_time_register.UseBlock;
 import com.equilibrium.entity.goal.BreakBlockGoal;
 import com.equilibrium.event.BreakBlockEvent;
 import com.equilibrium.event.CraftingMetalPickAxeCallback;
+import com.equilibrium.event.OnPlayerEntityEatEvent;
 import com.equilibrium.item.Metal;
 import com.equilibrium.item.ModItemGroup;
 import com.equilibrium.item.ModItems;
 import com.equilibrium.item.Tools;
 import com.equilibrium.persistent_state.StateSaverAndLoader;
 import com.equilibrium.util.ServerInfoRecorder;
+import com.google.common.collect.Lists;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.server.MinecraftServer;
@@ -37,8 +46,12 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
@@ -310,9 +323,51 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 	}
 
+	private static TypedActionResult<ItemStack> onUseCrystalItem(ItemStack itemStack , PlayerEntity player,World world,int experience){
+
+
+		// 播放玻璃破碎的声音
+		player.playSound(SoundEvents.BLOCK_GLASS_BREAK, 1.0F, 1.0F);
+		// 返回成功，表示已处理
+
+		//增加经验
+		player.addExperience(experience);
+
+		// 获取玩家眼前的方向和位置
+		Vec3d eyePos = player.getEyePos();  // 玩家眼睛的位置
+		Vec3d lookDir = player.getRotationVector();  // 玩家视线方向
+
+		// 计算在玩家眼前的一定距离处的位置
+		double distance = 0.5;  // 控制粒子生成的距离
+		Vec3d particlePos = eyePos.add(lookDir.multiply(distance));
+
+		// 创建物品材质的破碎粒子
+		ItemStackParticleEffect particleEffect = new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack);
+
+		// 生成青金石物品的破碎粒子
+		for (int i = 0; i < 10; i++) {
+			double xOffset = (Math.random() - 0.5) * 0.85;  // 随机偏移
+			double yOffset = (Math.random() - 0.5) * 0.85;
+			double zOffset = (Math.random() - 0.5) * 0.85;
+
+			// 使用 `ITEM` 粒子类型生成青金石物品的破碎效果
+			world.addParticle(particleEffect,
+					particlePos.x + xOffset, particlePos.y + yOffset, particlePos.z + zOffset,
+					0, 0, 0);  // 可根据需要调整粒子速度
+		}
+		//消耗一个晶体
+		itemStack.setCount(itemStack.getCount()-1);
+		return TypedActionResult.success(itemStack);
+
+	}
+
+
+
+
+
 
 	public void onInitialize() {
-
+		//记录服务器实例
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 			ServerInfoRecorder.setServerInstance(server);  // 保存服务器实例
 			server.setDifficultyLocked(true);
@@ -367,11 +422,59 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 
 
+		//使用物品监听器
+		UseItemCallback.EVENT.register((player, world, hand) -> {
+			// 获取玩家手中的物品
+			ItemStack itemStack = player.getStackInHand(hand);
+
+			// 判断是否为青金石
+			if (itemStack.getItem() == Items.LAPIS_LAZULI) {
+				return onUseCrystalItem(itemStack,player,world,25);
+			}
+			if (itemStack.getItem() == Items.QUARTZ) {
+				return onUseCrystalItem(itemStack,player,world,50);
+			}
+			if (itemStack.getItem() == Items.DIAMOND) {
+				return onUseCrystalItem(itemStack,player,world,500);
+			}
 
 
 
+			// 其他物品时不做处理
+			return TypedActionResult.pass(itemStack);
+        });
+
+		//原版物品添加tooltip
+		//不能和数据生成一起使用
+		ItemTooltipCallback.EVENT.register((stack, context, type,lines) -> {
+			// 判断物品是青金石（Lapis Lazuli）或其他物品
+			if (stack.getItem() == Items.LAPIS_LAZULI) {
+				lines.add(Text.literal("每个25XP").formatted(Formatting.DARK_GRAY));
+			}
+			if (stack.getItem() == Items.QUARTZ) {
+				lines.add(Text.literal("每个50XP").formatted(Formatting.DARK_GRAY));
+			}
+			if (stack.getItem() == Items.DIAMOND) {
+				lines.add(Text.literal("每个500XP").formatted(Formatting.DARK_GRAY));
+			}
+			if (stack.getItem() == Items.GOLDEN_APPLE) {
+				lines.add(Text.literal("生命恢复 II（00:40）").formatted(Formatting.BLUE));
+				lines.add(Text.literal("抗火（00:40）").formatted(Formatting.BLUE));
+			}
+		});
 
 
+		//玩家食用食品监听器
+//		OnPlayerEntityEatEvent.EVENT.register((player)->{
+//			if(!player.getWorld().isClient()) {
+//				player.sendMessage(Text.of("你吃掉了食物!"),true);
+//			}
+//			return ActionResult.SUCCESS;
+//        });
+
+
+
+		//合成金属镐监听器
 		CraftingMetalPickAxeCallback.EVENT.register((world,player) -> {
 
 //			DataFixer dataFixer = client.getDataFixer();  // 你需要初始化 DataFixer 实例
@@ -413,7 +516,7 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 
 
-
+		//命令注册
 		CommandRegistrationCallback.EVENT.register(this::registerCommands);
 
 

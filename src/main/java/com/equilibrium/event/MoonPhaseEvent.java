@@ -28,12 +28,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import net.minecraft.world.level.ServerWorldProperties;
+import net.minecraft.world.poi.PointOfInterestStorage;
+import net.minecraft.world.poi.PointOfInterestTypes;
 
 public class MoonPhaseEvent {
     private static final EntityType<?>[] ANIMAL_TYPES = new EntityType[]{
@@ -210,14 +214,31 @@ public class MoonPhaseEvent {
         }
 
         LightningEntity lightning = EntityType.LIGHTNING_BOLT.create(world);
+        //搜索该位置最近的一个避雷针位置
+        Optional<BlockPos> availableLighteningRod = getLightningRodPos(world,spawnPos);
+
         if (lightning != null) {
-            lightning.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(spawnPos));
+            if(availableLighteningRod.isPresent())
+                //避雷针处生成闪电,若没有,则在玩家附近生成
+                lightning.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(availableLighteningRod.get()));
+            else
+                lightning.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(spawnPos));
             world.spawnEntity(lightning);
         }
 
     }
-
-
+    //从ServerWorld中拿到的方法
+    private static Optional<BlockPos> getLightningRodPos(ServerWorld serverWorld , BlockPos pos) {
+        Optional<BlockPos> optional = serverWorld.getPointOfInterestStorage()
+                .getNearestPosition(
+                        poiType -> poiType.matchesKey(PointOfInterestTypes.LIGHTNING_ROD),
+                        innerPos -> innerPos.getY() == serverWorld.getTopY(Heightmap.Type.WORLD_SURFACE, innerPos.getX(), innerPos.getZ()) - 1,
+                        pos,
+                        128,
+                        PointOfInterestStorage.OccupationStatus.ANY
+                );
+        return optional.map(innerPos -> innerPos.up(1));
+    }
 
     public static void spawnAnimalNearPlayer(ServerWorld world) {
         PlayerEntity player = world.getRandomAlivePlayer();

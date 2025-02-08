@@ -1,7 +1,9 @@
 package com.equilibrium.mixin.player;
 
 import com.equilibrium.MITEequilibrium;
+import com.equilibrium.event.CraftingMetalPickAxeCallback;
 import com.equilibrium.event.MoonPhaseEvent;
+import com.equilibrium.event.OnPlayerEntityEatEvent;
 import com.equilibrium.item.Tools;
 import com.equilibrium.persistent_state.StateSaverAndLoader;
 import com.equilibrium.status.registerStatusEffect;
@@ -53,9 +55,11 @@ import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.text.Texts;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.Unit;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.*;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
@@ -91,6 +95,7 @@ import static net.minecraft.entity.effect.StatusEffects.SPEED;
 import static net.minecraft.potion.Potions.SWIFTNESS;
 import static net.minecraft.predicate.entity.EntityPredicates.VALID_LIVING_ENTITY;
 import static net.minecraft.registry.tag.EntityTypeTags.UNDEAD;
+import static net.minecraft.sound.SoundCategory.BLOCKS;
 import static net.minecraft.util.math.MathHelper.nextBetween;
 
 @Mixin(PlayerEntity.class)
@@ -242,6 +247,11 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "eatFood", at = @At(value = "HEAD"))
     public void eatFood(World world, ItemStack stack, FoodComponent foodComponent, CallbackInfoReturnable<ItemStack> cir) {
+        //触发使用食物的事件
+//        if(!world.isClient()) {
+//            ActionResult result = OnPlayerEntityEatEvent.EVENT.invoker().interact(this.getWorld().getPlayerByUuid(this.getUuid()));
+//        }
+
         if (stack.isIn(ModItemTags.HARMFOOD)){
             this.phytonutrient-=2000;
             StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.POISON, 400,0,true,true,true);
@@ -292,6 +302,46 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo ci) {
+//        if(!this.getWorld().isClient()) {
+//            this.sendMessage(Text.of("SpawnPoint is : " + this.getServer().getPlayerManager().getPlayer(this.getUuid()).getSpawnPointPosition()));
+//            this.teleport(this.getServer().getPlayerManager().getPlayer(this.getUuid()).getSpawnPointPosition().getX(), this.getServer().getPlayerManager().getPlayer(this.getUuid()).getSpawnPointPosition().getY(),this.getServer().getPlayerManager().getPlayer(this.getUuid()).getSpawnPointPosition().getZ(),false);
+//        }
+//        if(!this.getWorld().isClient()){
+//
+//        }
+//        this.sendMessage("SpawnPos is "+this.getWorldSpawnPos());
+//        @Inject(method = "onUse",at = @At("HEAD"),cancellable = true)
+//        public void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult
+//        hit, CallbackInfoReturnable< ActionResult > cir) {
+//            cir.cancel();
+//            if (world.isClient) {
+//                cir.setReturnValue(ActionResult.SUCCESS);
+//            } else if (player.getMainHandStack().isOf(Items.IRON_BLOCK)) {
+//                BlockState newAnvilBlock = state;
+//                int count = player.getMainHandStack().getCount();
+//                if (state.getBlock() == Blocks.CHIPPED_ANVIL){
+//                    newAnvilBlock = Blocks.ANVIL.getDefaultState().with(FACING, (Direction) state.get(FACING));
+//                }else if(state.getBlock() == Blocks.DAMAGED_ANVIL){
+//                    newAnvilBlock =Blocks.CHIPPED_ANVIL.getDefaultState().with(FACING, (Direction) state.get(FACING));
+//                }
+//                else{
+//                    //如果是完好无损的铁砧,正常交互
+//                    player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
+//                    player.incrementStat(Stats.INTERACT_WITH_ANVIL);
+//                    cir.setReturnValue(ActionResult.CONSUME);
+//                }
+//                //修补铁砧
+//                world.setBlockState(pos, newAnvilBlock);
+//                //消耗一个铁块,仅仅在完成修补后才会到达这里
+//                player.getMainHandStack().setCount(count-1);
+//                world.playSound(null,pos,SoundEvents.BLOCK_ANVIL_USE,BLOCKS,1f,1f);
+//                cir.setReturnValue(ActionResult.CONSUME);
+//
+//            } else {
+//                player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
+//                player.incrementStat(Stats.INTERACT_WITH_ANVIL);
+//                cir.setReturnValue(ActionResult.CONSUME);
+//            }
         //202501230630 完成了测试,直接把不可合成的药水名字换成迅捷药水之类的即可,不过最好用translate的那种
 //        this.getMainHandStack().set(POTION_CONTENTS, new PotionContentsComponent(Optional.empty(),Optional.empty(),List.of(new StatusEffectInstance(SPEED, 20, 0, true, true))));
 //        this.getMainHandStack().set(ITEM_NAME,Text.of("dd"));
@@ -379,7 +429,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                 setEntityInteractBonus(0.75f);
             } else if (itemstack.isIn(ModItemTags.SWORDS)) {
                 //剑
-                setEntityInteractBonus(0.75f);
+                setEntityInteractBonus(1.00f);
             } else if (itemstack.isIn(ModItemTags.HOES)) {
                 //锄头
                 setEntityInteractBonus(0.75f);
@@ -400,9 +450,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
         //潜行向下看时,增加生物交互距离
         if(this.isSneaking() && this.getPitch()>60)
-            cir.setReturnValue( 2.5 + entityInteractBonus);
+            cir.setReturnValue( 3.0 + entityInteractBonus);
         else{
-            cir.setReturnValue((1.5 + entityInteractBonus));
+            cir.setReturnValue((2.0 + entityInteractBonus));
         }
     }
 
@@ -476,6 +526,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Shadow public abstract ItemStack eatFood(World world, ItemStack stack, FoodComponent foodComponent);
 
+    @Shadow public abstract Text getName();
+
     //修改挖掘速度
     @Inject(method = "getBlockBreakingSpeed", at = @At("HEAD"), cancellable = true)
     public void getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> cir) {
@@ -508,18 +560,19 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         if (!this.isOnGround()) {
             f /= 5.0F;
         }
-        if(block.isIn(ModBlockTags.CATEGORY))
+        if(block.isIn(ModBlockTags.CATEGORY)||block.isIn(ModBlockTags.SHOULD_BE_SOFT))
             f= f * 8;
 
         if (stack.isSuitableFor(block)||(stack.isIn(ModItemTags.PICKAXES)&&block.isIn(ModBlockTags.ORE))) {
             f = f * 4;
         }
 
+
         this.itemHarvest = getItemHarvertLevel(stack);
         this.blockHarvest = getBlockHarvertLevel(block);
         if (this.itemHarvest >= this.blockHarvest) {
 
-            cir.setReturnValue(f * (0.040F) * (this.experienceLevel<35?1 + this.experienceLevel * 0.1F :1 + this.experienceLevel * 0.02F));
+            cir.setReturnValue(f * (0.040F) * (this.experienceLevel<35?1 + this.experienceLevel * 0.1F :1.35F + this.experienceLevel * 0.1F));
         } else {
             cir.setReturnValue(0f);
         }
