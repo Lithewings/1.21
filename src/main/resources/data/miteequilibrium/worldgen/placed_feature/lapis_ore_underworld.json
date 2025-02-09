@@ -1,9 +1,9 @@
 {
-  "feature": "miteequilibrium:copper_ore_underworld",
+  "feature": "miteequilibrium:lapis_ore_underworld",
   "placement": [
     {
       "type": "minecraft:count",
-      "count": 8
+      "count": 12
     },
     {
       "type": "minecraft:in_square"

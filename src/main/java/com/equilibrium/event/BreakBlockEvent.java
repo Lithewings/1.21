@@ -188,6 +188,7 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
                 world.spawnEntity(new ItemEntity(world, pos.getX()+0.5, pos.getY(), pos.getZ()+0.5,
                         new ItemStack(item)));
                 //若时运为3,则表示随机的数字 0 1 2 3 4 5 6 7 8 9 中大于等于7的概率,即0.3
+                //时运触发时,相当于又挖了一块相同的矿石
                 if(random.nextInt(10)>=(10-furtuneLevel)){
                     world.spawnEntity(new ItemEntity(world, pos.getX()+0.5, pos.getY(), pos.getZ()+0.5,
                             new ItemStack(item)));

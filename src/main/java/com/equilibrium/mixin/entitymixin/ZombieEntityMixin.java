@@ -64,7 +64,7 @@ public abstract class ZombieEntityMixin extends HostileEntity {
     private static void createZombieAttributes(CallbackInfoReturnable<DefaultAttributeContainer.Builder> cir) {
         cir.cancel();
         cir.setReturnValue(HostileEntity.createHostileAttributes()
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.30F)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 3.0)
                 .add(EntityAttributes.GENERIC_ARMOR, 2.0)
@@ -90,8 +90,9 @@ public abstract class ZombieEntityMixin extends HostileEntity {
         ci.cancel();
 //        this.targetSelector.add(2, new ActiveTargetGoal(this, PlayerEntity.class, false));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
-        //僵尸透视泥土等方块
+
         this.targetSelector.add(3, new RevengeGoal(this).setGroupRevenge(ZombifiedPiglinEntity.class));
+        //僵尸透视泥土等方块,具体见 AdvanceTargetPredicate
         this.targetSelector.add(2, new AdvanceActiveTargetGoal<>(this, PlayerEntity.class, false));
         this.goalSelector.add(1, new BreakBlockGoal(this, 800, difficulty -> difficulty == Difficulty.NORMAL || difficulty == Difficulty.HARD));
         this.targetSelector.add(4, new ActiveTargetGoal(this, MerchantEntity.class, false));

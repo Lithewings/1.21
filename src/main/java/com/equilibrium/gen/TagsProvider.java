@@ -40,11 +40,7 @@ public class TagsProvider extends FabricTagProvider.ItemTagProvider {
         getOrCreateTagBuilder(ItemTags.FOOT_ARMOR_ENCHANTABLE).
                 add(Armors.COPPER_BOOTS);
 
-        getOrCreateTagBuilder(ItemTags.MINING_ENCHANTABLE).
-                add(Armors.COPPER_CHEST_PLATE);
 
-        getOrCreateTagBuilder(ItemTags.SWORD_ENCHANTABLE).
-                add(Armors.COPPER_CHEST_PLATE);
 
 
 

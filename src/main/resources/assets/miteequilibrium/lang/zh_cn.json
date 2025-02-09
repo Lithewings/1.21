@@ -24,12 +24,20 @@
   "item.miteequilibrium.ancient_metal_nugget": "远古金属粒",
   "item.miteequilibrium.copper": "精铜锭",
   "item.miteequilibrium.copper_axe": "铜斧",
+
   "item.miteequilibrium.copper_boots": "铜靴",
   "item.miteequilibrium.copper_chest_plate": "铜胸甲",
-  "item.miteequilibrium.copper_dagger": "铜短剑",
   "item.miteequilibrium.copper_helmet": "铜头盔",
-  "item.miteequilibrium.copper_hoe": "铜锄",
   "item.miteequilibrium.copper_leggings": "铜护腿",
+
+  "item.miteequilibrium.mithril_boots": "秘银靴",
+  "item.miteequilibrium.mithril_chest_plate": "秘银胸甲",
+  "item.miteequilibrium.mithril_helmet": "秘银头盔",
+  "item.miteequilibrium.mithril_leggings": "秘银护腿",
+
+
+  "item.miteequilibrium.copper_dagger": "铜短剑",
+  "item.miteequilibrium.copper_hoe": "铜锄",
   "item.miteequilibrium.copper_nugget": "铜粒",
   "item.miteequilibrium.copper_pickaxe": "铜镐",
   "item.miteequilibrium.copper_shovel": "铜锹",
@@ -52,7 +60,7 @@
   "item.miteequilibrium.iron_pickaxe": "铁镐",
   "item.miteequilibrium.iron_shovel": "铁锹",
   "item.miteequilibrium.iron_sword": "铁剑",
-  "item.miteequilibrium.mithril": "秘银",
+  "item.miteequilibrium.mithril": "秘银锭",
   "item.miteequilibrium.mithril_axe": "秘银斧",
   "item.miteequilibrium.mithril_dagger": "秘银短剑",
   "item.miteequilibrium.mithril_hoe": "秘银锄",
@@ -74,6 +82,10 @@
   "item.miteequilibrium.silver_sword": "银剑",
 
 
+  "item.miteequilibrium.copper_coin": "铜制硬币",
+  "item.miteequilibrium.iron_coin": "铁制硬币",
+
+
 
   "block.miteequilibrium.example_block": "TestBlock",
   "itemgroup.testgroup": "MITEequilibrium",
@@ -93,12 +105,12 @@
   "aliveandwell.crafttable.info1": "The workbench is not graded enough to synthesize！！！",
   "aliveandwell.crafttable.info2": "This item could not be synthesized 32 days ago！！！",
   "aliveandwell.crafttable.info3": "This item is disabled！！！",
-  "block.miteequilibrium.clay_furnace": "Clay Furnace",
-  "block.miteequilibrium.obsidian_furnace": "Obsidian Furnace",
-  "block.miteequilibrium.netherrack_furnace": "Netherrack Furnace",
-  "container.clay_furnace": "Clay Furnace",
-  "container.netherrack_furnace": "Netherrack Furnace",
-  "container.obsidian_furnace": "Obsidian Furnace",
+  "block.miteequilibrium.clay_furnace": "粘土熔炉",
+  "block.miteequilibrium.obsidian_furnace": "黑曜石熔炉",
+  "block.miteequilibrium.netherrack_furnace": "下界岩熔炉",
+  "container.clay_furnace": "粘土熔炉",
+  "container.netherrack_furnace": "下界岩熔炉",
+  "container.obsidian_furnace": "黑曜石熔炉",
   "crafttime.join_info": "Crafttable and Dnchantment tablecan be synthesized on low-level workbench.",
-  "crafttime.group": "Craft Time"
+  "crafttime.group": "合成耗时"
 }

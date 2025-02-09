@@ -1,4 +1,19 @@
 {
+
+  "item.miteequilibrium.copper_coin": "Copper Coin",
+
+  "item.miteequilibrium.iron_coin": "Iron Coin",
+
+
+
+
+
+
+
+
+
+
+
   "item.miteequilibrium.test": "Test",
   "block.miteequilibrium.example_block": "TestBlock",
   "itemgroup.testgroup": "MITEequilibrium",

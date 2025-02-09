@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BlockToItemConverter {
-    // 创建一个Map来存储Block和对应的Item
+    // 创建一个Map来存储Block和对应的Item,用于矿石掉落
     private Map<Block, Item> blockItemMap;
 
     public BlockToItemConverter() {

@@ -80,6 +80,7 @@ import static com.equilibrium.entity.ModEntities.registerModEntities;
 
 import static com.equilibrium.item.Armors.registerArmors;
 import static com.equilibrium.item.Metal.registerModItemRaw;
+import static com.equilibrium.item.extend_item.CoinItems.registerCoinItems;
 import static com.equilibrium.status.registerStatusEffect.registerStatusEffects;
 import static com.equilibrium.tags.ModBlockTags.registerModBlockTags;
 import static com.equilibrium.tags.ModItemTags.registerModItemTags;
@@ -323,11 +324,13 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 	}
 
-	private static TypedActionResult<ItemStack> onUseCrystalItem(ItemStack itemStack , PlayerEntity player,World world,int experience){
+	public static TypedActionResult<ItemStack> onUseCrystalItem(ItemStack itemStack , PlayerEntity player,World world,int experience){
 
 
 		// 播放玻璃破碎的声音
 		player.playSound(SoundEvents.BLOCK_GLASS_BREAK, 1.0F, 1.0F);
+		//经验球获取的声音
+		player.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
 		// 返回成功，表示已处理
 
 		//增加经验
@@ -446,6 +449,7 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 		//原版物品添加tooltip
 		//不能和数据生成一起使用
+
 		ItemTooltipCallback.EVENT.register((stack, context, type,lines) -> {
 			// 判断物品是青金石（Lapis Lazuli）或其他物品
 			if (stack.getItem() == Items.LAPIS_LAZULI) {
@@ -545,6 +549,8 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 		//以下开始正式添加物品:
 
+		//添加硬币物品
+		registerCoinItems();
 
 		//添加工具物品
 		Tools.registerModItemTools();

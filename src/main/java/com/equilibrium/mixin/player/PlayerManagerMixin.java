@@ -104,7 +104,7 @@ public abstract class PlayerManagerMixin {
         if(player.getHealth() <= 1){
             player.damage(player.getDamageSources().badRespawnPoint(player.getPos()),114514);
         }else {
-            player.damage(player.getDamageSources().magic(),1f);
+            player.setHealth(player.getHealth()-1);
         }
 }
     }

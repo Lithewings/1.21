@@ -37,6 +37,12 @@
     "miteequilibrium:copper_boots",
     "miteequilibrium:copper_chest_plate",
     "miteequilibrium:copper_helmet",
-    "miteequilibrium:copper_leggings"
+    "miteequilibrium:copper_leggings",
+
+    "miteequilibrium:mithril_boots",
+    "miteequilibrium:mithril_chest_plate",
+    "miteequilibrium:mithril_helmet",
+    "miteequilibrium:mithril_leggings"
+
   ]
 }

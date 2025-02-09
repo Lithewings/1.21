@@ -58,6 +58,7 @@ public class AdvanceActiveTargetGoal<T extends LivingEntity> extends TrackTarget
         this.targetClass = targetClass;
         this.reciprocalChance = toGoalTicks(reciprocalChance);
         this.setControls(EnumSet.of(Goal.Control.TARGET));
+        //僵尸透视泥土等方块的逻辑实现
         this.targetPredicate = AdvanceTargetPredicate.createAttackable().setBaseMaxDistance(this.getFollowRange()).setPredicate(targetPredicate);
     }
 
@@ -99,12 +100,13 @@ public class AdvanceActiveTargetGoal<T extends LivingEntity> extends TrackTarget
         this.mob.setTarget(this.targetEntity);
         super.start();
     }
-    @Override
-    public double getFollowRange() {
-        //其他维度下的怪物追踪距离被大幅减小
-        return this.mob.getWorld().getRegistryKey()== World.OVERWORLD ? this.mob.getAttributeValue(EntityAttributes.GENERIC_FOLLOW_RANGE): 0.25* (this.mob.getAttributeValue(EntityAttributes.GENERIC_FOLLOW_RANGE));
-    }
-
+    //请在每个怪物的构造函数中各自实现
+//    @Override
+//    public double getFollowRange() {
+//        //其他维度下的怪物追踪距离被大幅减小
+//        return this.mob.getWorld().getRegistryKey()== World.OVERWORLD ? this.mob.getAttributeValue(EntityAttributes.GENERIC_FOLLOW_RANGE): 0.25* (this.mob.getAttributeValue(EntityAttributes.GENERIC_FOLLOW_RANGE));
+//    }
+//
 
 
 

@@ -10,7 +10,10 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,9 +32,13 @@ public abstract class SkeletonEntityMixin extends HostileEntity implements Range
 
     @Inject(method = "<init>",at = @At("TAIL"))
     protected void AbstractSkeletonEntity(EntityType entityType, World world, CallbackInfo ci) {
-        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(8);
+        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(4);
         this.getAttributeInstance(EntityAttributes.GENERIC_FALL_DAMAGE_MULTIPLIER).setBaseValue(16);
-
+        if(this.getWorld().getRegistryKey()==RegistryKey.of(RegistryKeys.WORLD, Identifier.of("miteequilibrium", "underworld"))){
+        //地下世界追踪距离修正,原本所有怪物追踪距离砍半,但骷髅可以比别的怪物看得更远一点
+            double range = this.getAttributeValue(EntityAttributes.GENERIC_FOLLOW_RANGE);
+            this.getAttributeInstance(EntityAttributes.GENERIC_FOLLOW_RANGE).setBaseValue(range+16);
+    }
     }
 
 
@@ -45,13 +52,13 @@ public abstract class SkeletonEntityMixin extends HostileEntity implements Range
     @Inject(method = "getHardAttackInterval",at = @At(value = "HEAD"),cancellable = true)
     protected void getHardAttackInterval(CallbackInfoReturnable<Integer> cir) {
         cir.cancel();
-        cir.setReturnValue(15);
+        cir.setReturnValue(20);
     }
 
     @Inject(method = "getRegularAttackInterval",at = @At(value = "HEAD"),cancellable = true)
     protected void getRegularAttackInterval(CallbackInfoReturnable<Integer> cir) {
         cir.cancel();
-        cir.setReturnValue(30);
+        cir.setReturnValue(40);
     }
 
     @Inject(method = "shootAt",at = @At(value = "HEAD"),cancellable = true)

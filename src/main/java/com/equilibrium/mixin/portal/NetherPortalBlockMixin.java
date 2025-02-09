@@ -1,26 +1,14 @@
 package com.equilibrium.mixin.portal;
 
-import com.equilibrium.MITEequilibrium;
-import com.equilibrium.constant.ConstantString;
-import com.equilibrium.util.ShouldSentText;
-import com.mojang.brigadier.Message;
-import net.fabricmc.fabric.api.client.message.v1.ClientSendMessageEvents;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.Portal;
-import net.minecraft.block.entity.VaultBlockEntity;
-import net.minecraft.command.TranslatableBuiltInExceptions;
-import net.minecraft.enchantment.effect.AllOfEnchantmentEffects;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.message.SentMessage;
-import net.minecraft.network.message.SignedMessage;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -29,13 +17,11 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import net.minecraft.world.border.WorldBorder;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.gen.feature.EndPlatformFeature;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
@@ -47,8 +33,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
-import java.util.Set;
 
+import static com.equilibrium.MITEequilibrium.MOD_ID;
 import static com.equilibrium.constant.ConstantString.*;
 
 
@@ -151,7 +137,7 @@ public abstract class NetherPortalBlockMixin extends Block implements Portal{
 
     private static RegistryKey<World> overworld = World.OVERWORLD;
     private static RegistryKey<World> nether = World.NETHER;
-    private static RegistryKey<World> underworld = RegistryKey.of(RegistryKeys.WORLD, Identifier.of("miteequilibrium", "underworld"));
+    private static RegistryKey<World> underworld = RegistryKey.of(RegistryKeys.WORLD, Identifier.of(MOD_ID, "underworld"));
 
 
 

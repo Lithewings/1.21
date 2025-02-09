@@ -14,8 +14,5 @@ public abstract class ActiveTargetMixin <T extends LivingEntity> extends TrackTa
         super(mob, checkVisibility);
     }
 
-    @Override
-    protected double getFollowRange() {
-        return this.mob.getWorld().getRegistryKey()== World.OVERWORLD ? this.mob.getAttributeValue(EntityAttributes.GENERIC_FOLLOW_RANGE): 0.25* (this.mob.getAttributeValue(EntityAttributes.GENERIC_FOLLOW_RANGE));
-    }
+
 }

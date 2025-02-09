@@ -787,7 +787,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
 
 
-        ShouldSentText.count++;
+
         if (!this.getWorld().isClient) {
             this.phytonutrient--;
             //小于0就赋值为0,大于0不动

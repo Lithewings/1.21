@@ -3,6 +3,7 @@ package com.equilibrium.item;
 import com.equilibrium.MITEequilibrium;
 
 import com.equilibrium.block.ModBlocks;
+import com.equilibrium.item.extend_item.CoinItems;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -125,6 +126,17 @@ public class ModItemGroup {
                                 entries.add(Armors.COPPER_BOOTS);
                                 entries.add(Armors.COPPER_CHEST_PLATE);
                                 entries.add(Armors.COPPER_LEGGINGS);
+
+                                entries.add(Armors.MITHRIL_HELMET);
+                                entries.add(Armors.MITHRIL_BOOTS);
+                                entries.add(Armors.MITHRIL_CHEST_PLATE);
+                                entries.add(Armors.MITHRIL_LEGGINGS);
+
+
+                                entries.add(CoinItems.COPPER_COIN);
+                                entries.add(CoinItems.IRON_COIN);
+
+
 
                             }
                     ).build());

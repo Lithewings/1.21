@@ -6,6 +6,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
 public class EnchantedAppleItem extends Item {
@@ -16,7 +17,9 @@ public class EnchantedAppleItem extends Item {
     public void onCraftByPlayer(ItemStack stack, World world, PlayerEntity player) {
         super.onCraft(stack, world);
         player.addExperience(-200);
+        player.sendMessage(Text.of("ItemStack is"+stack));
     }
+
 
     public static final FoodComponent GOLDEN_APPLE = new FoodComponent.Builder()
             .nutrition(4)

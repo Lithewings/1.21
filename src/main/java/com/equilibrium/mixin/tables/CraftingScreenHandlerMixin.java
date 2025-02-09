@@ -5,6 +5,7 @@ import com.equilibrium.craft_time_register.BlockInit;
 import com.equilibrium.craft_time_worklevel.CraftingIngredients;
 import com.equilibrium.item.Metal;
 import com.equilibrium.item.Tools;
+import com.equilibrium.item.extend_item.CoinItems;
 import com.equilibrium.tags.ModItemTags;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.CraftingTableBlock;
@@ -227,6 +228,20 @@ public abstract class CraftingScreenHandlerMixin extends AbstractRecipeScreenHan
 			if(itemStack.isOf(Items.GOLDEN_APPLE) && player.totalExperience<200 && !player.isCreative())
 				itemStack = ItemStack.EMPTY;
 
+
+			//铜硬币至少需要足额经验才能合成
+			if(itemStack.isOf(CoinItems.COPPER_COIN) && player.totalExperience<CoinItems.COPPER_COIN_EXPERIENCE_COST && !player.isCreative())
+				itemStack = ItemStack.EMPTY;
+
+			//铁硬币至少需要足额经验才能合成
+			if(itemStack.isOf(CoinItems.IRON_COIN) && player.totalExperience<CoinItems.IRON_COIN_EXPERIENCE_COST && !player.isCreative())
+				itemStack = ItemStack.EMPTY;
+
+
+
+			//合成台需要玩家至少拥有200级经验才能合成,用以合成自动合成器
+			if(itemStack.isOf(Items.CRAFTING_TABLE) && player.experienceLevel<200 && !player.isCreative())
+				itemStack = ItemStack.EMPTY;
 
 			//斧子中,替换铁,金
 			if(itemStack.isIn(ModItemTags.AXES)){

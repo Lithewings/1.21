@@ -13,6 +13,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
@@ -68,7 +70,7 @@ public abstract class WorldRendererMixin {
     @Shadow public abstract ChunkBuilder getChunkBuilder();
 
 
-
+    @Shadow public abstract void renderSky(Matrix4f matrix4f, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback);
 
     private void renderEndSkyMixin(MatrixStack matrices) {
         RenderSystem.enableBlend();
@@ -135,6 +137,8 @@ public abstract class WorldRendererMixin {
     @Inject(method = "renderSky(Lorg/joml/Matrix4f;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",at = @At(value = "HEAD"),cancellable = true)
     public void renderSky(Matrix4f matrix4f, Matrix4f projectionMatrix, float tickDelta, Camera camera, boolean thickFog, Runnable fogCallback, CallbackInfo ci) {
         ci.cancel();
+        if(this.client.world.getRegistryKey()== RegistryKey.of(RegistryKeys.WORLD, Identifier.of("miteequilibrium", "underworld")))
+            return;
         fogCallback.run();
         if (!thickFog) {
             CameraSubmersionType cameraSubmersionType = camera.getSubmersionType();

@@ -1,6 +1,7 @@
 package com.equilibrium.mixin.vanilla_itemsmixin;
 
 import com.equilibrium.item.EnchantedAppleItem;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.component.type.FoodComponents;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -13,12 +14,16 @@ import static net.minecraft.item.Items.register;
 
 @Mixin(Items.class)
 public class ItemsMixin {
+    private static final FoodComponent PUMPKIN_PIE_FOOD = new FoodComponent.Builder().nutrition(10).saturationModifier(12).build();
+
+
     @Shadow
     @Final
     public static Item GOLDEN_APPLE = register("golden_apple", new EnchantedAppleItem(new EnchantedAppleItem.Settings().rarity(Rarity.RARE).food(EnchantedAppleItem.GOLDEN_APPLE)));
 
-
-
+    @Shadow
+    @Final
+    public static Item PUMPKIN_PIE = register("pumpkin_pie", new Item(new Item.Settings().food(PUMPKIN_PIE_FOOD)));
 
 
 

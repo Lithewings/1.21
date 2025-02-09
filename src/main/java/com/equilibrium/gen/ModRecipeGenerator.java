@@ -6,6 +6,7 @@ import com.equilibrium.item.Armors;
 import com.equilibrium.item.Metal;
 import com.equilibrium.item.ModItems;
 import com.equilibrium.item.Tools;
+import com.equilibrium.item.extend_item.CoinItems;
 import com.equilibrium.tags.ModItemTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
@@ -24,6 +25,8 @@ import net.minecraft.util.Identifier;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import static com.equilibrium.MITEequilibrium.MOD_ID;
+
 public class ModRecipeGenerator extends FabricRecipeProvider {
     private static final List<ItemConvertible> ADAMANTIUM_RAW=List.of(Metal.ADAMANTIUM_RAW);
     private static final List<ItemConvertible> COPPER_INGOT=List.of(Items.COPPER_INGOT);
@@ -37,7 +40,29 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
     @Override
     public void generate(RecipeExporter exporter) {
 
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, CoinItems.COPPER_COIN).
+                pattern("X").
+                input('X', Metal.copper_nugget).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.copper_nugget)).
+                offerTo(exporter, Identifier.of(MOD_ID,"copper_coin"));
 
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, CoinItems.IRON_COIN).
+                pattern("X").
+                input('X', Items.IRON_NUGGET).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Items.IRON_NUGGET)).
+                offerTo(exporter, Identifier.of(MOD_ID,"iron_coin"));
+
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Items.GOLDEN_APPLE).
+                pattern("XXX").
+                pattern("XYX").
+                pattern("XXX").
+                input('X', Items.GOLD_NUGGET).
+                input('Y', Items.APPLE).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Items.GOLD_NUGGET)).
+                offerTo(exporter, Identifier.of("miteequilibrium","golden_apple"));
+
+        //armors
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Armors.COPPER_BOOTS).
                 pattern("X X").
                 pattern("X X").
@@ -68,6 +93,36 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
                 criterion("has_item", RecipeProvider.conditionsFromItem(Metal.copper)).
                 offerTo(exporter, Identifier.of("miteequilibrium","copper_leggings"));
 
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Armors.MITHRIL_BOOTS).
+                pattern("X X").
+                pattern("X X").
+                input('X', Metal.mithril).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.mithril)).
+                offerTo(exporter, Identifier.of("miteequilibrium","mithril_boots"));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Armors.MITHRIL_HELMET).
+                pattern("XXX").
+                pattern("X X").
+                input('X', Metal.mithril).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.mithril)).
+                offerTo(exporter, Identifier.of("miteequilibrium","mithril_helmet"));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Armors.MITHRIL_CHEST_PLATE).
+                pattern("X X").
+                pattern("XXX").
+                pattern("XXX").
+                input('X', Metal.mithril).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.mithril)).
+                offerTo(exporter, Identifier.of("miteequilibrium","mithril_chest_plate"));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Armors.MITHRIL_LEGGINGS).
+                pattern("XXX").
+                pattern("X X").
+                pattern("X X").
+                input('X', Metal.mithril).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.mithril)).
+                offerTo(exporter, Identifier.of("miteequilibrium","mithril_leggings"));
 
         //shield
 

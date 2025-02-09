@@ -105,7 +105,6 @@ public abstract class LootTableModifier {
                 return LootTable.builder().build();
             }
 
-
             if (Blocks.GILDED_BLACKSTONE.getLootTableKey() == key && source.isBuiltin()) {
                 return LootTable.builder().build();
             }
