@@ -1,71 +1,46 @@
 package com.equilibrium.mixin.player;
 
-import com.equilibrium.MITEequilibrium;
-import com.equilibrium.event.CraftingMetalPickAxeCallback;
-import com.equilibrium.event.MoonPhaseEvent;
-import com.equilibrium.event.OnPlayerEntityEatEvent;
 import com.equilibrium.item.Tools;
 import com.equilibrium.persistent_state.StateSaverAndLoader;
 import com.equilibrium.status.registerStatusEffect;
 import com.equilibrium.tags.ModBlockTags;
 import com.equilibrium.tags.ModItemTags;
 import com.equilibrium.util.*;
-import com.llamalad7.mixinextras.sugar.Local;
-import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.component.type.FoodComponent;
-import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonPart;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.FishingBobberEntity;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
-import net.minecraft.text.Texts;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.Unit;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.*;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.dimension.DimensionTypes;
-import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -75,13 +50,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import javax.tools.Tool;
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import static com.equilibrium.event.MoonPhaseEvent.*;
 
@@ -89,13 +60,7 @@ import static com.equilibrium.item.tools_attribute.ExtraDamageFromExperienceLeve
 import static com.equilibrium.util.IsMinable.getBlockHarvertLevel;
 import static com.equilibrium.util.IsMinable.getItemHarvertLevel;
 import static java.lang.Math.max;
-import static net.minecraft.component.DataComponentTypes.ITEM_NAME;
-import static net.minecraft.component.DataComponentTypes.POTION_CONTENTS;
-import static net.minecraft.entity.effect.StatusEffects.SPEED;
-import static net.minecraft.potion.Potions.SWIFTNESS;
-import static net.minecraft.predicate.entity.EntityPredicates.VALID_LIVING_ENTITY;
 import static net.minecraft.registry.tag.EntityTypeTags.UNDEAD;
-import static net.minecraft.sound.SoundCategory.BLOCKS;
 import static net.minecraft.util.math.MathHelper.nextBetween;
 
 @Mixin(PlayerEntity.class)
@@ -141,10 +106,15 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Override
     public void dropInventory() {
         super.dropInventory();
-        if ((this.experienceLevel<5)) {
+        serverState = StateSaverAndLoader.getServerState(ServerInfoRecorder.getServerInstance());
+        //首次死亡的掉落保护
+        if(serverState.playerDeathTimes==1)
+            this.getWorld().getGameRules().get(GameRules.KEEP_INVENTORY).set(true,this.getServer());
+        else if ((this.experienceLevel<5)) {
             this.getWorld().getGameRules().get(GameRules.KEEP_INVENTORY).set(false,this.getServer());
             this.vanishCursedItems();
             this.inventory.dropAll();
+
         }else{
             this.getWorld().getGameRules().get(GameRules.KEEP_INVENTORY).set(true,this.getServer());
             this.experienceLevel = this.experienceLevel>35 ? 35 :0;
@@ -171,6 +141,11 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         //基础伤害,面板伤害=(1.25*1.5+5)=6.875
         //最终伤害 = 6.875*1.5 ~ 10.8
 
+        //其他逻辑
+
+//            StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(ServerInfoRecorder.getServerInstance());
+//            int accuracy = 100 - serverState.playerDeathTimes - 40;
+//            boolean shouldInvulnerable = this.getRandom().nextInt(100) >= accuracy;
 
 
     }
@@ -188,17 +163,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     public float entityInteractBonus = 0;
 
 
-    //营养不良造成的缓慢回血倍率
-    @Unique
-    public float malnourishedForSlowHealing;
 
-    public float getMalnourishedForSlowHealing() {
-        return this.malnourishedForSlowHealing;
-    }
-
-    public void setMalnourishedForSlowHealing(float factor) {
-        this.malnourishedForSlowHealing = factor;
-    }
 
 
     @Shadow
@@ -299,9 +264,19 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             }
         }
     }
+    @Unique
+    public StateSaverAndLoader serverState;
+
+
 
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo ci) {
+//        if(!this.getWorld().isClient()) {
+//            serverState = StateSaverAndLoader.getServerState(ServerInfoRecorder.getServerInstance());
+//            this.sendMessage(Text.of("deathTime = " + serverState.playerDeathTimes));
+//            this.sendMessage(Text.of("isFirstOnTheWorld? = " + serverState.onFirstInTheWorld));
+//            this.sendMessage(Text.of("isPickAxeCraft ? = " + serverState.isPickAxeCrafted));
+//        }
 //        if(!this.getWorld().isClient()) {
 //            this.sendMessage(Text.of("SpawnPoint is : " + this.getServer().getPlayerManager().getPlayer(this.getUuid()).getSpawnPointPosition()));
 //            this.teleport(this.getServer().getPlayerManager().getPlayer(this.getUuid()).getSpawnPointPosition().getX(), this.getServer().getPlayerManager().getPlayer(this.getUuid()).getSpawnPointPosition().getY(),this.getServer().getPlayerManager().getPlayer(this.getUuid()).getSpawnPointPosition().getZ(),false);
@@ -593,39 +568,39 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     }
 
 
-    public void refreshPlayerFoodLevelAndMaxHealth() {
-        int maxFoodLevel = this.experienceLevel >= 35 ? 20 : 6 + (int) (this.experienceLevel / 5) * 2;
-//        LOGGER.info("setMaxFoodLevel is already triggered,and the Level is "+this.experienceLevel+"Finally the maxFoodLevel is"+maxFoodLevel);
-        PlayerMaxHungerHelper.setMaxFoodLevel(maxFoodLevel);
+//    public void refreshPlayerFoodLevelAndMaxHealth() {
+//        int maxFoodLevel = this.experienceLevel >= 35 ? 20 : 6 + (int) (this.experienceLevel / 5) * 2;
+////        LOGGER.info("setMaxFoodLevel is already triggered,and the Level is "+this.experienceLevel+"Finally the maxFoodLevel is"+maxFoodLevel);
+//        PlayerMaxHungerHelper.setMaxFoodLevel(maxFoodLevel);
+//
+//        int maxHealthLevel = this.experienceLevel >= 35 ? 20 : 6 + (int) (this.experienceLevel / 5) * 2;
+////        LOGGER.info("setMaxHealthLevel is already triggered,and the Level is "+this.experienceLevel+"Finally the maxHealthLevel is"+maxFoodLevel);
+//        PlayerMaxHealthHelper.setMaxHealthLevel(maxHealthLevel);
+//    }
 
-        int maxHealthLevel = this.experienceLevel >= 35 ? 20 : 6 + (int) (this.experienceLevel / 5) * 2;
-//        LOGGER.info("setMaxHealthLevel is already triggered,and the Level is "+this.experienceLevel+"Finally the maxHealthLevel is"+maxFoodLevel);
-        PlayerMaxHealthHelper.setMaxHealthLevel(maxHealthLevel);
-    }
-
-    @Inject(method = "addExperienceLevels", at = @At("HEAD"), cancellable = true)
-    public void addExperienceLevels(int levels, CallbackInfo ci) {
-
-        //触发器,用作增加经验值的后续处理,比如增加生命值和饥饿度等
-        //除了初始化会增加上限之外,只有该方法才能增加上限值
-        ci.cancel();
-        this.experienceLevel += levels;
-        if (this.experienceLevel < 0) {
-            this.experienceLevel = 0;
-            this.experienceProgress = 0.0F;
-            this.totalExperience = 0;
-        }
-        if (levels > 0 && this.experienceLevel % 5 == 0) {
-            refreshPlayerFoodLevelAndMaxHealth();
-
-        }
-
-        if (levels > 0 && this.experienceLevel % 5 == 0 && (float) this.lastPlayedLevelUpSoundTime < (float) this.age - 100.0F) {
-            float f = this.experienceLevel > 30 ? 1.0F : (float) this.experienceLevel / 30.0F;
-            this.getWorld().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_PLAYER_LEVELUP, this.getSoundCategory(), f * 0.75F, 1.0F);
-            this.lastPlayedLevelUpSoundTime = this.age;
-        }
-    }
+//    @Inject(method = "addExperienceLevels", at = @At("HEAD"), cancellable = true)
+//    public void addExperienceLevels(int levels, CallbackInfo ci) {
+//
+//        //触发器,用作增加经验值的后续处理,比如增加生命值和饥饿度等
+//        //除了初始化会增加上限之外,只有该方法才能增加上限值
+//        ci.cancel();
+//        this.experienceLevel += levels;
+//        if (this.experienceLevel < 0) {
+//            this.experienceLevel = 0;
+//            this.experienceProgress = 0.0F;
+//            this.totalExperience = 0;
+//        }
+//        if (levels > 0 && this.experienceLevel % 5 == 0) {
+//            refreshPlayerFoodLevelAndMaxHealth();
+//
+//        }
+//
+//        if (levels > 0 && this.experienceLevel % 5 == 0 && (float) this.lastPlayedLevelUpSoundTime < (float) this.age - 100.0F) {
+//            float f = this.experienceLevel > 30 ? 1.0F : (float) this.experienceLevel / 30.0F;
+//            this.getWorld().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_PLAYER_LEVELUP, this.getSoundCategory(), f * 0.75F, 1.0F);
+//            this.lastPlayedLevelUpSoundTime = this.age;
+//        }
+//    }
 
 
     @Inject(method = "canFoodHeal", at = @At("HEAD"), cancellable = true)
@@ -637,9 +612,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
 
 
-    //获取时间,得到月相,决定是否触发月相事件
-
-    private String moonType;
 
 
 
@@ -657,7 +629,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
 
 
-
+    //营养不良造成的缓慢回血倍率
+    @Unique
+    public int malnourishedForSlowHealing;
 
 
     @Inject(method = "tick", at = @At("HEAD"))
@@ -667,18 +641,15 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 //        this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(Math.min(1.0 + (this.experienceLevel * 0.01), 1.5));
 
 
-        if(this.getWorld().getTimeOfDay()%8000==0){
-            addExhaustion(4f);
-        }
-        //刷新上限值,和Hud保持同步,都是1s20次刷新
-        refreshPlayerFoodLevelAndMaxHealth();
+
+        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(PlayerMaxHealthOrFoodLevelHelper.getMaxHealthOrFoodLevel());
+
+
         if (!this.isCreative()) {
             //在tick中加入生命回复任务
-            int maxHealth = PlayerMaxHealthHelper.getMaxHealthLevel();
-            setMalnourishedForSlowHealing(
-                    this.phytonutrient < 100 ? 4 : 1
-            );
-            if (this.getHealth() < maxHealth && this.age % (960 * malnourishedForSlowHealing) == 0) {
+            int maxHealth = PlayerMaxHealthOrFoodLevelHelper.getMaxHealthOrFoodLevel();
+            this.malnourishedForSlowHealing= this.phytonutrient < 100 ? 4 : 1;
+            if (this.getHealth() < maxHealth && this.age % (960 * this.malnourishedForSlowHealing) == 0) {
                 this.heal(1.0F);
 //                MITEequilibrium.LOGGER.info("Natural Regeneration +1 ");
             }
@@ -686,106 +657,104 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
 
 
-        moonType = getMoonType(this.getWorld());
-
-        if(moonType!=null) {
-            //需要获得最新的世界数据,把worldRegistryKey放到tick里面来
-            RegistryKey<World> worldRegistryKey = this.getWorld().getRegistryKey();
-
-            //随机刻速度检查,不是黄月或者蓝月就恢复默认的随机刻速度
-
-            //不在主世界,一定不能获得随机刻增益
-            if (worldRegistryKey!=World.OVERWORLD && !this.getWorld().isClient) {
-                if (this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 3){
-                    this.sendMessage(Text.of("由于不在主世界,随机刻应该修改为3"));
-                    RandomTickModifier((ServerWorld) this.getWorld(), 3);
-                }
-            }
-            //月相事件,只在主世界进行
-            if (worldRegistryKey == World.OVERWORLD && !this.getWorld().isClient) {
-
-                //普通月相且无随机刻修改逻辑
-                boolean randomTickMoonType = (moonType.equals("blueMoon")) || (moonType.equals("harvestMoon")) || (moonType.equals("haloMoon"));
-                if (!randomTickMoonType)
-                    if(this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED)!=3){
-
-                        this.sendMessage(Text.of("由于处在普通月相,随机刻应该修改为3"));
-                        RandomTickModifier((ServerWorld) this.getWorld(), 3);}
-
-
-                //不是特殊月相,以下不执行
-                //改进,月相用枚举类
-
-
-
-
-                if (moonType.equals("bloodMoon")) {
-                    //this.getWorld()一定是服务器世界
-                    if (this.age % 100 == 0) {
-                        //执行间隔事件
-                        spawnMobNearPlayer((ServerWorld)this.getWorld());
-
-                    }
-                    if (this.age % this.random.nextBetween(50,64) == 0) {
-                        //执行间隔事件
-                        controlWeather((ServerWorld) this.getWorld());
-//                        this.sendMessage(Text.of("雷电事件"));
-                    }
-                }
-
-
-
-
-
-
-                if (moonType.equals("harvestMoon") || (moonType.equals("haloMoon"))) {
-                    if(this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED)!=4)
-                        RandomTickModifier((ServerWorld) this.getWorld(), 4);
+//        moonType = getMoonType(this.getWorld());
+//
+//        if(moonType!=null) {
+//            //需要获得最新的世界数据,把worldRegistryKey放到tick里面来
+//            RegistryKey<World> worldRegistryKey = this.getWorld().getRegistryKey();
+//
+//            //随机刻速度检查,不是黄月或者蓝月就恢复默认的随机刻速度
+//
+//            //不在主世界,一定不能获得随机刻增益
+//            if (worldRegistryKey!=World.OVERWORLD && !this.getWorld().isClient) {
+//                if (this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 3){
+//                    this.sendMessage(Text.of("由于不在主世界,随机刻已回调至默认值"));
+//                    RandomTickModifier((ServerWorld) this.getWorld(), 3);
+//                }
+//            }
+//            //月相事件,只在主世界进行
+//            if (worldRegistryKey == World.OVERWORLD && !this.getWorld().isClient) {
+//
+//                //普通月相且无随机刻修改逻辑
+//                boolean randomTickMoonType = (moonType.equals("blueMoon")) || (moonType.equals("harvestMoon")) || (moonType.equals("haloMoon"));
+//                if (!randomTickMoonType)
+//                    if(this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED)!=3){
+//
+//                        this.sendMessage(Text.of("由于处在普通月相,随机刻应该修改为3"));
+//                        RandomTickModifier((ServerWorld) this.getWorld(), 3);}
+//
+//
+//                //不是特殊月相,以下不执行
+//                //改进,月相用枚举类
+//
+//
+//
+//
+//                if (moonType.equals("bloodMoon")) {
+//                    //this.getWorld()一定是服务器世界
 //                    if (this.age % 100 == 0) {
 //                        //执行间隔事件
-//                        this.sendMessage(Text.of("黄月/幻月升起,触发事件"));
-
+//                        spawnMobNearPlayer((ServerWorld)this.getWorld());
+//
 //                    }
-                }
-                if (moonType.equals("fullMoon")) {
-                    if (this.age % 100 == 0) {
-//                        this.sendMessage(Text.of("满月升起,触发事件"));
-                        applyStrengthToHostileMobs((ServerWorld) this.getWorld());
-                    }
-                }
-                if (moonType.equals("newMoon")) {
-                    if (this.age % 100 == 0){
-                        applyWeaknessToHostileMobs((ServerWorld) this.getWorld());
-//                        this.sendMessage(Text.of("新月升起,触发事件"));
-                    }
-                }
-
-                //第一次蓝月,不改变随机刻速度
-                if (moonType.equals("blueMoon")) {
-                    if(this.getWorld().getTimeOfDay()>24000){
-                        if(this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED)!=5)
-                            RandomTickModifier((ServerWorld) this.getWorld(), 5);
-                        if (this.age % 1200 == 0) {
-                            this.sendMessage(Text.of("蓝月升起,触发事件"));
-                            ServerWorld serverWorld = (ServerWorld) this.getWorld();
-                            //执行间隔事件
-                            spawnAnimalNearPlayer(serverWorld);
-                        }
-                    }else{
-                        if(this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED)!=3){
-                            this.sendMessage(Text.of("由于第一天的蓝月并没有随机刻增益,随机刻应该修改为3"));
-                            RandomTickModifier((ServerWorld) this.getWorld(), 3);}
-                    }
-                    //应该是用world.找到所有玩家,这里无非就是避免客户端世界直接转服务器世界造成崩溃
-                    //待改进:应该是this.getWorld,如果不是客户端世界再执行spawnAnimal方法
-
-                }
-
-
-            }
-        }
-
-
+//                    if (this.age % this.random.nextBetween(50,64) == 0) {
+//                        //执行间隔事件
+//                        controlWeather((ServerWorld) this.getWorld());
+////                        this.sendMessage(Text.of("雷电事件"));
+//                    }
+//                }
+//
+//
+//
+//
+//
+//
+//                if (moonType.equals("harvestMoon") || (moonType.equals("haloMoon"))) {
+//                    if(this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED)!=4)
+//                        RandomTickModifier((ServerWorld) this.getWorld(), 4);
+////                    if (this.age % 100 == 0) {
+////                        //执行间隔事件
+////                        this.sendMessage(Text.of("黄月/幻月升起,触发事件"));
+//
+////                    }
+//                }
+//                if (moonType.equals("fullMoon")) {
+//                    if (this.age % 100 == 0) {
+////                        this.sendMessage(Text.of("满月升起,触发事件"));
+//                        applyStrengthToHostileMobs((ServerWorld) this.getWorld());
+//                    }
+//                }
+//                if (moonType.equals("newMoon")) {
+//                    if (this.age % 100 == 0){
+//                        applyWeaknessToHostileMobs((ServerWorld) this.getWorld());
+////                        this.sendMessage(Text.of("新月升起,触发事件"));
+//                    }
+//                }
+//
+//                //第一次蓝月,不改变随机刻速度
+//                if (moonType.equals("blueMoon")) {
+//                    if(this.getWorld().getTimeOfDay()>24000){
+//                        if(this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED)!=5)
+//                            RandomTickModifier((ServerWorld) this.getWorld(), 5);
+//                        if (this.age % 1200 == 0) {
+//                            this.sendMessage(Text.of("蓝月升起,触发事件"));
+//                            ServerWorld serverWorld = (ServerWorld) this.getWorld();
+//                            //执行间隔事件
+//                            spawnAnimalNearPlayer(serverWorld);
+//                        }
+//                    }else{
+//                        if(this.getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED)!=3){
+//                            this.sendMessage(Text.of("由于第一天的蓝月并没有随机刻增益,随机刻应该修改为3"));
+//                            RandomTickModifier((ServerWorld) this.getWorld(), 3);}
+//                    }
+//                    //应该是用world.找到所有玩家,这里无非就是避免客户端世界直接转服务器世界造成崩溃
+//                    //待改进:应该是this.getWorld,如果不是客户端世界再执行spawnAnimal方法
+//
+//                }
+//
+//
+//            }
+//        }
 
 
         if (!this.getWorld().isClient) {
@@ -811,20 +780,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
     }
 
-
-    @Inject(method = "tickMovement", at = @At("HEAD"))
-    public void tickMovement(CallbackInfo ci) {
-    }
-
-
-    @Override
-    //自然回复设定
-    public void setHealth(float health) {
-//        MITEequilibrium.LOGGER.info("Before setHealth, the xp level is "+this.experienceLevel);
-//        MITEequilibrium.LOGGER.info("Set health : "+health);
-        int maxHealth = PlayerMaxHealthHelper.getMaxHealthLevel();
-        this.dataTracker.set(HEALTH, MathHelper.clamp(health, 0.0F, maxHealth));
-    }
 
 
 }

@@ -1,21 +1,19 @@
 package com.equilibrium.mixin.render;
 
-import com.equilibrium.util.PlayerMaxHealthHelper;
-import com.equilibrium.util.PlayerMaxHungerHelper;
+import com.equilibrium.util.PlayerMaxHealthOrFoodLevelHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.random.Random;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(InGameHud.class)
@@ -46,14 +44,12 @@ public abstract class InGameHudMixin {
 
 
 
-
-
-    @Redirect(method = "renderStatusBars",at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getAttributeValue(Lnet/minecraft/registry/entry/RegistryEntry;)D"))
-    public double playerMaxHealth (PlayerEntity playerEntity, RegistryEntry registryEntry){
-
-        return PlayerMaxHealthHelper.getMaxHealthLevel();
-    }
-
+    //渲染多少生命值心? 已经弃用,直接修改最大生命值上限即可
+//    @ModifyArg(method = "renderStatusBars", at = @At(value = "INVOKE", target = "Ljava/lang/Math;max(FF)F"),index = 0)
+//    public float playerMaxHealth (float a){
+//        return PlayerMaxHealthOrFoodLevelHelper.getMaxHealthOrFoodLevel();
+//    }
+//
 
 
 
@@ -62,17 +58,15 @@ public abstract class InGameHudMixin {
     @Inject(method = "renderFood",at = @At(value = "HEAD"), cancellable = true)
     private void renderFood(DrawContext context, PlayerEntity player, int top, int right, CallbackInfo ci) {
         ci.cancel();
-        //根据等级经验动态渲染饱食度,原则上显示的饱食度上限就应该等于根据在HungerManagerMixin中设定的上限
-
         HungerManager hungerManager = player.getHungerManager();
-
 
         int i = hungerManager.getFoodLevel();
         //获得额外的饱食度上限渲染
         //规则:从6点饱食度开始,每增加5级,就增加2点饱食度上限,每5级增加一次
 
+        //仅仅是渲染,实际上限在hungerManager里面设置
 
-        int maxFoodLevel=PlayerMaxHungerHelper.getMaxFoodLevel();
+        int maxFoodLevel=PlayerMaxHealthOrFoodLevelHelper.getMaxHealthOrFoodLevel();
 
 
 

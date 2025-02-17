@@ -23,16 +23,16 @@ public class ModBlocks {
 
     public static final Block ANCIENT_METAL_BLOCK = new Block(Block.Settings.create().strength(3.0f));
 
-    public static final Block COPPER_ORE = new Block(Block.Settings.create().strength(2.0f));
+    public static final Block COPPER_ORE = new Block(Block.Settings.create().strength(1.0f));
     public static final Block COPPER_BLOCK = new Block(Block.Settings.create().strength(4.0f));
 
-    public static final Block MITHRIL_ORE = new Block(Block.Settings.create().strength(3.0f));
+    public static final Block MITHRIL_ORE = new Block(Block.Settings.create().strength(2.0f));
     public static final Block MITHRIL_BLOCK = new Block(Block.Settings.create().strength(4.0f));
 
-    public static final Block SILVER_ORE = new Block(Block.Settings.create().strength(2.0f));
+    public static final Block SILVER_ORE = new Block(Block.Settings.create().strength(1.0f));
     public static final Block SILVER_BLOCK = new Block(Block.Settings.create().strength(4.0f));
 
-    public static final Block GOLD_ORE = new Block(Block.Settings.create().strength(2.0f));
+    public static final Block GOLD_ORE = new Block(Block.Settings.create().strength(1.0f));
     public static final Block GOLD_BLOCK = new Block(Block.Settings.create().strength(4.0f));
 
     //strength中第一个为硬度,第二个为爆炸抗性
@@ -57,6 +57,7 @@ public class ModBlocks {
 //                            .pistonBehavior(PistonBehavior.BLOCK)
 //            );
     public static void registerModBlocks(){
+
         Registry.register(Registries.BLOCK, Identifier.of("miteequilibrium", "example_block"), EXAMPLE_BLOCK);
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium", "example_block"), new BlockItem(EXAMPLE_BLOCK, new Item.Settings()));
 

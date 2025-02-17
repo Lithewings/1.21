@@ -1,5 +1,6 @@
 package com.equilibrium.mixin.entitymixin;
 
+import com.equilibrium.util.WorldMoonPhasesSelector;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -17,6 +18,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import static com.equilibrium.event.MoonPhaseEvent.getMoonType;
+
 @Mixin(HostileEntity.class)
 public abstract class HostileAttributesMixin extends PathAwareEntity implements Monster {
 
@@ -29,11 +32,15 @@ public abstract class HostileAttributesMixin extends PathAwareEntity implements 
 
     @Inject(method = "<init>",at = @At("TAIL"))
     protected void HostileEntity(EntityType entityType, World world, CallbackInfo ci) {
-        if(this.getWorld().getRegistryKey()== RegistryKey.of(RegistryKeys.WORLD, Identifier.of("miteequilibrium", "underworld"))){
-            //地下世界,怪物追踪距离减少
-            double range = this.getAttributeValue(EntityAttributes.GENERIC_FOLLOW_RANGE);
-            this.getAttributeInstance(EntityAttributes.GENERIC_FOLLOW_RANGE).setBaseValue(range*0.75);
-    }
+//        this.getAttributeInstance(EntityAttributes.GENERIC_FOLLOW_RANGE).setBaseValue(32);
+//        if(this.getWorld().getRegistryKey()== RegistryKey.of(RegistryKeys.WORLD, Identifier.of("miteequilibrium", "underworld"))){
+//            //地下世界,怪物追踪距离减少
+//            this.getAttributeInstance(EntityAttributes.GENERIC_FOLLOW_RANGE).setBaseValue(32*0.75);
+//        }
+//        //血月怪物追踪距离乘以8倍
+//        else if(this.getWorld().getRegistryKey()==World.OVERWORLD&& getMoonType(world).equals("bloodMoon"))
+//            this.getAttributeInstance(EntityAttributes.GENERIC_FOLLOW_RANGE).setBaseValue(32*8);
+
     }
 
 

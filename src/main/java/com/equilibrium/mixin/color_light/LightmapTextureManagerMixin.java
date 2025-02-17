@@ -174,7 +174,7 @@ public abstract class LightmapTextureManagerMixin {
                         }
 
                         //100级时获得最大增益值
-                        float nightVision = playerExperienceLevel.isEmpty() ? 0 : Math.clamp(Collections.max(playerExperienceLevel)*0.01F,0,2);
+                        float nightVision = playerExperienceLevel.isEmpty() ? 0 : Math.clamp(Collections.max(playerExperienceLevel)*0.01F,0,1);
 
 
                         //返回方块底色颜色浓淡的因子

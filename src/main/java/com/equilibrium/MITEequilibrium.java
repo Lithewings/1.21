@@ -41,6 +41,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -69,6 +70,8 @@ import com.equilibrium.craft_time_worklevel.FurnaceIngredients;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -78,6 +81,8 @@ import static com.equilibrium.enchantments.RegisterEnchantments.registerEnchantm
 import static com.equilibrium.entity.ModEntities.registerModEntities;
 
 
+import static com.equilibrium.event.MoonPhaseEvent.*;
+import static com.equilibrium.event.MoonPhaseEvent.RandomTickModifier;
 import static com.equilibrium.item.Armors.registerArmors;
 import static com.equilibrium.item.Metal.registerModItemRaw;
 import static com.equilibrium.item.extend_item.CoinItems.registerCoinItems;
@@ -315,17 +320,9 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 	// 新的一天到来时触发的事件
 	private void onNewDay(MinecraftServer server, ServerWorld world, long worldTime) {
-		// 触发新的一天事件
-//		server.getPlayerManager().getPlayerList().forEach(player -> {
-//			player.sendMessage(Text.literal("新的一天开始了！"), false);
-//		});
-
-
-
 	}
 
 	public static TypedActionResult<ItemStack> onUseCrystalItem(ItemStack itemStack , PlayerEntity player,World world,int experience){
-
 
 		// 播放玻璃破碎的声音
 		player.playSound(SoundEvents.BLOCK_GLASS_BREAK, 1.0F, 1.0F);
@@ -369,33 +366,129 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 
 
+
 	public void onInitialize() {
 		//记录服务器实例
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 			ServerInfoRecorder.setServerInstance(server);  // 保存服务器实例
+			ServerInfoRecorder.setDay((int) server.getWorld(World.OVERWORLD).getTimeOfDay());
 			server.setDifficultyLocked(true);
 		});
 
 
 		// 注册服务器 tick 事件
 		ServerTickEvents.START_SERVER_TICK.register(server -> {
-			// 记录服务器实例
+			// 若此前没有记录服务器实例,则记录一次
 			if(!isServerInstanceSet() )
 				ServerInfoRecorder.setServerInstance(server);
-
 			// 每隔 TICK_INTERVAL 次 tick 触发一次检查
 			tickCount++;
+			//获取时间,得到月相,决定是否触发月相事件
 
-			//规则更新
-//			if (tickCount %(TICK_INTERVAL/10) == 0) {
-//				if(!server.getGameRules().getBoolean(GameRules.KEEP_INVENTORY))
-//					server.getGameRules().get(GameRules.KEEP_INVENTORY).set(true,server);
-//			}
+			//月相事件
+			String moonType = getMoonType(server.getWorld(World.OVERWORLD));
+			ServerWorld serverOverWorld = server.getWorld(World.OVERWORLD);
+			boolean isNoPlayersInTheOverWorld = serverOverWorld.getPlayers().isEmpty();
+			Random random = new Random();
 
-			//护甲更新
+
+			if (isNoPlayersInTheOverWorld) {
+				if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 3)
+					for (PlayerEntity player : server.getPlayerManager().getPlayerList())
+						player.sendMessage(Text.of("由于主世界没有玩家,随机刻速度已回调至默认值"), true);
+				RandomTickModifier(serverOverWorld, 3);
+
+			}
+
+			if (Objects.equals(moonType, "errorMoontype"))
+				for (PlayerEntity player : server.getPlayerManager().getPlayerList())
+					player.sendMessage(Text.of("月相加载失败"), true);
+			else{
+				//月相事件,只在主世界进行
+				//增大随机刻的条件
+				boolean shouldRandomTickIncrease = (moonType.equals("blueMoon") || (moonType.equals("harvestMoon")) || (moonType.equals("haloMoon")));
+				if (!shouldRandomTickIncrease) {
+					if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 3) {
+						for (PlayerEntity player : server.getPlayerManager().getPlayerList())
+							player.sendMessage(Text.of("由于处在普通月相,随机刻已回调至默认值"), true);
+						RandomTickModifier(serverOverWorld, 3);
+					}
+				}
+
+
+				if (moonType.equals("bloodMoon")) {
+					if (serverOverWorld.getTimeOfDay() % 100 == 0) {
+						//执行间隔事件
+						spawnMobNearPlayer(serverOverWorld);
+					}
+					if (serverOverWorld.getTimeOfDay() % random.nextInt(50, 64) == 0) {
+						//执行间隔事件
+						controlWeather(serverOverWorld);
+//                        this.sendMessage(Text.of("雷电事件"));
+					}
+				}
+
+
+				if (moonType.equals("harvestMoon") || (moonType.equals("haloMoon"))) {
+					if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 4)
+						RandomTickModifier(serverOverWorld, 4);
+//               if (this.age % 100 == 0) {
+					//执行间隔事件
+//               this.sendMessage(Text.of("黄月/幻月升起,触发事件"));
+//               }
+				}
+
+				if (moonType.equals("fullMoon")) {
+					if (serverOverWorld.getTimeOfDay() % 100 == 0) {
+//              this.sendMessage(Text.of("满月升起,触发事件"));
+						applyStrengthToHostileMobs(serverOverWorld);
+					}
+				}
+
+				if (moonType.equals("newMoon")) {
+					if (serverOverWorld.getTimeOfDay() % 100 == 0) {
+						applyWeaknessToHostileMobs(serverOverWorld);
+//              this.sendMessage(Text.of("新月升起,触发事件"));
+					}
+				}
+
+				//第一次蓝月,不改变随机刻速度
+				if (moonType.equals("blueMoon")) {
+					if (serverOverWorld.getTimeOfDay() > 24000) {
+
+						if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 5)
+							RandomTickModifier(serverOverWorld, 5);
+						if (serverOverWorld.getTimeOfDay() % 1200 == 0) {
+
+//								this.sendMessage(Text.of("蓝月升起,触发事件"));
+							//执行间隔事件
+							spawnAnimalNearPlayer(serverOverWorld);
+						}
+					} else {
+						if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 3) {
+							for (PlayerEntity player : server.getPlayerManager().getPlayerList())
+								player.sendMessage(Text.of("由于第一天的蓝月并没有随机刻增益,随机刻应该修改为3"), true);
+							RandomTickModifier(serverOverWorld, 3);
+						}
+					}
+					//应该是用world.找到所有玩家,这里无非就是避免客户端世界直接转服务器世界造成崩溃
+					//待改进:应该是this.getWorld,如果不是客户端世界再执行spawnAnimal方法
+
+				}
+			}
+
+
+
+
+
+
+
+
+            //护甲更新
 			if (tickCount %(TICK_INTERVAL/10) == 0) {
-				for(ServerPlayerEntity serverPlayerEntity : server.getPlayerManager().getPlayerList())
+				for(ServerPlayerEntity serverPlayerEntity : server.getPlayerManager().getPlayerList()) {
 					updatePlayerArmor(serverPlayerEntity);
+				}
 			}
 
 			if (tickCount >= TICK_INTERVAL) {
@@ -486,18 +579,15 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 
 
-
-
-
-
-
+			//创建持久状态类
 			StateSaverAndLoader serverState;
 			if(!world.isClient()){
+				//为这个新创建的类赋值,获取到服务器实例,这个实例在一开始从本地文件载入,然后复制一份到ServerInfoRecorder中去,所以这是可以读取到本地文件数据的
 				serverState = StateSaverAndLoader.getServerState(ServerInfoRecorder.getServerInstance());
 			}else{
 				return ActionResult.PASS;
 			}
-
+			//直接访问成员变量即可
 			boolean craftedIronPickaxe = serverState.isPickAxeCrafted;
 
 			if(!craftedIronPickaxe){

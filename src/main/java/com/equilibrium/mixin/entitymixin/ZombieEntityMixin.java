@@ -60,15 +60,16 @@ public abstract class ZombieEntityMixin extends HostileEntity {
         cir.setReturnValue(true);
     }
 
-    @Inject(method = "createZombieAttributes", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "createZombieAttributes", at = @At(value = "HEAD"))
     private static void createZombieAttributes(CallbackInfoReturnable<DefaultAttributeContainer.Builder> cir) {
-        cir.cancel();
-        cir.setReturnValue(HostileEntity.createHostileAttributes()
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.30F)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 3.0)
-                .add(EntityAttributes.GENERIC_ARMOR, 2.0)
-                .add(EntityAttributes.ZOMBIE_SPAWN_REINFORCEMENTS));
+//        cir.cancel();
+//
+//        cir.setReturnValue(HostileEntity.createHostileAttributes()
+//                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 64.0)
+//                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.30F)
+//                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 3.0)
+//                .add(EntityAttributes.GENERIC_ARMOR, 2.0)
+//                .add(EntityAttributes.ZOMBIE_SPAWN_REINFORCEMENTS));
     }
 
 
