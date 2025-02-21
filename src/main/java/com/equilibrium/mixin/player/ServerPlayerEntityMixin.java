@@ -46,17 +46,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         super(world, pos, yaw, gameProfile);
 
     }
+
     @Shadow private int joinInvulnerabilityTicks = 0;
 
-    @Shadow public abstract void sendMessage(Text message, boolean overlay);
-
-    @Shadow public abstract void teleport(ServerWorld targetWorld, double x, double y, double z, float yaw, float pitch);
-
-    @Shadow public abstract float getSpawnAngle();
-
-    @Shadow public abstract ServerWorld getServerWorld();
-
-    @Shadow public abstract void sendMessage(Text message);
 
     //    @Override
 //    public void jump(){
@@ -64,6 +56,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 //        this.sendMessage(Text.of("SpawnPoint is : "+this.getSpawnPointPosition()));
 //        this.teleport(this.getServerWorld(),this.getSpawnPointPosition().getX(),this.getSpawnPointPosition().getY(),this.getSpawnPointPosition().getZ(),0,0);
 //    }
+
+
     @Inject(method = "onDeath",at = @At("HEAD"))
     public void onDeath(DamageSource damageSource, CallbackInfo ci) {
         StateSaverAndLoader serverState;

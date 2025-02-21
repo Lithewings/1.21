@@ -5,7 +5,6 @@ import com.equilibrium.constant.ConstantString;
 import com.equilibrium.item.Armors;
 import com.equilibrium.item.Metal;
 import com.equilibrium.item.Tools;
-import com.equilibrium.item.tools_attribute.metal.MetalAxe;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.registry.RegistryWrapper;
@@ -54,9 +53,9 @@ public class ModLanguageTranslatorZhCn extends FabricLanguageProvider {
 
         translationBuilder.add(Tools.ADAMANTIUM_AXE,"艾德曼斧");
         translationBuilder.add(Tools.ADMANTIUM_DAGGER,"艾德曼短剑");
-        translationBuilder.add(Tools.ADMANTIUM_HOE,"艾德曼锄");
-        translationBuilder.add(Tools.ADMANTIUM_PICKAXE,"艾德曼镐");
-        translationBuilder.add(Tools.ADMANTIUM_SHOVEL,"艾德曼铲");
+        translationBuilder.add(Tools.ADAMANTIUM_HOE,"艾德曼锄");
+        translationBuilder.add(Tools.ADAMANTIUM_PICKAXE,"艾德曼镐");
+        translationBuilder.add(Tools.ADAMANTIUM_SHOVEL,"艾德曼铲");
         translationBuilder.add(Tools.ADMANTIUM_SWORD,"艾德曼剑");
         translationBuilder.add(Tools.SILVER_AXE,"银斧");
         translationBuilder.add(Tools.SILVER_SWORD,"银剑");

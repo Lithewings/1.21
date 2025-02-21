@@ -9,6 +9,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.sound.SoundEvents;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -87,7 +88,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity implemen
 				this.craft_time += getCraftingSpeed(this);
 			}else if (this.craftTime$getCraftTime() >= this.craftTime$getCraftPeriod()) {
 				//合成结束播放声音
-				this.playSound(SoundEventRegistry.finishSound, 0.1F, 1f);
+				this.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.1F, 1f);
 				this.craftTime$startCraftWithNewPeriod(craft_period);
 				return true;
 			}

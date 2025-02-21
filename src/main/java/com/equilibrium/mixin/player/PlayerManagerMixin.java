@@ -16,6 +16,8 @@ import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ConnectedClientData;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
@@ -53,13 +55,14 @@ public abstract class PlayerManagerMixin {
 
     @Inject(method = "onPlayerConnect", at = @At(value = "TAIL"))
     public void onPlayerConnect(ClientConnection connection, ServerPlayerEntity player, ConnectedClientData clientData, CallbackInfo ci) {
-        LOGGER.info("When finishing connect,the player xp level is " + player.experienceLevel);
-        LOGGER.info("When finishing connect,the player health level is " + player.getHealth());
+//        LOGGER.info("When finishing connect,the player xp level is " + player.experienceLevel);
+//        LOGGER.info("When finishing connect,the player health level is " + player.getHealth());
         //获取服务器的所有nbt数据
         serverState = StateSaverAndLoader.getServerState(ServerInfoRecorder.getServerInstance());
         if (serverState.onFirstInTheWorld) {
             //只触发一次
             serverState.onFirstInTheWorld = false;
+            player.sendMessage(Text.literal("在你的附近寻找箱子,取走物品以解锁成就栏").formatted(Formatting.YELLOW));
             World world = player.getWorld();
             BlockPos spawnPos = player.getWorld().getSpawnPos();
             StatusEffectInstance boost = new StatusEffectInstance(StatusEffects.SATURATION, 24000, 0, false, false, true);
@@ -98,12 +101,16 @@ public abstract class PlayerManagerMixin {
 //            int initializedFoodLevel = player.experienceLevel >= 35 ? 20 : 6 + (int) (player.experienceLevel / 5) * 2;
 //            PlayerMaxHungerHelper.setMaxFoodLevel(initializedFoodLevel);
 
-            StatusEffectInstance statusEffectInstance1 = new StatusEffectInstance(StatusEffects.BLINDNESS, 60, 255, false, false, false);
+            StatusEffectInstance statusEffectInstance1 = new StatusEffectInstance(StatusEffects.BLINDNESS, 100, 255, false, false, false);
             StatusEffectUtil.addEffectToPlayersWithinDistance((ServerWorld) player.getWorld(), player, player.getPos(), 4, statusEffectInstance1, 100);
             StatusEffectInstance statusEffectInstance2 = new StatusEffectInstance(StatusEffects.NAUSEA, 100, 255, false, false, false);
             StatusEffectUtil.addEffectToPlayersWithinDistance((ServerWorld) player.getWorld(), player, player.getPos(), 4, statusEffectInstance2, 100);
             StatusEffectInstance statusEffectInstance3 = new StatusEffectInstance(StatusEffects.WEAKNESS, 100, 255, false, false, false);
             StatusEffectUtil.addEffectToPlayersWithinDistance((ServerWorld) player.getWorld(), player, player.getPos(), 4, statusEffectInstance3, 100);
+            StatusEffectInstance statusEffectInstance4 = new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 255, false, false, false);
+            StatusEffectUtil.addEffectToPlayersWithinDistance((ServerWorld) player.getWorld(), player, player.getPos(), 4, statusEffectInstance4, 100);
+
+
 
             if (player.getHealth() <= 1) {
                 player.damage(player.getDamageSources().badRespawnPoint(player.getPos()), 114514);

@@ -78,7 +78,7 @@ public class MetalHoe extends ToolItem{
                 if (!world.isClient) {
                     consumer.accept(context);
                     if (playerEntity != null) {
-                        context.getStack().damage(1, playerEntity, LivingEntity.getSlotForHand(context.getHand()));
+                        context.getStack().damage(50, playerEntity, LivingEntity.getSlotForHand(context.getHand()));
                     }
                 }
 

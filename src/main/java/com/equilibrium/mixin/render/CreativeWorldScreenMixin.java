@@ -7,6 +7,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.gui.screen.world.WorldCreator;
 import net.minecraft.client.gui.tab.TabManager;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.*;
 import net.minecraft.resource.ResourcePackManager;
 import net.minecraft.text.Text;
@@ -21,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import javax.swing.plaf.ToolTipUI;
 import java.nio.file.Path;
 
 
@@ -63,12 +65,16 @@ public abstract class CreativeWorldScreenMixin extends Screen {
 
 
     @Inject(method = "initTabNavigation", at = @At(value = "TAIL"))
+    //按钮捕获
     private void modifyGameTab(CallbackInfo ci) {
+
         for (int i = 0; i < 2; i++) {
-            int finalI = i;
+            int page = i;
             this.tabNavigation.tabs.get(i).forEachChild(element -> {
                 if (element instanceof CyclingButtonWidget<?>) {
-                    element.active = false;
+
+                    //名字见 TabNavigationWidget类往后翻,会有按钮的文本
+                    //这里只是显示而已,不会真正改变值
                     MITEequilibrium.LOGGER.info(element.getMessage().toString());
                     if (element.getMessage().toString().contains("difficulty"))
                         ((CyclingButtonWidget<Difficulty>) element).setValue(Difficulty.HARD);
@@ -78,8 +84,19 @@ public abstract class CreativeWorldScreenMixin extends Screen {
                         ((CyclingButtonWidget<Boolean>) element).setValue(false);
                     if (element.getMessage().toString().contains("mapType"))
                         ((CyclingButtonWidget<WorldCreator.WorldType>) element).setValue(worldCreator.getNormalWorldTypes().getFirst());
-                } else if(element instanceof TextFieldWidget && finalI ==1){
-                    element.visible = false;
+                    element.active = false;
+
+                } else if(element instanceof TextFieldWidget && page ==0) {
+                    //世界名字输入不可用
+
+                    ((TextFieldWidget) element).setText("World");
+                    ((TextFieldWidget) element).setTooltip(Tooltip.of(Text.of("如果你想要修改世界名字,请先创建世界后再选择世界编辑")));
+                    element.active=false;
+                }
+                else if(element instanceof TextFieldWidget && page ==1){
+                    //种子输入不可用
+                    ((TextFieldWidget) element).setTooltip(Tooltip.of(Text.of("目前阶段还无法指定世界种子,让随机数来决定这些")));
+                    element.active=false;
                 }
                 else
                     element.active=false;

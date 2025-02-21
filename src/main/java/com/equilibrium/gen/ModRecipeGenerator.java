@@ -4,13 +4,10 @@ import com.equilibrium.block.ModBlocks;
 import com.equilibrium.craft_time_register.BlockInit;
 import com.equilibrium.item.Armors;
 import com.equilibrium.item.Metal;
-import com.equilibrium.item.ModItems;
 import com.equilibrium.item.Tools;
 import com.equilibrium.item.extend_item.CoinItems;
-import com.equilibrium.tags.ModItemTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.data.server.recipe.RecipeProvider;
@@ -383,7 +380,7 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
 
 
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.ADMANTIUM_SHOVEL).
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.ADAMANTIUM_SHOVEL).
                 pattern("X").
                 pattern("Y").
                 pattern("Y").
@@ -494,7 +491,7 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
                 offerTo(exporter, Identifier.of("miteequilibrium","gold_dagger"));
 
         //hoe
-        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.ADMANTIUM_HOE).
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.ADAMANTIUM_HOE).
                 pattern("XX").
                 pattern(" Y").
                 pattern(" Y").
@@ -549,7 +546,7 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
 
 
         //pickaxe
-        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.ADMANTIUM_PICKAXE).
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.ADAMANTIUM_PICKAXE).
                 pattern("XXX").
                 pattern(" Y ").
                 pattern(" Y ").

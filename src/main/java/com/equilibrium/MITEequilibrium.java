@@ -7,28 +7,24 @@ import com.equilibrium.craft_time_register.UseBlock;
 import com.equilibrium.entity.goal.BreakBlockGoal;
 import com.equilibrium.event.BreakBlockEvent;
 import com.equilibrium.event.CraftingMetalPickAxeCallback;
-import com.equilibrium.event.OnPlayerEntityEatEvent;
 import com.equilibrium.item.Metal;
 import com.equilibrium.item.ModItemGroup;
 import com.equilibrium.item.ModItems;
 import com.equilibrium.item.Tools;
+import com.equilibrium.mixin.player.ClientPlayerEntityMixin;
 import com.equilibrium.persistent_state.StateSaverAndLoader;
 import com.equilibrium.util.ServerInfoRecorder;
-import com.google.common.collect.Lists;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.component.ComponentType;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.AttributeModifiersComponent;
-import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -36,12 +32,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -50,9 +43,10 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.GameMode;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
@@ -69,7 +63,6 @@ import com.equilibrium.craft_time_worklevel.FurnaceIngredients;
 
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -77,12 +70,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static com.equilibrium.enchantments.EnchantmentsCodec.registerAllOfEnchantments;
-import static com.equilibrium.enchantments.RegisterEnchantments.registerEnchantments;
 import static com.equilibrium.entity.ModEntities.registerModEntities;
 
 
 import static com.equilibrium.event.MoonPhaseEvent.*;
 import static com.equilibrium.event.MoonPhaseEvent.RandomTickModifier;
+import static com.equilibrium.event.sound.SoundEventRegistry.registrySoundEvents;
 import static com.equilibrium.item.Armors.registerArmors;
 import static com.equilibrium.item.Metal.registerModItemRaw;
 import static com.equilibrium.item.extend_item.CoinItems.registerCoinItems;
@@ -93,7 +86,6 @@ import static com.equilibrium.util.LootTableModifier.modifierLootTables;
 
 import static com.equilibrium.ore_generator.ModPlacementGenerator.registerModOre;
 import static com.equilibrium.util.ServerInfoRecorder.isServerInstanceSet;
-import static net.minecraft.component.DataComponentTypes.ATTRIBUTE_MODIFIERS;
 
 
 public class MITEequilibrium implements ModInitializer {
@@ -102,6 +94,10 @@ public class MITEequilibrium implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	public static Config config;
+
+
+
+
 
 	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
@@ -372,6 +368,8 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 			ServerInfoRecorder.setServerInstance(server);  // 保存服务器实例
 			ServerInfoRecorder.setDay((int) server.getWorld(World.OVERWORLD).getTimeOfDay());
+			//锁定游戏难度:困难
+			server.setDifficulty(Difficulty.HARD,true);
 			server.setDifficultyLocked(true);
 		});
 
@@ -484,10 +482,12 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 
 
-            //护甲更新
+            //护甲更新,玩家游戏模式更新
 			if (tickCount %(TICK_INTERVAL/10) == 0) {
 				for(ServerPlayerEntity serverPlayerEntity : server.getPlayerManager().getPlayerList()) {
 					updatePlayerArmor(serverPlayerEntity);
+//					if(serverPlayerEntity.isCreative())
+//						serverPlayerEntity.changeGameMode(GameMode.SURVIVAL);
 				}
 			}
 
@@ -543,22 +543,22 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 		//原版物品添加tooltip
 		//不能和数据生成一起使用
 
-		ItemTooltipCallback.EVENT.register((stack, context, type,lines) -> {
-			// 判断物品是青金石（Lapis Lazuli）或其他物品
-			if (stack.getItem() == Items.LAPIS_LAZULI) {
-				lines.add(Text.literal("每个25XP").formatted(Formatting.DARK_GRAY));
-			}
-			if (stack.getItem() == Items.QUARTZ) {
-				lines.add(Text.literal("每个50XP").formatted(Formatting.DARK_GRAY));
-			}
-			if (stack.getItem() == Items.DIAMOND) {
-				lines.add(Text.literal("每个500XP").formatted(Formatting.DARK_GRAY));
-			}
-			if (stack.getItem() == Items.GOLDEN_APPLE) {
-				lines.add(Text.literal("生命恢复 II（00:40）").formatted(Formatting.BLUE));
-				lines.add(Text.literal("抗火（00:40）").formatted(Formatting.BLUE));
-			}
-		});
+//		ItemTooltipCallback.EVENT.register((stack, context, type,lines) -> {
+//			// 判断物品是青金石（Lapis Lazuli）或其他物品
+//			if (stack.getItem() == Items.LAPIS_LAZULI) {
+//				lines.add(Text.literal("每个25XP").formatted(Formatting.DARK_GRAY));
+//			}
+//			if (stack.getItem() == Items.QUARTZ) {
+//				lines.add(Text.literal("每个50XP").formatted(Formatting.DARK_GRAY));
+//			}
+//			if (stack.getItem() == Items.DIAMOND) {
+//				lines.add(Text.literal("每个500XP").formatted(Formatting.DARK_GRAY));
+//			}
+//			if (stack.getItem() == Items.GOLDEN_APPLE) {
+//				lines.add(Text.literal("生命恢复 II（00:40）").formatted(Formatting.BLUE));
+//				lines.add(Text.literal("抗火（00:40）").formatted(Formatting.BLUE));
+//			}
+//		});
 
 
 		//玩家食用食品监听器
@@ -610,8 +610,16 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 
 
+
 		//命令注册
 		CommandRegistrationCallback.EVENT.register(this::registerCommands);
+
+
+
+
+
+
+
 
 
 		//附魔注册(记得把数据驱动部分也做好)
@@ -690,9 +698,9 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 		CreativeGroup.addGroup();
 		UseBlock.init();
-		Registry.register(Registries.SOUND_EVENT, SoundEventRegistry.finishSoundID, SoundEventRegistry.finishSound);
 
 
+		registrySoundEvents();
 
 		LOGGER.info("Hello Fabric world!");
 	}

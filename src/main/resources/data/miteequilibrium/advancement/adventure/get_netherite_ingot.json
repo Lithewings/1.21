@@ -1,0 +1,30 @@
+{
+  "parent": "miteequilibrium:adventure/go_to_nether",
+  "criteria": {
+    "get_netherite_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:netherite_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "设法获取或制作下界合金锭，以合成下界合金工作台\n你可以在地狱底部开凿矿井隧道先获取到远古残骸，或者在猪灵堡垒大肆冒险一番，在藏宝室宝箱中拿到想要的材料",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:netherite_ingot"
+    },
+    "title": "科技线的尾声"
+  },
+  "requirements": [
+    [
+      "get_netherite_ingot"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

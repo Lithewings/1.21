@@ -1,0 +1,30 @@
+{
+  "parent": "miteequilibrium:adventure/get_flint",
+  "criteria": {
+    "get_hatchet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miteequilibrium:flint_hatchet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "设法获取或合成第一块燧石，制作燧石手斧以砍伐树木",
+    "icon": {
+      "count": 1,
+      "id": "miteequilibrium:flint_hatchet"
+    },
+    "title": "生存达人"
+  },
+  "requirements": [
+    [
+      "get_hatchet"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

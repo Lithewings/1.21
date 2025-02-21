@@ -1,12 +1,9 @@
 package com.equilibrium.mixin.entitymixin;
 
-import com.equilibrium.MITEequilibrium;
 import com.equilibrium.item.Tools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,7 +24,7 @@ public abstract class EndCrystalEntityMixin extends Entity {
 
     @Inject(method = "damage",at = @At("HEAD"),cancellable = true)
     public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if(source.getAttacker() instanceof PlayerEntity player && player.getMainHandStack().isOf(Tools.ADMANTIUM_PICKAXE))
+        if(source.getAttacker() instanceof PlayerEntity player && player.getMainHandStack().isOf(Tools.ADAMANTIUM_PICKAXE))
             return;
         else{
             cir.setReturnValue(false);

@@ -1,0 +1,31 @@
+{
+  "criteria": {
+    "got_spyglass": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:spyglass"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "description": "纪念品\n源自出生点的箱子",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:spyglass"
+    },
+    "title": "MITE-宁静"
+  },
+  "requirements": [
+    [
+      "got_spyglass"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

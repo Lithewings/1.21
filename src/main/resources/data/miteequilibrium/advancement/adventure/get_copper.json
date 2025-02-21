@@ -1,0 +1,33 @@
+{
+  "parent": "miteequilibrium:adventure/get_flint",
+  "criteria": {
+    "get_copper": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miteequilibrium:copper_nugget"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "不断挖掘沙砾，获取第一颗铜粒，直到收集27颗以制作铜镐\n将获得20XP",
+    "icon": {
+      "count": 1,
+      "id": "miteequilibrium:copper_nugget"
+    },
+    "title": "怎么是抽卡游戏?"
+  },
+  "requirements": [
+    [
+      "get_copper"
+    ]
+  ],
+  "rewards": {
+    "experience": 20
+  },
+  "sends_telemetry_event": true
+}

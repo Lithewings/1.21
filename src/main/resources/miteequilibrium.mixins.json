@@ -95,6 +95,8 @@
     "render.CreativeWorldScreenMixin",
     "render.DeathScreenMixin",
     "render.DebugHudMixin",
+    "render.EntityRenderDispatcherMixinForRenderHitBox",
+    "render.GameMenuScreenMixin",
     "render.InGameHudMixin",
     "render.WorldRendererMixin",
     "tables.AnvilScreenHandlerMixin",

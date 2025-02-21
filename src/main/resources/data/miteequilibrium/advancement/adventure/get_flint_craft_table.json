@@ -1,0 +1,30 @@
+{
+  "parent": "miteequilibrium:adventure/get_hatchet",
+  "criteria": {
+    "get_flint_craft_table": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miteequilibrium:flint_hatchet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "继续收集燧石，合成燧石小刀以制作燧石工作台",
+    "icon": {
+      "count": 1,
+      "id": "miteequilibrium:flint_crafting_table"
+    },
+    "title": "这是,工作台?"
+  },
+  "requirements": [
+    [
+      "get_flint_craft_table"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

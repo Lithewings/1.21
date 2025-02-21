@@ -49,14 +49,14 @@ public class Tools {
     public static final Item SILVER_PICKAXE = createMetalPickAxeItem(ModToolMaterials.SILVER_PICKAXE,5,2f);
     public static final Item IRON_PICKAXE = createMetalPickAxeItem(ModToolMaterials.IRON_PICKAXE,6,2f);
     public static final Item MITHRIL_PICKAXE = createMetalPickAxeItem(ModToolMaterials.MITHRIL_PICKAXE,7,2f);
-    public static final Item ADMANTIUM_PICKAXE = createMetalPickAxeItem(ModToolMaterials.ADAMANTIUM_PICKAXE,8,2f);
+    public static final Item ADAMANTIUM_PICKAXE = createMetalPickAxeItem(ModToolMaterials.ADAMANTIUM_PICKAXE,8,2f);
 
     public static final Item COPPER_HOE = createMetalHoeItem(ModToolMaterials.COPPER_HOE,4,3f);
     public static final Item GOLD_HOE = createMetalHoeItem(ModToolMaterials.GOLD_HOE,4,3f);
     public static final Item SILVER_HOE = createMetalHoeItem(ModToolMaterials.SILVER_HOE,4,3f);
     public static final Item IRON_HOE = createMetalHoeItem(ModToolMaterials.IRON_HOE,5,3f);
     public static final Item MITHRIL_HOE = createMetalHoeItem(ModToolMaterials.MITHRIL_HOE,6,3f);
-    public static final Item ADMANTIUM_HOE =createMetalHoeItem(ModToolMaterials.ADAMANTIUM_HOE,7,3f);
+    public static final Item ADAMANTIUM_HOE =createMetalHoeItem(ModToolMaterials.ADAMANTIUM_HOE,7,3f);
 
 
     public static final Item COPPER_SHOVEL = createMetalShovelItem(ModToolMaterials.COPPER_SHOVEL,3,4f);
@@ -64,7 +64,7 @@ public class Tools {
     public static final Item SILVER_SHOVEL = createMetalShovelItem(ModToolMaterials.SILVER_SHOVEL,3,4f);
     public static final Item IRON_SHOVEL = createMetalShovelItem(ModToolMaterials.IRON_SHOVEL,4,4f);
     public static final Item MITHRIL_SHOVEL = createMetalShovelItem(ModToolMaterials.MITHRIL_SHOVEL,5,4f);
-    public static final Item ADMANTIUM_SHOVEL =createMetalShovelItem(ModToolMaterials.ADAMANTIUM_SHOVEL,6,4f);
+    public static final Item ADAMANTIUM_SHOVEL =createMetalShovelItem(ModToolMaterials.ADAMANTIUM_SHOVEL,6,4f);
 
     public static final Item COPPER_SWORD = createMetalSwordItem(ModToolMaterials.COPPER_SWORD,7,3f);
     public static final Item GOLD_SWORD = createMetalSwordItem(ModToolMaterials.GOLD_SWORD,7,3f);
@@ -165,14 +165,14 @@ public class Tools {
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","silver_axe"),SILVER_AXE);
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","gold_axe"),GOLD_AXE);
 
-        Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","adamantium_hoe"),ADMANTIUM_HOE);
+        Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","adamantium_hoe"), ADAMANTIUM_HOE);
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","mithril_hoe"), MITHRIL_HOE);
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","iron_hoe"),IRON_HOE);
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","copper_hoe"),COPPER_HOE);
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","silver_hoe"),SILVER_HOE);
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","gold_hoe"),GOLD_HOE);
 
-        Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","adamantium_pickaxe"), ADMANTIUM_PICKAXE);
+        Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","adamantium_pickaxe"), ADAMANTIUM_PICKAXE);
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","mithril_pickaxe"), MITHRIL_PICKAXE);
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","iron_pickaxe"),IRON_PICKAXE);
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","copper_pickaxe"),COPPER_PICKAXE);
@@ -187,7 +187,7 @@ public class Tools {
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","gold_sword"),GOLD_SWORD);
 
 
-        Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","adamantium_shovel"), ADMANTIUM_SHOVEL);
+        Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","adamantium_shovel"), ADAMANTIUM_SHOVEL);
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","mithril_shovel"), MITHRIL_SHOVEL);
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","iron_shovel"),IRON_SHOVEL);
         Registry.register(Registries.ITEM, Identifier.of("miteequilibrium","copper_shovel"),COPPER_SHOVEL);

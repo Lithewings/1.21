@@ -1,0 +1,33 @@
+{
+  "parent": "miteequilibrium:adventure/go_to_underworld",
+  "criteria": {
+    "get_mithril": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miteequilibrium:mithril"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "用岩浆驱动的黑曜石熔炉冶炼秘银矿石，获得秘银锭\n获得200XP",
+    "icon": {
+      "count": 1,
+      "id": "miteequilibrium:mithril"
+    },
+    "title": "神话时代"
+  },
+  "requirements": [
+    [
+      "get_mithril"
+    ]
+  ],
+  "rewards": {
+    "experience": 200
+  },
+  "sends_telemetry_event": true
+}

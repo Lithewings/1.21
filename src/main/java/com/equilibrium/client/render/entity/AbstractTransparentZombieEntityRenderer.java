@@ -7,10 +7,10 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.entity.mob.ZombieEntity;
 
 @Environment(EnvType.CLIENT)
-public abstract class AbstractZombieEntityRenderer <T extends ZombieEntity, M extends TransparentZombieEntityModelAbstractZombieModel<T>> extends BipedEntityRenderer<T, M> {
+public abstract class AbstractTransparentZombieEntityRenderer<T extends ZombieEntity, M extends TransparentZombieEntityModelAbstractZombieModel<T>> extends BipedEntityRenderer<T, M> {
 
 
-    protected AbstractZombieEntityRenderer(EntityRendererFactory.Context ctx, M bodyModel, M legsArmorModel, M bodyArmorModel) {
+    protected AbstractTransparentZombieEntityRenderer(EntityRendererFactory.Context ctx, M bodyModel, M legsArmorModel, M bodyArmorModel) {
         super(ctx, bodyModel, 0.5F);
 
     }

@@ -1,0 +1,72 @@
+{
+  "parent": "miteequilibrium:adventure/get_full_copper_armor",
+  "criteria": {
+    "get_full_iron_armor1": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:iron_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "get_full_iron_armor2": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:iron_helmet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "get_full_iron_armor3": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:iron_leggings"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "get_full_iron_armor4": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:iron_chestplate"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "穿上全套铁护甲\n你可能要穿着它度过很长时间\n获得200XP",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:iron_chestplate"
+    },
+    "title": "全副武装 II"
+  },
+  "requirements": [
+    [
+      "get_full_iron_armor1"
+    ],
+    [
+      "get_full_iron_armor2"
+    ],
+    [
+      "get_full_iron_armor3"
+    ],
+    [
+      "get_full_iron_armor4"
+    ]
+  ],
+  "rewards": {
+    "experience": 200
+  },
+  "sends_telemetry_event": true
+}

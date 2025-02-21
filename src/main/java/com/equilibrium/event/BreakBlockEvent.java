@@ -1,10 +1,7 @@
 package com.equilibrium.event;
-import com.equilibrium.block.ModBlocks;
 import com.equilibrium.item.Metal;
 import com.equilibrium.tags.ModBlockTags;
-import com.equilibrium.tags.ModItemTags;
 import com.equilibrium.util.BlockToItemConverter;
-import com.equilibrium.util.IsMinable;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -16,14 +13,15 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
+
+
 
 public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
     BlockToItemConverter blockToItemConverter = new BlockToItemConverter();
@@ -39,6 +37,10 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
      */
     @Override
     public void afterBlockBreak(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity) {
+
+
+
+
 
         ItemStack itemStack =player.getMainHandStack();
 
@@ -119,6 +121,7 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
 
         }
         if (state.getBlock() == Blocks.GRAVEL) {
+
 
 
             if (slikTouch==1){

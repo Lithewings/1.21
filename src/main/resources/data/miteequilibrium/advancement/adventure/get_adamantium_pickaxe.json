@@ -1,0 +1,30 @@
+{
+  "parent": "miteequilibrium:adventure/get_netherite_ingot",
+  "criteria": {
+    "get_adamantium_pickaxe": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miteequilibrium:adamantium_pickaxe"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "在下界合金工作台上制作艾德曼镐\n这是唯一能够破坏末影水晶的工具",
+    "icon": {
+      "count": 1,
+      "id": "miteequilibrium:adamantium_pickaxe"
+    },
+    "title": "末影水晶破坏者"
+  },
+  "requirements": [
+    [
+      "get_adamantium_pickaxe"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

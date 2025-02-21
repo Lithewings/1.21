@@ -137,6 +137,24 @@
     ],
     "misc": [],
     "monster": [
+
+      {
+        "type": "miteequilibrium:invisible_stalker",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 40
+      },
+
+
+      {
+        "type": "miteequilibrium:ghoul",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 40
+      },
+
+
+
       {
         "type": "minecraft:spider",
         "maxCount": 1,
