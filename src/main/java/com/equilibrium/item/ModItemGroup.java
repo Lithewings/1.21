@@ -3,6 +3,7 @@ package com.equilibrium.item;
 import com.equilibrium.MITEequilibrium;
 
 import com.equilibrium.block.ModBlocks;
+import com.equilibrium.item.extend_item.CoinItems;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -81,14 +82,14 @@ public class ModItemGroup {
                                 entries.add(Tools.SILVER_AXE);
                                 entries.add(Tools.IRON_AXE);
 
-                                entries.add(Tools.ADMANTIUM_HOE);
+                                entries.add(Tools.ADAMANTIUM_HOE);
                                 entries.add(Tools.COPPER_HOE);
                                 entries.add(Tools.GOLD_HOE);
                                 entries.add(Tools.MITHRIL_HOE);
                                 entries.add(Tools.SILVER_HOE);
                                 entries.add(Tools.IRON_HOE);
 
-                                entries.add(Tools.ADMANTIUM_SHOVEL);
+                                entries.add(Tools.ADAMANTIUM_SHOVEL);
                                 entries.add(Tools.COPPER_SHOVEL);
                                 entries.add(Tools.GOLD_SHOVEL);
                                 entries.add(Tools.MITHRIL_SHOVEL);
@@ -102,7 +103,7 @@ public class ModItemGroup {
                                 entries.add(Tools.SILVER_SWORD);
                                 entries.add(Tools.IRON_SWORD);
 
-                                entries.add(Tools.ADMANTIUM_PICKAXE);
+                                entries.add(Tools.ADAMANTIUM_PICKAXE);
                                 entries.add(Tools.GOLD_PICKAXE);
                                 entries.add(Tools.COPPER_PICKAXE);
                                 entries.add(Tools.IRON_PICKAXE);
@@ -125,6 +126,17 @@ public class ModItemGroup {
                                 entries.add(Armors.COPPER_BOOTS);
                                 entries.add(Armors.COPPER_CHEST_PLATE);
                                 entries.add(Armors.COPPER_LEGGINGS);
+
+                                entries.add(Armors.MITHRIL_HELMET);
+                                entries.add(Armors.MITHRIL_BOOTS);
+                                entries.add(Armors.MITHRIL_CHEST_PLATE);
+                                entries.add(Armors.MITHRIL_LEGGINGS);
+
+
+                                entries.add(CoinItems.COPPER_COIN);
+                                entries.add(CoinItems.IRON_COIN);
+
+
 
                             }
                     ).build());

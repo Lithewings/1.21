@@ -1,5 +1,6 @@
 package com.equilibrium.mixin.entitymixin;
 
+import com.equilibrium.util.WorldMoonPhasesSelector;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -7,17 +8,17 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.LightType;
-import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import static com.equilibrium.event.MoonPhaseEvent.getMoonType;
 
 @Mixin(HostileEntity.class)
 public abstract class HostileAttributesMixin extends PathAwareEntity implements Monster {
@@ -26,15 +27,22 @@ public abstract class HostileAttributesMixin extends PathAwareEntity implements 
     protected HostileAttributesMixin(EntityType<? extends PathAwareEntity> entityType, World world) {
         super(entityType, world);
 
+
+    }
+
+    @Inject(method = "<init>",at = @At("TAIL"))
+    protected void HostileEntity(EntityType entityType, World world, CallbackInfo ci) {
+//        this.getAttributeInstance(EntityAttributes.GENERIC_FOLLOW_RANGE).setBaseValue(32);
+//        if(this.getWorld().getRegistryKey()== RegistryKey.of(RegistryKeys.WORLD, Identifier.of("miteequilibrium", "underworld"))){
+//            //地下世界,怪物追踪距离减少
+//            this.getAttributeInstance(EntityAttributes.GENERIC_FOLLOW_RANGE).setBaseValue(32*0.75);
+//        }
+//        //血月怪物追踪距离乘以8倍
+//        else if(this.getWorld().getRegistryKey()==World.OVERWORLD&& getMoonType(world).equals("bloodMoon"))
+//            this.getAttributeInstance(EntityAttributes.GENERIC_FOLLOW_RANGE).setBaseValue(32*8);
+
     }
 
 
 
-    @Inject(method = "createHostileAttributes",at = @At(value = "HEAD"),cancellable = true)
-    private static void createHostileAttributes(CallbackInfoReturnable<DefaultAttributeContainer.Builder> cir) {
-        cir.cancel();
-        cir.setReturnValue(MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 64.0));
-    }
 }

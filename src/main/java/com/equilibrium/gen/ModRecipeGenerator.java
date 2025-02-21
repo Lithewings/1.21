@@ -4,12 +4,10 @@ import com.equilibrium.block.ModBlocks;
 import com.equilibrium.craft_time_register.BlockInit;
 import com.equilibrium.item.Armors;
 import com.equilibrium.item.Metal;
-import com.equilibrium.item.ModItems;
 import com.equilibrium.item.Tools;
-import com.equilibrium.tags.ModItemTags;
+import com.equilibrium.item.extend_item.CoinItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.data.server.recipe.RecipeProvider;
@@ -24,6 +22,8 @@ import net.minecraft.util.Identifier;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import static com.equilibrium.MITEequilibrium.MOD_ID;
+
 public class ModRecipeGenerator extends FabricRecipeProvider {
     private static final List<ItemConvertible> ADAMANTIUM_RAW=List.of(Metal.ADAMANTIUM_RAW);
     private static final List<ItemConvertible> COPPER_INGOT=List.of(Items.COPPER_INGOT);
@@ -37,7 +37,29 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
     @Override
     public void generate(RecipeExporter exporter) {
 
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, CoinItems.COPPER_COIN).
+                pattern("X").
+                input('X', Metal.copper_nugget).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.copper_nugget)).
+                offerTo(exporter, Identifier.of(MOD_ID,"copper_coin"));
 
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, CoinItems.IRON_COIN).
+                pattern("X").
+                input('X', Items.IRON_NUGGET).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Items.IRON_NUGGET)).
+                offerTo(exporter, Identifier.of(MOD_ID,"iron_coin"));
+
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Items.GOLDEN_APPLE).
+                pattern("XXX").
+                pattern("XYX").
+                pattern("XXX").
+                input('X', Items.GOLD_NUGGET).
+                input('Y', Items.APPLE).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Items.GOLD_NUGGET)).
+                offerTo(exporter, Identifier.of("miteequilibrium","golden_apple"));
+
+        //armors
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Armors.COPPER_BOOTS).
                 pattern("X X").
                 pattern("X X").
@@ -68,6 +90,36 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
                 criterion("has_item", RecipeProvider.conditionsFromItem(Metal.copper)).
                 offerTo(exporter, Identifier.of("miteequilibrium","copper_leggings"));
 
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Armors.MITHRIL_BOOTS).
+                pattern("X X").
+                pattern("X X").
+                input('X', Metal.mithril).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.mithril)).
+                offerTo(exporter, Identifier.of("miteequilibrium","mithril_boots"));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Armors.MITHRIL_HELMET).
+                pattern("XXX").
+                pattern("X X").
+                input('X', Metal.mithril).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.mithril)).
+                offerTo(exporter, Identifier.of("miteequilibrium","mithril_helmet"));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Armors.MITHRIL_CHEST_PLATE).
+                pattern("X X").
+                pattern("XXX").
+                pattern("XXX").
+                input('X', Metal.mithril).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.mithril)).
+                offerTo(exporter, Identifier.of("miteequilibrium","mithril_chest_plate"));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Armors.MITHRIL_LEGGINGS).
+                pattern("XXX").
+                pattern("X X").
+                pattern("X X").
+                input('X', Metal.mithril).
+                criterion("has_item", RecipeProvider.conditionsFromItem(Metal.mithril)).
+                offerTo(exporter, Identifier.of("miteequilibrium","mithril_leggings"));
 
         //shield
 
@@ -175,9 +227,9 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
 
 
         offerSmelting(exporter,ADAMANTIUM_RAW,RecipeCategory.MISC,Metal.adamantium,100,200,"adamantium_raw");
-        offerSmelting(exporter,COPPER_INGOT,RecipeCategory.MISC,Metal.copper,10,200,"copper_ingot");
-        offerSmelting(exporter,MITHRIL_RAW,RecipeCategory.MISC,Metal.mithril,50,200,"mithril_raw");
-        offerSmelting(exporter,SILVER_RAW,RecipeCategory.MISC,Metal.silver,10,200,"silver_raw");
+        offerSmelting(exporter,COPPER_INGOT,RecipeCategory.MISC,Metal.copper,20,200,"copper_ingot");
+        offerSmelting(exporter,MITHRIL_RAW,RecipeCategory.MISC,Metal.mithril,80,200,"mithril_raw");
+        offerSmelting(exporter,SILVER_RAW,RecipeCategory.MISC,Metal.silver,30,200,"silver_raw");
 
         //piece->flint
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Items.FLINT).
@@ -328,7 +380,7 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
 
 
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.ADMANTIUM_SHOVEL).
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.ADAMANTIUM_SHOVEL).
                 pattern("X").
                 pattern("Y").
                 pattern("Y").
@@ -439,7 +491,7 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
                 offerTo(exporter, Identifier.of("miteequilibrium","gold_dagger"));
 
         //hoe
-        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.ADMANTIUM_HOE).
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.ADAMANTIUM_HOE).
                 pattern("XX").
                 pattern(" Y").
                 pattern(" Y").
@@ -494,7 +546,7 @@ public class ModRecipeGenerator extends FabricRecipeProvider {
 
 
         //pickaxe
-        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.ADMANTIUM_PICKAXE).
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Tools.ADAMANTIUM_PICKAXE).
                 pattern("XXX").
                 pattern(" Y ").
                 pattern(" Y ").

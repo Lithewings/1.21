@@ -1,5 +1,7 @@
 package com.equilibrium.mixin.tables;
 
+import com.equilibrium.util.ServerInfoRecorder;
+import com.equilibrium.util.WorldMoonPhasesSelector;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -19,6 +21,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Objects;
 
 import static com.equilibrium.entity.goal.AStarPathfinder.findPath;
 
@@ -79,12 +83,25 @@ public abstract class BedBlockMixin extends HorizontalFacingBlock implements Blo
         if (world.isClient) {
             cir.setReturnValue(ActionResult.CONSUME);
         }
+
+
+
+
+
+
 //        RegistryKey<World> registryKey = RegistryKey.of(RegistryKeys.WORLD, Identifier.of("miteequilibrium", "underworld"));
         if (player.getWorld().getRegistryKey() !=World.OVERWORLD) {
             player.sendMessage(Text.of("你无法在主世界之外的维度睡觉"),true);
             cir.setReturnValue(ActionResult.SUCCESS);
             return;
         }
+        if(Objects.equals(WorldMoonPhasesSelector.getMoonType(), "bloodMoon")) {
+            player.sendMessage(Text.of("血月让你无法休息"), true);
+            cir.setReturnValue(ActionResult.SUCCESS);
+            return;
+        }
+
+
         if (!world.isClient) {
             // 找到床头位置（如果是床尾则偏移到床头）
             if (state.get(BedBlock.PART) != BedPart.HEAD) {
@@ -102,9 +119,18 @@ public abstract class BedBlockMixin extends HorizontalFacingBlock implements Blo
                 // 向玩家发送找到的坐标信息
 //                player.sendMessage(Text.literal("找到的空气方块位置: " + firstAirPos+"并以此计算休息位置的安全程度"), true);
                 if(!(findPath(world,pos,firstAirPos)==null)){
-                    player.sendMessage(Text.of("这里并不安全,你无法入睡或设置重生点,尝试彻底封闭周围空间"),true);
+                    player.sendMessage(Text.of("这里并不安全,你无法入睡,尝试彻底封闭周围空间"),true);
                     cir.setReturnValue(ActionResult.SUCCESS);
-
+                }
+                else{
+                    //足够安全后,检查时间
+                    if(world.getTimeOfDay() % 24000L<15500 && !Objects.equals(WorldMoonPhasesSelector.getMoonType(), "fullMoon")){
+                    player.sendMessage(Text.of("你并没有困意"), true);
+                    cir.setReturnValue(ActionResult.SUCCESS);
+                    } else if (Objects.equals(WorldMoonPhasesSelector.getMoonType(), "fullMoon")) {
+                        player.sendMessage(Text.of("满月让你感到失眠"),true);
+                        cir.setReturnValue(ActionResult.SUCCESS);
+                    }
                 }
 
 
@@ -112,6 +138,7 @@ public abstract class BedBlockMixin extends HorizontalFacingBlock implements Blo
                 player.sendMessage(Text.literal("你无法在露天位置睡觉"), true);
                 cir.setReturnValue(ActionResult.SUCCESS);
             }
+
 
 
         }

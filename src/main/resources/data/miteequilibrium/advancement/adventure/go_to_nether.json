@@ -1,0 +1,31 @@
+{
+  "parent": "miteequilibrium:adventure/go_to_underworld",
+
+  "criteria": {
+    "go_to_nether": {
+      "conditions": {
+        "to": "minecraft:the_nether"
+      },
+      "trigger": "minecraft:changed_dimension"
+    }
+  },
+  "display": {
+    "frame": "challenge",
+    "announce_to_chat": false,
+    "description": "进入下界\n你需要先设法来到地底世界的最底部，然后建立传送门，这将会是一场极为漫长的旅途\n获得500XP",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:netherrack"
+    },
+    "title": "让我们更深入一些"
+  },
+  "requirements": [
+    [
+      "go_to_nether"
+    ]
+  ],
+  "rewards": {
+    "experience": 200
+  },
+  "sends_telemetry_event": true
+}

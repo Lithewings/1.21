@@ -1,0 +1,38 @@
+{
+  "parent": "miteequilibrium:adventure/enter_the_end",
+
+  "criteria": {
+    "killed_dragon": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "minecraft:ender_dragon"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "frame": "challenge",
+    "description":
+      "击败末影龙,到达旅途的终点",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:dragon_head"
+    },
+    "title":
+      "结束了。"
+
+  },
+  "requirements": [
+    [
+      "killed_dragon"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

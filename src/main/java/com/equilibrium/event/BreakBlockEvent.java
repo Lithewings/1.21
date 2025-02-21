@@ -1,10 +1,7 @@
 package com.equilibrium.event;
-import com.equilibrium.block.ModBlocks;
 import com.equilibrium.item.Metal;
 import com.equilibrium.tags.ModBlockTags;
-import com.equilibrium.tags.ModItemTags;
 import com.equilibrium.util.BlockToItemConverter;
-import com.equilibrium.util.IsMinable;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -16,14 +13,15 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
+
+
 
 public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
     BlockToItemConverter blockToItemConverter = new BlockToItemConverter();
@@ -39,6 +37,10 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
      */
     @Override
     public void afterBlockBreak(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity) {
+
+
+
+
 
         ItemStack itemStack =player.getMainHandStack();
 
@@ -56,8 +58,8 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
         if(state.isIn(ModBlockTags.LOG_120)){
             itemStack.damage(120,player, EquipmentSlot.MAINHAND);
             player.sendMessage(Text.of("-120"));
-        }else
-
+        }
+        else
         if(state.isIn(ModBlockTags.STONE_LIKE_240)){
             itemStack.damage(240,player, EquipmentSlot.MAINHAND);
             player.sendMessage(Text.of("-240"));
@@ -76,18 +78,19 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
         //240 360 480其余没有列出的,但是确实比较硬的物品,而且在三者子集里容易冲突
         else
         if(state.isIn(BlockTags.NEEDS_STONE_TOOL)){
-            itemStack.damage(240,player, EquipmentSlot.MAINHAND);
-            player.sendMessage(Text.of("-240"));}
+            itemStack.damage(120,player, EquipmentSlot.MAINHAND);
+            player.sendMessage(Text.of("-120"));}
         else
         if(state.isIn(BlockTags.NEEDS_IRON_TOOL)) {
-            itemStack.damage(360, player, EquipmentSlot.MAINHAND);
-            player.sendMessage(Text.of("-360"));
+            itemStack.damage(180, player, EquipmentSlot.MAINHAND);
+            player.sendMessage(Text.of("-180"));
         }
         else
         if(state.isIn(BlockTags.NEEDS_DIAMOND_TOOL)) {
-            itemStack.damage(480, player, EquipmentSlot.MAINHAND);
-            player.sendMessage(Text.of("-480"));
+            itemStack.damage(240, player, EquipmentSlot.MAINHAND);
+            player.sendMessage(Text.of("-240"));
         }
+        //这些都是玩家空手即可采集的方块
         else
         if(state.isIn(ModBlockTags.NORMAL_30)){
             itemStack.damage(30,player, EquipmentSlot.MAINHAND);
@@ -118,6 +121,7 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
 
         }
         if (state.getBlock() == Blocks.GRAVEL) {
+
 
 
             if (slikTouch==1){
@@ -187,6 +191,7 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
                 world.spawnEntity(new ItemEntity(world, pos.getX()+0.5, pos.getY(), pos.getZ()+0.5,
                         new ItemStack(item)));
                 //若时运为3,则表示随机的数字 0 1 2 3 4 5 6 7 8 9 中大于等于7的概率,即0.3
+                //时运触发时,相当于又挖了一块相同的矿石
                 if(random.nextInt(10)>=(10-furtuneLevel)){
                     world.spawnEntity(new ItemEntity(world, pos.getX()+0.5, pos.getY(), pos.getZ()+0.5,
                             new ItemStack(item)));

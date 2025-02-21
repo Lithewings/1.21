@@ -59,7 +59,7 @@ public class CraftingDifficultyHelper {
 		int totalDifficulty2 = (int) item_difficulty;
 
 		totalDifficulty1 = (int) Math.log(totalDifficulty1);
-		totalDifficulty2 = (int) Math.pow(totalDifficulty2,0.68);
+		totalDifficulty2 = (int) Math.pow(totalDifficulty2,0.64);
 
 
 		return totalDifficulty1*totalDifficulty2;

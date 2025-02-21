@@ -1,0 +1,28 @@
+{
+  "parent": "miteequilibrium:adventure/follow_ender_eye",
+  "criteria": {
+    "entered_end": {
+      "conditions": {
+        "to": "minecraft:the_end"
+      },
+      "trigger": "minecraft:changed_dimension"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "来到末地，为击败末影龙做准备，希望你没有忘记携带艾德曼镐"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:end_stone"
+    },
+    "title": "落地水大考验"
+
+  },
+  "requirements": [
+    [
+      "entered_end"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

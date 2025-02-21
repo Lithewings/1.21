@@ -1,0 +1,33 @@
+{
+  "parent": "miteequilibrium:adventure/get_flint",
+  "criteria": {
+    "get_silver": {
+      "conditions": {
+        "items": [
+          {
+            "items": "miteequilibrium:silver_nugget"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "不断挖掘沙砾，获取第一颗银粒，收集9颗以制作银工作台\n将获得20XP",
+    "icon": {
+      "count": 1,
+      "id": "miteequilibrium:silver_nugget"
+    },
+    "title": "贵金属"
+  },
+  "requirements": [
+    [
+      "get_silver"
+    ]
+  ],
+  "rewards": {
+    "experience": 20
+  },
+  "sends_telemetry_event": true
+}

@@ -1,5 +1,6 @@
 package com.equilibrium.item.tools_attribute.metal;
 
+import com.equilibrium.item.tools_attribute.ModToolMaterials;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
@@ -10,16 +11,22 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
+
+import static com.equilibrium.item.tools_attribute.ExtraDamageFromExperienceLevel.getDamageLevel;
 
 public class MetalDagger extends ToolItem {
     public MetalDagger(ToolMaterial toolMaterial, Item.Settings settings) {
@@ -30,6 +37,10 @@ public class MetalDagger extends ToolItem {
         return new ToolComponent(
                 List.of(ToolComponent.Rule.ofAlwaysDropping(List.of(Blocks.COBWEB), 15.0F), ToolComponent.Rule.of(BlockTags.SWORD_EFFICIENT, 1.5F)), 1.0F, 0
         );
+    }
+    @Override
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+        tooltip.add(Text.literal("屠宰:对消极生物造成1.5倍伤害").formatted(Formatting.GRAY));
     }
 
 
@@ -63,8 +74,14 @@ public class MetalDagger extends ToolItem {
         return true;
     }
 
+
+
+
+
+
     @Override
     public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+
         stack.damage(50, attacker, EquipmentSlot.MAINHAND);
     }
 

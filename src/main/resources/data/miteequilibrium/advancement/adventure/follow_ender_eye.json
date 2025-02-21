@@ -1,0 +1,37 @@
+{
+  "parent": "miteequilibrium:adventure/use_ender_eye",
+  "criteria": {
+    "in_stronghold": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "minecraft:stronghold"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "description": "来到要塞,并在迷宫般的交错路口中找到传送门房间\n注意,传送门房间只会生成在据出生点至少12km以外的要塞中",
+
+    "icon": {
+      "count": 1,
+      "id": "minecraft:end_portal_frame"
+    },
+    "title": "隔墙有眼/意外收获?"
+
+  },
+  "requirements": [
+    [
+      "in_stronghold"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

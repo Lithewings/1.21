@@ -2,14 +2,14 @@ package com.equilibrium.tags;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
 public class ModBlockTags {
 
-
-
+    public static final TagKey<Block> SHOULD_BE_SOFT = of("should_be_soft");
 
     public static final TagKey<Block> STONE_LIKE_240 = of("stone_like_240");
     public static final TagKey<Block> STONE_LIKE_360 = of("stone_like_360");
@@ -38,6 +38,8 @@ public class ModBlockTags {
 
     public static final TagKey<Block> ORE = of("ore");
 
+    //功能性方块
+    public static final TagKey<Block> CATEGORY = of("category");
 
 
     private static TagKey<Block> of(String id) {

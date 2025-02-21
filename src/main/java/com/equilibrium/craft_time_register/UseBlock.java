@@ -18,7 +18,7 @@ public class UseBlock {
             if (!player.getWorld().isClient){
                 if(!player.isCreative()){
 //                    player.sendMessage(Text.of(name));
-                    //无法使用原版工作台
+//                    无法使用原版工作台
                     if(block == Blocks.CRAFTING_TABLE){
                         world.removeBlock(hitResult.getBlockPos(),true);
                     }

@@ -1,0 +1,29 @@
+{
+  "parent": "miteequilibrium:adventure/get_iron_pickaxe",
+  "criteria": {
+    "go_to_underworld": {
+      "conditions": {
+        "to": "miteequilibrium:underworld"
+      },
+      "trigger": "minecraft:changed_dimension"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "在主世界的最底部建立传送门，进入地下世界维度\n将获得200XP",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:flint_and_steel"
+    },
+    "title": "黑暗洞穴"
+  },
+  "requirements": [
+    [
+      "go_to_underworld"
+    ]
+  ],
+  "rewards": {
+    "experience": 200
+  },
+  "sends_telemetry_event": true
+}

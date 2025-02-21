@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BlockToItemConverter {
-    // 创建一个Map来存储Block和对应的Item
+    // 创建一个Map来存储Block和对应的Item,用于矿石掉落
     private Map<Block, Item> blockItemMap;
 
     public BlockToItemConverter() {
@@ -53,6 +53,8 @@ public class BlockToItemConverter {
         blockItemMap.put(Blocks.NETHER_GOLD_ORE, Items.GOLD_NUGGET);
         blockItemMap.put(Blocks.GILDED_BLACKSTONE, Items.GOLD_NUGGET);
 
+
+        blockItemMap.put(Blocks.NETHER_QUARTZ_ORE, Items.QUARTZ);
 
 
 

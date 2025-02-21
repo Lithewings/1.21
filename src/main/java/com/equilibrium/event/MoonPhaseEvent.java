@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LightningEntity;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.CreeperEntity;
@@ -16,6 +17,7 @@ import net.minecraft.entity.mob.SkeletonEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.PlaySoundCommand;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -27,12 +29,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 
 import net.minecraft.world.level.ServerWorldProperties;
+import net.minecraft.world.poi.PointOfInterestStorage;
+import net.minecraft.world.poi.PointOfInterestTypes;
 
 public class MoonPhaseEvent {
     private static final EntityType<?>[] ANIMAL_TYPES = new EntityType[]{
@@ -58,6 +65,120 @@ public class MoonPhaseEvent {
         }
     }
 
+
+//    public static MinecraftServer MainMoonPhaseEvent(MinecraftServer server) {
+//        //获取时间,得到月相,决定是否触发月相事件
+//
+//        //月相事件
+//        String moonType = getMoonType(server.getWorld(World.OVERWORLD));
+//        ServerWorld serverOverWorld = server.getWorld(World.OVERWORLD);
+//        boolean isNoPlayersInTheOverWorld = serverOverWorld.getPlayers().isEmpty();
+//        Random random = new Random();
+//
+//
+//
+//        if (isNoPlayersInTheOverWorld) {
+//            if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 3)
+//                for (PlayerEntity player : server.getPlayerManager().getPlayerList())
+//                    player.sendMessage(Text.of("由于主世界没有玩家,随机刻速度已回调至默认值"), true);
+//            RandomTickModifier(serverOverWorld, 3);
+//
+//        }
+//
+//        if (!Objects.equals(moonType, "errorMoontype"))
+//            return server;
+//
+//
+//
+//
+//
+//
+//
+//        //月相事件,只在主世界进行
+//
+//        //增大随机刻的条件
+//        boolean shouldRandomTickIncrease = (moonType.equals("blueMoon") || (moonType.equals("harvestMoon")) || (moonType.equals("haloMoon")));
+//        if (!shouldRandomTickIncrease) {
+//            if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 3) {
+//                for (PlayerEntity player : server.getPlayerManager().getPlayerList())
+//                    player.sendMessage(Text.of("由于处在普通月相,随机刻已回调至默认值"), true);
+//                RandomTickModifier(serverOverWorld, 3);
+//            }
+//        }
+//
+//
+//        if (moonType.equals("bloodMoon")) {
+//            if (serverOverWorld.getTimeOfDay() % 100 == 0) {
+//                //执行间隔事件
+//                spawnMobNearPlayer(serverOverWorld);
+//            }
+//            if (serverOverWorld.getTimeOfDay() % random.nextInt(50, 64) == 0) {
+//                //执行间隔事件
+//                controlWeather(serverOverWorld);
+////                        this.sendMessage(Text.of("雷电事件"));
+//            }
+//        }
+//
+//
+//        if (moonType.equals("harvestMoon") || (moonType.equals("haloMoon"))) {
+//            if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 4)
+//                RandomTickModifier(serverOverWorld, 4);
+////               if (this.age % 100 == 0) {
+//            //执行间隔事件
+////               this.sendMessage(Text.of("黄月/幻月升起,触发事件"));
+////               }
+//        }
+//
+//        if (moonType.equals("fullMoon")) {
+//            if (serverOverWorld.getTimeOfDay() % 100 == 0) {
+////              this.sendMessage(Text.of("满月升起,触发事件"));
+//                applyStrengthToHostileMobs(serverOverWorld);
+//            }
+//        }
+//
+//        if (moonType.equals("newMoon")) {
+//            if (serverOverWorld.getTimeOfDay() % 100 == 0) {
+//                applyWeaknessToHostileMobs(serverOverWorld);
+////              this.sendMessage(Text.of("新月升起,触发事件"));
+//            }
+//        }
+//
+//        //第一次蓝月,不改变随机刻速度
+//        if (moonType.equals("blueMoon")) {
+//            if (serverOverWorld.getTimeOfDay() > 24000) {
+//
+//                if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 5)
+//                    RandomTickModifier(serverOverWorld, 5);
+//                if (serverOverWorld.getTimeOfDay() % 1200 == 0) {
+//
+////								this.sendMessage(Text.of("蓝月升起,触发事件"));
+//                    //执行间隔事件
+//                    spawnAnimalNearPlayer(serverOverWorld);
+//                }
+//            } else {
+//                if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 3) {
+//                    for (PlayerEntity player : server.getPlayerManager().getPlayerList())
+//                        player.sendMessage(Text.of("由于第一天的蓝月并没有随机刻增益,随机刻应该修改为3"), true);
+//                    RandomTickModifier(serverOverWorld, 3);
+//                }
+//            }
+//            //应该是用world.找到所有玩家,这里无非就是避免客户端世界直接转服务器世界造成崩溃
+//            //待改进:应该是this.getWorld,如果不是客户端世界再执行spawnAnimal方法
+//
+//        }
+//        return server;
+//    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //满月加强怪物
     public static void applyStrengthToHostileMobs(ServerWorld world) {
         for (PlayerEntity player : world.getPlayers())
@@ -78,8 +199,9 @@ public class MoonPhaseEvent {
 
                 // 为每个敌对生物添加力量效果
                 for (HostileEntity mob : hostileMobs) {
+                    mob.getAttributeInstance(EntityAttributes.GENERIC_FOLLOW_RANGE).setBaseValue(256);
                     // 创建力量效果实例，持续时间单位为tick（20 ticks = 1秒），这里设为300 ticks, 即15秒
-                    StatusEffectInstance strength = new StatusEffectInstance(StatusEffects.STRENGTH, 6000, 0); // 0 为效果等级，0 级即为 I 级
+                    StatusEffectInstance strength = new StatusEffectInstance(StatusEffects.STRENGTH, 300, 0); // 0 为效果等级，0 级即为 I 级
                     mob.addStatusEffect(strength);
                 }
             }
@@ -102,9 +224,10 @@ public class MoonPhaseEvent {
                     // 获取敌对生物列表
                     List<HostileEntity> hostileMobs = world.getEntitiesByType(hostileFilter, searchBox, HostileEntity::isAlive);
 
-                    // 为每个敌对生物添加虚弱效果
+                    // 为每个敌对生物添加虚弱效果并削弱追踪距离
                     for (HostileEntity mob : hostileMobs) {
                         // 创建虚弱效果实例，持续时间单位为tick（20 ticks = 1秒），这里设为300 ticks, 即15秒
+                        mob.getAttributeInstance(EntityAttributes.GENERIC_FOLLOW_RANGE).setBaseValue(16);
                         StatusEffectInstance weakness = new StatusEffectInstance(StatusEffects.WEAKNESS, 6000, 0); // 0 为效果等级，0 级即为 I 级
                         StatusEffectInstance slowness = new StatusEffectInstance(StatusEffects.SLOWNESS, 6000, 1); // 0 为效果等级，0 级即为 I 级
                         mob.addStatusEffect(weakness);
@@ -207,14 +330,31 @@ public class MoonPhaseEvent {
         }
 
         LightningEntity lightning = EntityType.LIGHTNING_BOLT.create(world);
+        //搜索该位置最近的一个避雷针位置
+        Optional<BlockPos> availableLighteningRod = getLightningRodPos(world,spawnPos);
+
         if (lightning != null) {
-            lightning.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(spawnPos));
+            if(availableLighteningRod.isPresent())
+                //避雷针处生成闪电,若没有,则在玩家附近生成
+                lightning.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(availableLighteningRod.get()));
+            else
+                lightning.refreshPositionAfterTeleport(Vec3d.ofBottomCenter(spawnPos));
             world.spawnEntity(lightning);
         }
 
     }
-
-
+    //从ServerWorld中拿到的方法
+    private static Optional<BlockPos> getLightningRodPos(ServerWorld serverWorld , BlockPos pos) {
+        Optional<BlockPos> optional = serverWorld.getPointOfInterestStorage()
+                .getNearestPosition(
+                        poiType -> poiType.matchesKey(PointOfInterestTypes.LIGHTNING_ROD),
+                        innerPos -> innerPos.getY() == serverWorld.getTopY(Heightmap.Type.WORLD_SURFACE, innerPos.getX(), innerPos.getZ()) - 1,
+                        pos,
+                        128,
+                        PointOfInterestStorage.OccupationStatus.ANY
+                );
+        return optional.map(innerPos -> innerPos.up(1));
+    }
 
     public static void spawnAnimalNearPlayer(ServerWorld world) {
         PlayerEntity player = world.getRandomAlivePlayer();
@@ -273,11 +413,11 @@ public class MoonPhaseEvent {
             startThunderstorm(world);
             if (playerEntity != null)
                 if (playerEntity.getRandom().nextInt(4) == 0) {
-                    playerEntity.sendMessage(Text.of("雷声"));
+//                    playerEntity.sendMessage(Text.of("雷声"));
                     playerEntity.getWorld().playSound(null, BlockPos.ofFloored(playerEntity.getPos()), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.WEATHER, 1.0F, 1.0F);
                 } else {
                     spawnLighteningNearPlayer(world, playerEntity);
-                    playerEntity.sendMessage(Text.of("雷电"));
+//                    playerEntity.sendMessage(Text.of("雷电"));
                 }
 
 

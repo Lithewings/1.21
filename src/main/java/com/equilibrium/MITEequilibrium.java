@@ -11,23 +11,28 @@ import com.equilibrium.item.Metal;
 import com.equilibrium.item.ModItemGroup;
 import com.equilibrium.item.ModItems;
 import com.equilibrium.item.Tools;
+import com.equilibrium.mixin.player.ClientPlayerEntityMixin;
 import com.equilibrium.persistent_state.StateSaverAndLoader;
 import com.equilibrium.util.ServerInfoRecorder;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.component.ComponentType;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.particle.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.server.MinecraftServer;
@@ -35,8 +40,14 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.GameMode;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,16 +63,22 @@ import com.equilibrium.craft_time_worklevel.FurnaceIngredients;
 
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static com.equilibrium.enchantments.EnchantmentsCodec.registerAllOfEnchantments;
 import static com.equilibrium.entity.ModEntities.registerModEntities;
 
 
+import static com.equilibrium.event.MoonPhaseEvent.*;
+import static com.equilibrium.event.MoonPhaseEvent.RandomTickModifier;
+import static com.equilibrium.event.sound.SoundEventRegistry.registrySoundEvents;
 import static com.equilibrium.item.Armors.registerArmors;
 import static com.equilibrium.item.Metal.registerModItemRaw;
+import static com.equilibrium.item.extend_item.CoinItems.registerCoinItems;
 import static com.equilibrium.status.registerStatusEffect.registerStatusEffects;
 import static com.equilibrium.tags.ModBlockTags.registerModBlockTags;
 import static com.equilibrium.tags.ModItemTags.registerModItemTags;
@@ -69,7 +86,6 @@ import static com.equilibrium.util.LootTableModifier.modifierLootTables;
 
 import static com.equilibrium.ore_generator.ModPlacementGenerator.registerModOre;
 import static com.equilibrium.util.ServerInfoRecorder.isServerInstanceSet;
-import static net.minecraft.component.DataComponentTypes.ATTRIBUTE_MODIFIERS;
 
 
 public class MITEequilibrium implements ModInitializer {
@@ -78,6 +94,10 @@ public class MITEequilibrium implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	public static Config config;
+
+
+
+
 
 	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
@@ -142,7 +162,7 @@ public class MITEequilibrium implements ModInitializer {
 	private static final double M = 0.5;  // 中点
 
 
-	//玩家护甲值下降
+	//玩家护甲值下降,套装集齐效果
 	public static Text updatePlayerArmor(PlayerEntity player) {
 
 
@@ -196,6 +216,16 @@ public class MITEequilibrium implements ModInitializer {
 
 		//设定玩家护甲
 		player.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).setBaseValue(-protectionReduction);
+		//拥有至少10点护甲时,获得抗性提升效果
+		if(protection>10) {
+			boolean hasResistance = player.hasStatusEffect(StatusEffects.RESISTANCE);
+			if (!hasResistance)
+				player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 120, 0, false, false, false));
+			else if (player.getStatusEffect(StatusEffects.RESISTANCE).getDuration()<=20) {
+				player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 120, 0, false, false, false));
+			}
+		}
+
 
 		Text text =Text.literal(String.format(
 					"满耐久护甲=%.2f, 衰减系数=%.2f%%, 实际护甲=%.2f",
@@ -286,34 +316,179 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 	// 新的一天到来时触发的事件
 	private void onNewDay(MinecraftServer server, ServerWorld world, long worldTime) {
-		// 触发新的一天事件
-//		server.getPlayerManager().getPlayerList().forEach(player -> {
-//			player.sendMessage(Text.literal("新的一天开始了！"), false);
-//		});
+	}
 
+	public static TypedActionResult<ItemStack> onUseCrystalItem(ItemStack itemStack , PlayerEntity player,World world,int experience){
 
+		// 播放玻璃破碎的声音
+		player.playSound(SoundEvents.BLOCK_GLASS_BREAK, 1.0F, 1.0F);
+		//经验球获取的声音
+		player.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
+		// 返回成功，表示已处理
+
+		//增加经验
+		player.addExperience(experience);
+
+		// 获取玩家眼前的方向和位置
+		Vec3d eyePos = player.getEyePos();  // 玩家眼睛的位置
+		Vec3d lookDir = player.getRotationVector();  // 玩家视线方向
+
+		// 计算在玩家眼前的一定距离处的位置
+		double distance = 0.5;  // 控制粒子生成的距离
+		Vec3d particlePos = eyePos.add(lookDir.multiply(distance));
+
+		// 创建物品材质的破碎粒子
+		ItemStackParticleEffect particleEffect = new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack);
+
+		// 生成青金石物品的破碎粒子
+		for (int i = 0; i < 10; i++) {
+			double xOffset = (Math.random() - 0.5) * 0.85;  // 随机偏移
+			double yOffset = (Math.random() - 0.5) * 0.85;
+			double zOffset = (Math.random() - 0.5) * 0.85;
+
+			// 使用 `ITEM` 粒子类型生成青金石物品的破碎效果
+			world.addParticle(particleEffect,
+					particlePos.x + xOffset, particlePos.y + yOffset, particlePos.z + zOffset,
+					0, 0, 0);  // 可根据需要调整粒子速度
+		}
+		//消耗一个晶体
+		itemStack.setCount(itemStack.getCount()-1);
+		return TypedActionResult.success(itemStack);
 
 	}
 
 
-	public void onInitialize() {
 
+
+
+
+
+	public void onInitialize() {
+		//记录服务器实例
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 			ServerInfoRecorder.setServerInstance(server);  // 保存服务器实例
+			ServerInfoRecorder.setDay((int) server.getWorld(World.OVERWORLD).getTimeOfDay());
+			//锁定游戏难度:困难
+			server.setDifficulty(Difficulty.HARD,true);
+			server.setDifficultyLocked(true);
 		});
 
 
 		// 注册服务器 tick 事件
 		ServerTickEvents.START_SERVER_TICK.register(server -> {
-			// 记录服务器实例
+			// 若此前没有记录服务器实例,则记录一次
 			if(!isServerInstanceSet() )
 				ServerInfoRecorder.setServerInstance(server);
 			// 每隔 TICK_INTERVAL 次 tick 触发一次检查
 			tickCount++;
-			//护甲更新
-			if (tickCount >= TICK_INTERVAL/10) {
-				for(ServerPlayerEntity serverPlayerEntity : server.getPlayerManager().getPlayerList())
+			//获取时间,得到月相,决定是否触发月相事件
+
+			//月相事件
+			String moonType = getMoonType(server.getWorld(World.OVERWORLD));
+			ServerWorld serverOverWorld = server.getWorld(World.OVERWORLD);
+			boolean isNoPlayersInTheOverWorld = serverOverWorld.getPlayers().isEmpty();
+			Random random = new Random();
+
+
+			if (isNoPlayersInTheOverWorld) {
+				if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 3)
+					for (PlayerEntity player : server.getPlayerManager().getPlayerList())
+						player.sendMessage(Text.of("由于主世界没有玩家,随机刻速度已回调至默认值"), true);
+				RandomTickModifier(serverOverWorld, 3);
+
+			}
+
+			if (Objects.equals(moonType, "errorMoontype"))
+				for (PlayerEntity player : server.getPlayerManager().getPlayerList())
+					player.sendMessage(Text.of("月相加载失败"), true);
+			else{
+				//月相事件,只在主世界进行
+				//增大随机刻的条件
+				boolean shouldRandomTickIncrease = (moonType.equals("blueMoon") || (moonType.equals("harvestMoon")) || (moonType.equals("haloMoon")));
+				if (!shouldRandomTickIncrease) {
+					if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 3) {
+						for (PlayerEntity player : server.getPlayerManager().getPlayerList())
+							player.sendMessage(Text.of("由于处在普通月相,随机刻已回调至默认值"), true);
+						RandomTickModifier(serverOverWorld, 3);
+					}
+				}
+
+
+				if (moonType.equals("bloodMoon")) {
+					if (serverOverWorld.getTimeOfDay() % 100 == 0) {
+						//执行间隔事件
+						spawnMobNearPlayer(serverOverWorld);
+					}
+					if (serverOverWorld.getTimeOfDay() % random.nextInt(50, 64) == 0) {
+						//执行间隔事件
+						controlWeather(serverOverWorld);
+//                        this.sendMessage(Text.of("雷电事件"));
+					}
+				}
+
+
+				if (moonType.equals("harvestMoon") || (moonType.equals("haloMoon"))) {
+					if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 4)
+						RandomTickModifier(serverOverWorld, 4);
+//               if (this.age % 100 == 0) {
+					//执行间隔事件
+//               this.sendMessage(Text.of("黄月/幻月升起,触发事件"));
+//               }
+				}
+
+				if (moonType.equals("fullMoon")) {
+					if (serverOverWorld.getTimeOfDay() % 100 == 0) {
+//              this.sendMessage(Text.of("满月升起,触发事件"));
+						applyStrengthToHostileMobs(serverOverWorld);
+					}
+				}
+
+				if (moonType.equals("newMoon")) {
+					if (serverOverWorld.getTimeOfDay() % 100 == 0) {
+						applyWeaknessToHostileMobs(serverOverWorld);
+//              this.sendMessage(Text.of("新月升起,触发事件"));
+					}
+				}
+
+				//第一次蓝月,不改变随机刻速度
+				if (moonType.equals("blueMoon")) {
+					if (serverOverWorld.getTimeOfDay() > 24000) {
+
+						if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 5)
+							RandomTickModifier(serverOverWorld, 5);
+						if (serverOverWorld.getTimeOfDay() % 1200 == 0) {
+
+//								this.sendMessage(Text.of("蓝月升起,触发事件"));
+							//执行间隔事件
+							spawnAnimalNearPlayer(serverOverWorld);
+						}
+					} else {
+						if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 3) {
+							for (PlayerEntity player : server.getPlayerManager().getPlayerList())
+								player.sendMessage(Text.of("由于第一天的蓝月并没有随机刻增益,随机刻应该修改为3"), true);
+							RandomTickModifier(serverOverWorld, 3);
+						}
+					}
+					//应该是用world.找到所有玩家,这里无非就是避免客户端世界直接转服务器世界造成崩溃
+					//待改进:应该是this.getWorld,如果不是客户端世界再执行spawnAnimal方法
+
+				}
+			}
+
+
+
+
+
+
+
+
+            //护甲更新,玩家游戏模式更新
+			if (tickCount %(TICK_INTERVAL/10) == 0) {
+				for(ServerPlayerEntity serverPlayerEntity : server.getPlayerManager().getPlayerList()) {
 					updatePlayerArmor(serverPlayerEntity);
+//					if(serverPlayerEntity.isCreative())
+//						serverPlayerEntity.changeGameMode(GameMode.SURVIVAL);
+				}
 			}
 
 			if (tickCount >= TICK_INTERVAL) {
@@ -343,11 +518,60 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 
 
+		//使用物品监听器
+		UseItemCallback.EVENT.register((player, world, hand) -> {
+			// 获取玩家手中的物品
+			ItemStack itemStack = player.getStackInHand(hand);
+
+			// 判断是否为青金石
+			if (itemStack.getItem() == Items.LAPIS_LAZULI) {
+				return onUseCrystalItem(itemStack,player,world,25);
+			}
+			if (itemStack.getItem() == Items.QUARTZ) {
+				return onUseCrystalItem(itemStack,player,world,50);
+			}
+			if (itemStack.getItem() == Items.DIAMOND) {
+				return onUseCrystalItem(itemStack,player,world,500);
+			}
 
 
 
+			// 其他物品时不做处理
+			return TypedActionResult.pass(itemStack);
+        });
+
+		//原版物品添加tooltip
+		//不能和数据生成一起使用
+
+//		ItemTooltipCallback.EVENT.register((stack, context, type,lines) -> {
+//			// 判断物品是青金石（Lapis Lazuli）或其他物品
+//			if (stack.getItem() == Items.LAPIS_LAZULI) {
+//				lines.add(Text.literal("每个25XP").formatted(Formatting.DARK_GRAY));
+//			}
+//			if (stack.getItem() == Items.QUARTZ) {
+//				lines.add(Text.literal("每个50XP").formatted(Formatting.DARK_GRAY));
+//			}
+//			if (stack.getItem() == Items.DIAMOND) {
+//				lines.add(Text.literal("每个500XP").formatted(Formatting.DARK_GRAY));
+//			}
+//			if (stack.getItem() == Items.GOLDEN_APPLE) {
+//				lines.add(Text.literal("生命恢复 II（00:40）").formatted(Formatting.BLUE));
+//				lines.add(Text.literal("抗火（00:40）").formatted(Formatting.BLUE));
+//			}
+//		});
 
 
+		//玩家食用食品监听器
+//		OnPlayerEntityEatEvent.EVENT.register((player)->{
+//			if(!player.getWorld().isClient()) {
+//				player.sendMessage(Text.of("你吃掉了食物!"),true);
+//			}
+//			return ActionResult.SUCCESS;
+//        });
+
+
+
+		//合成金属镐监听器
 		CraftingMetalPickAxeCallback.EVENT.register((world,player) -> {
 
 //			DataFixer dataFixer = client.getDataFixer();  // 你需要初始化 DataFixer 实例
@@ -355,24 +579,21 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 
 
-
-
-
-
-
+			//创建持久状态类
 			StateSaverAndLoader serverState;
 			if(!world.isClient()){
+				//为这个新创建的类赋值,获取到服务器实例,这个实例在一开始从本地文件载入,然后复制一份到ServerInfoRecorder中去,所以这是可以读取到本地文件数据的
 				serverState = StateSaverAndLoader.getServerState(ServerInfoRecorder.getServerInstance());
 			}else{
 				return ActionResult.PASS;
 			}
-
+			//直接访问成员变量即可
 			boolean craftedIronPickaxe = serverState.isPickAxeCrafted;
 
 			if(!craftedIronPickaxe){
 				if(!world.isClient()) {
 					serverState.isPickAxeCrafted =true;
-					player.sendMessage(Text.of("你第一次合成了铁镐"));
+					player.sendMessage(Text.of("你第一次合成了金属镐"));
 				}
 				else
 					return ActionResult.PASS;
@@ -390,9 +611,23 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 
 
+		//命令注册
 		CommandRegistrationCallback.EVENT.register(this::registerCommands);
 
 
+
+
+
+
+
+
+
+		//附魔注册(记得把数据驱动部分也做好)
+		registerAllOfEnchantments();
+
+
+
+		//僵尸破坏方块进度列表
 		init();
 
 		//护甲添加
@@ -412,6 +647,8 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 		//以下开始正式添加物品:
 
+		//添加硬币物品
+		registerCoinItems();
 
 		//添加工具物品
 		Tools.registerModItemTools();
@@ -461,9 +698,9 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 		CreativeGroup.addGroup();
 		UseBlock.init();
-		Registry.register(Registries.SOUND_EVENT, SoundEventRegistry.finishSoundID, SoundEventRegistry.finishSound);
 
 
+		registrySoundEvents();
 
 		LOGGER.info("Hello Fabric world!");
 	}

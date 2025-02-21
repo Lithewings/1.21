@@ -1,4 +1,10 @@
 accessWidener v1 named
+
+accessible field net/minecraft/client/network/ClientPlayerEntity client Lnet/minecraft/client/MinecraftClient;
+accessible method net/minecraft/entity/mob/ZombieVillagerEntity setConverting (Ljava/util/UUID;I)V
+
+accessible method net/minecraft/block/CropBlock getAvailableMoisture (Lnet/minecraft/block/Block;Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;)F
+
 accessible field net/minecraft/client/gui/widget/TabNavigationWidget tabButtons Lcom/google/common/collect/ImmutableList;
 accessible class net/minecraft/client/gui/screen/world/CreateWorldScreen$WorldTab
 accessible field net/minecraft/client/gui/widget/TabNavigationWidget tabs Lcom/google/common/collect/ImmutableList;

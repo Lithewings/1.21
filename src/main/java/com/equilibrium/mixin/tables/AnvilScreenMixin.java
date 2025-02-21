@@ -1,6 +1,5 @@
 package com.equilibrium.mixin.tables;
 
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.AnvilScreen;
 import net.minecraft.client.gui.screen.ingame.ForgingScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -10,8 +9,7 @@ import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(AnvilScreen.class)
 public abstract class AnvilScreenMixin extends ForgingScreen<AnvilScreenHandler> { @Shadow protected abstract void setup();
@@ -20,13 +18,8 @@ public abstract class AnvilScreenMixin extends ForgingScreen<AnvilScreenHandler>
         super(handler, playerInventory, title, texture);
     }
 
-    @Inject(method = "drawForeground",at = @At("HEAD"))
-    protected void drawForeground(DrawContext context, int mouseX, int mouseY, CallbackInfo ci) {
-//        int i = this.handler.getLevelCost();
-//        if(i==0)
-//            super.drawForeground(context, mouseX, mouseY);
-//        else
-//            ci.cancel();
-//
-//    }
+    @ModifyArg(method = "drawForeground",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I"),index = 1)
+    protected Text drawForeground(Text text) {
+        int i = this.handler.getLevelCost();
+        return Text.of( Text.translatable("container.repair.require").getString()+": "+i);
     }}

@@ -29,15 +29,6 @@ public class ServerInfoRecorder {
         else
             return true;
     }
-    //判断是否制作了稿子
-    public static boolean getStructureGenerateValidity(){
-        if(serverInstance!=null){
-            StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(serverInstance);
-            return serverState.isPickAxeCrafted;
-        }else
-            return false;
-
-    }
 
 
 

@@ -1,0 +1,30 @@
+{
+  "parent": "miteequilibrium:adventure/get_mithril",
+  "criteria": {
+    "get_diamond": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:diamond"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": "制作秘银镐以采集钻石，为制作附魔台做准备",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:diamond"
+    },
+    "title": "钻石!"
+  },
+  "requirements": [
+    [
+      "get_diamond"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
