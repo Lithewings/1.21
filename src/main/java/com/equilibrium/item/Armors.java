@@ -22,6 +22,13 @@ public class Armors {
     public static final Item MITHRIL_BOOTS =new ArmorItem(ModArmorMaterials.MITHRIL, ArmorItem.Type.BOOTS,new Item.Settings().maxDamage(4*64));
 
 
+
+    public static final Item ANCIENT_METAL_CHAINMAIL_HELMET =new ArmorItem(ModArmorMaterials.ANCIENT_METAL_CHAINMAIL, ArmorItem.Type.HELMET,new Item.Settings().maxDamage(5*32));
+    public static final Item ANCIENT_METAL_CHAINMAIL_CHEST_PLATE =new ArmorItem(ModArmorMaterials.ANCIENT_METAL_CHAINMAIL, ArmorItem.Type.CHESTPLATE,new Item.Settings().maxDamage(8*32));
+    public static final Item ANCIENT_METAL_CHAINMAIL_LEGGINGS =new ArmorItem(ModArmorMaterials.ANCIENT_METAL_CHAINMAIL, ArmorItem.Type.LEGGINGS,new Item.Settings().maxDamage(7*32));
+    public static final Item ANCIENT_METAL_CHAINMAIL_BOOTS =new ArmorItem(ModArmorMaterials.ANCIENT_METAL_CHAINMAIL, ArmorItem.Type.BOOTS,new Item.Settings().maxDamage(4*32));
+
+
     public static void registerArmors(Item item ,String string) {
         Registry.register(Registries.ITEM, Identifier.of(MOD_ID,string), item);
 
@@ -36,6 +43,15 @@ public class Armors {
         registerArmors(MITHRIL_CHEST_PLATE,"mithril_chest_plate");
         registerArmors(MITHRIL_LEGGINGS,"mithril_leggings");
         registerArmors(MITHRIL_BOOTS,"mithril_boots");
+
+        registerArmors(ANCIENT_METAL_CHAINMAIL_HELMET,"ancient_metal_chainmail_helmet");
+        registerArmors(ANCIENT_METAL_CHAINMAIL_CHEST_PLATE,"ancient_metal_chainmail_chest_plate");
+        registerArmors(ANCIENT_METAL_CHAINMAIL_LEGGINGS,"ancient_metal_chainmail_leggings");
+        registerArmors(ANCIENT_METAL_CHAINMAIL_BOOTS,"ancient_metal_chainmail_boots");
+
+
+
+
     }
 
 }

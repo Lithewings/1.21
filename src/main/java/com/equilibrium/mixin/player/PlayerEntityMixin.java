@@ -110,9 +110,13 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         if(this.getMainHandStack().isIn(ModItemTags.DAGGERS) && target instanceof PassiveEntity) {
             otherBonus=1.5F;
         }
-        if((this.getMainHandStack().isOf(Tools.SILVER_SWORD)||this.getMainHandStack().isOf(Tools.SILVER_DAGGER) ) && target.getType().isIn(UNDEAD)) {
+        if((this.getMainHandStack().isOf(Tools.SILVER_DAGGER) ) && target.getType().isIn(UNDEAD)) {
             otherBonus=1.5F;
         }
+        if((this.getMainHandStack().isOf(Tools.SILVER_SWORD) ) && target.getType().isIn(UNDEAD)) {
+            otherBonus=2F;
+        }
+
         //非独立乘区
         this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(experienceBonus*otherBonus);
 
@@ -241,7 +245,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo ci) {
-
+        this.sendMessage(Text.of(this.getWorld().getDifficulty().getName()));
         //202501230630 完成了测试,直接把不可合成的药水名字换成迅捷药水之类的即可,不过最好用translate的那种
 //        this.getMainHandStack().set(POTION_CONTENTS, new PotionContentsComponent(Optional.empty(),Optional.empty(),List.of(new StatusEffectInstance(SPEED, 20, 0, true, true))));
 //        this.getMainHandStack().set(ITEM_NAME,Text.of("dd"));
@@ -457,6 +461,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     public abstract boolean isCreative();
 
     @Shadow public abstract void playSound(SoundEvent sound, float volume, float pitch);
+
+    @Shadow public abstract void sendMessage(Text message, boolean overlay);
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void tick(CallbackInfo ci){

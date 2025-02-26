@@ -35,5 +35,6 @@ public abstract class ConcentricRingsStructurePlacementMixin implements Structur
 
     @Final
     @Shadow
-    private int count =4095;
+    //谨慎选取大小,这会严重影响加载世界时的性能
+    private int count =128;
 }

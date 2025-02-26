@@ -1,7 +1,6 @@
 package com.equilibrium.util;
 
 import com.equilibrium.block.ModBlocks;
-import com.equilibrium.config.CommonConfig;
 import com.equilibrium.item.Metal;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.CraftingScreen;
@@ -151,10 +150,10 @@ public class CraftingDifficultyHelper {
 
 
 
-
-		if(CommonConfig.craftItemTimeMap.containsKey(name)){
-			return CommonConfig.craftItemTimeMap.get(name);
-		}
+//
+//		if(CommonConfig.craftItemTimeMap.containsKey(name)){
+//			return CommonConfig.craftItemTimeMap.get(name);
+//		}
 
 		return 20F;
 	}

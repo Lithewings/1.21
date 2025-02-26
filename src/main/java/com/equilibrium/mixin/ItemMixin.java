@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static com.equilibrium.constant.MaxCount.vanillaMaxCount;
+
 import static net.minecraft.component.DataComponentTypes.*;
 import static net.minecraft.item.Items.register;
 
@@ -28,18 +28,7 @@ public class ItemMixin {
     @Shadow
     private static final Interner<ComponentMap> COMPONENT_MAP_INTERNER = Interners.newStrongInterner();
 
-    ComponentMap DEFAULT_ITEM_COMPONENTS = vanillaMaxCount ?
-
-            ComponentMap.builder()
-            .add(MAX_STACK_SIZE, 64)
-            .add(LORE, LoreComponent.DEFAULT)
-            .add(ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT)
-            .add(REPAIR_COST, 0)
-            .add(ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT)
-            .add(RARITY, Rarity.COMMON)
-            .build()
-
-            :
+    ComponentMap DEFAULT_ITEM_COMPONENTS =
 
             ComponentMap.builder()
             .add(MAX_STACK_SIZE, 16)

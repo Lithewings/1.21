@@ -1,7 +1,7 @@
 package com.equilibrium.mixin.portal;
 
 import com.equilibrium.block.ModBlocks;
-import com.equilibrium.block.UnderworldPortalBlock;
+
 import net.minecraft.block.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;

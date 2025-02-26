@@ -58,5 +58,35 @@
     "sounds": [
       "miteequilibrium:mob/ghoul/death"
     ]
+  },
+
+
+
+
+  "mob.wight.death": {
+    "sounds": [
+      "miteequilibrium:mob/wight/death"
+    ]
+  },
+  "mob.wight.say1": {
+    "sounds": [
+      "miteequilibrium:mob/ghoul/say1"
+    ]
+  },
+
+  "mob.wight.say2": {
+    "sounds": [
+      "miteequilibrium:mob/ghoul/say2"
+    ]
+  },
+  "mob.wight.hurt1": {
+    "sounds": [
+      "miteequilibrium:mob/ghoul/hurt1"
+    ]
+  },
+  "mob.wight.hurt2": {
+    "sounds": [
+      "miteequilibrium:mob/ghoul/hurt2"
+    ]
   }
 }

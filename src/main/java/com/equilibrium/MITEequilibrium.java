@@ -13,8 +13,10 @@ import com.equilibrium.item.ModItems;
 import com.equilibrium.item.Tools;
 import com.equilibrium.mixin.player.ClientPlayerEntityMixin;
 import com.equilibrium.persistent_state.StateSaverAndLoader;
+import com.equilibrium.util.OnServerInitializeMethod;
 import com.equilibrium.util.ServerInfoRecorder;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
@@ -41,8 +43,11 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Difficulty;
@@ -53,7 +58,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-import com.equilibrium.config.Config;
+
 import com.equilibrium.craft_time_register.BlockEnityRegistry;
 
 import com.equilibrium.event.sound.SoundEventRegistry;
@@ -82,10 +87,12 @@ import static com.equilibrium.item.extend_item.CoinItems.registerCoinItems;
 import static com.equilibrium.status.registerStatusEffect.registerStatusEffects;
 import static com.equilibrium.tags.ModBlockTags.registerModBlockTags;
 import static com.equilibrium.tags.ModItemTags.registerModItemTags;
-import static com.equilibrium.util.LootTableModifier.modifierLootTables;
+
 
 import static com.equilibrium.ore_generator.ModPlacementGenerator.registerModOre;
+import static com.equilibrium.util.OnServerInitializeMethod.onUseCrystalItem;
 import static com.equilibrium.util.ServerInfoRecorder.isServerInstanceSet;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 
 
 public class MITEequilibrium implements ModInitializer {
@@ -93,7 +100,7 @@ public class MITEequilibrium implements ModInitializer {
 	public static final String MOD_ID = "miteequilibrium";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	public static Config config;
+//	public static Config config;
 
 
 
@@ -112,34 +119,147 @@ public class MITEequilibrium implements ModInitializer {
 	}
 
 
+	public static void talkToAllServerPlayer(MinecraftServer server , String context){
+		for(ServerPlayerEntity serverPlayer : server.getPlayerManager().getPlayerList()) {
+			serverPlayer.sendMessage(Text.of(context));
+		}
+	}
+
+
+
 
 
 
 	// 注册命令的标准方式，适配 CommandDispatcher 的签名
 	private void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
-		// 注册 /locate structure 指令
-//		dispatcher.register(
-//				CommandManager.literal("locate")
-//						.then(
-//								CommandManager.literal("structure")
-//										.then(
-//												CommandManager.argument("structure", StringArgumentType.word())
-//														.executes(context -> executeLocateStructure(context.getSource()))
-//										)
-//						)
-//		);
-
-//
 		dispatcher.register(
 				CommandManager.literal("village")
 						.executes
-								(this::isPickAxeCrafted)
-
-
-
+								(OnServerInitializeMethod::isPickAxeCrafted)
 
 		);
+//		dispatcher.register(CommandManager.literal("hardcore")
+//				.executes(context -> {
+//					ServerCommandSource source = context.getSource();
+//					PlayerEntity player = source.getPlayer();
+//
+//
+//
+//
+//					// 构建可点击文本
+//					Text clickableText = Text.literal("[切换到聊天栏,点击文字切换至极限模式(该操作将无法撤销)]")
+//							.styled(style -> style
+//									.withColor(Formatting.GREEN)
+//									.withClickEvent(new ClickEvent(
+//											ClickEvent.Action.RUN_COMMAND,
+//											"/triggeraction" // 点击后触发的命令
+//									))
+//									.withHoverEvent(new HoverEvent(
+//											HoverEvent.Action.SHOW_TEXT,
+//											Text.of("该操作将无法撤销,是否继续?")
+//									))
+//							);
+//					// 发送消息给玩家
+//					player.sendMessage(clickableText, false);
+//					return 1;
+//				}));
+//
+//
+//		dispatcher.register(CommandManager.literal("triggeraction")
+//				.executes(context -> {
+//					MinecraftServer server = context.getSource().getServer();
+//					ServerCommandSource source = context.getSource();
+//					PlayerEntity player = source.getPlayer();
+//
+//					if(context.getSource().getWorld().getTimeOfDay()>24000L){
+//						player.sendMessage(Text.of("目前状态无法再切换至极限模式（生存时间已大于1天）"));
+//						return 1;
+//					}
+//
+//
+//
+//					// 执行自定义逻辑（例如发送提示）
+//					talkToAllServerPlayer(server,"世界已切换至极限模式,重新进入世界以生效设置");
+//
+//					// 这里可以添加更多操作，如给予物品、修改游戏状态等
+//
+//					//放到记录类中,在别的位置可能就会用到
+//					StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(ServerInfoRecorder.getServerInstance());
+//					serverState.keepHardcore=true;
+//
+//
+//
+//
+//					return 1;
+//				}));
 
+
+
+
+
+
+//		dispatcher.register(
+//				CommandManager.literal("difficultyLevel")
+//						.then(CommandManager.literal("set")
+//								.then(CommandManager.argument("level", IntegerArgumentType.integer())
+//										.executes(commandContext -> {
+//											MinecraftServer server = commandContext.getSource().getServer();
+//											if(server.getWorld(World.OVERWORLD).getTimeOfDay()>24000L) {
+//												talkToAllServerPlayer(server, "目前无法再使用该命令调整游戏难度等级（生存时间已大于1天）");
+//												return 1;
+//											}
+//
+//
+//
+//											int level = IntegerArgumentType.getInteger(commandContext, "level");
+//
+//
+//											StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(server);
+//
+//
+//											switch(level){
+//												case 0:{
+//													server.setDifficulty(Difficulty.EASY,true);
+//													talkToAllServerPlayer(server,"游戏难度将始终保持在简单难度");
+//													serverState.difficultyLevel = level;
+//													break;
+//												}
+//												case 1: {
+//													server.setDifficulty(Difficulty.NORMAL, true);
+//													talkToAllServerPlayer(server, "游戏难度将始终保持在普通难度");
+//													serverState.difficultyLevel = level;
+//													break;
+//												}
+//												case 2: {
+//													server.setDifficulty(Difficulty.HARD, true);
+//													talkToAllServerPlayer(server, "游戏难度将始终保持在困难难度");
+//													serverState.difficultyLevel = level;
+//													break;
+//												}
+//												default:
+//													server.setDifficulty(Difficulty.NORMAL,true);
+//													talkToAllServerPlayer(server,"未知的游戏难度等级,请重新选择难度");
+//													break;
+//											}
+//
+//
+//											return 1;
+//
+//
+//
+//
+//
+//
+//										}
+//
+//
+//
+//
+//										)
+//
+//
+//
+//		)));
 		// 监听右键点击事件，检查是否持有指南针
 //		ServerTickEvents.END_SERVER_TICK.register(server -> {
 //			for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
@@ -157,98 +277,9 @@ public class MITEequilibrium implements ModInitializer {
 //		});
 	}
 
-	// Logistic 曲线参数，可根据需求调整
-	private static final double K = 10.0; // 陡峭度
-	private static final double M = 0.5;  // 中点
-
-
-	//玩家护甲值下降,套装集齐效果
-	public static Text updatePlayerArmor(PlayerEntity player) {
 
 
 
-		ArrayList<ItemStack> armorItemList = new ArrayList<>();
-		player.getArmorItems().forEach(element->{
-			if(element.getItem() instanceof ArmorItem)
-				armorItemList.add(element);
-				}
-		);
-		//空护甲时直接返回
-		if(armorItemList.isEmpty()) {
-			player.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).setBaseValue(0.0D);
-			return Text.of("The armor equipment is empty");
-		}
-
-		//由于耐久损耗,实际获得的护甲值
-		double protection = 0;
-		//最大护甲值,或者说满耐久护甲值
-		double maxProtection = 0;
-
-		for(ItemStack itemStack : armorItemList){
-			if(itemStack.getItem() instanceof ArmorItem){
-				ArmorItem armorItem = (ArmorItem) itemStack.getItem();
-				//最大护甲值
-				int baseProtection = armorItem.getProtection();
-				//加到理论最大护甲值里面
-				maxProtection = maxProtection + baseProtection;
-				//最大耐久
-				int baseDurability = itemStack.getMaxDamage();
-				//目前耐久
-				int durability = baseDurability - itemStack.getDamage();
-				//满耐久一定获得满护甲值
-				if (durability==baseDurability) {
-					protection = protection + baseProtection;
-				} else {
-					//计算线性耐久度比例
-					float linearRatio = (float) durability / baseDurability;
-					//应用 S 型曲线 (Logistic) 做非线性衰减
-					float sCurveRatio = (float) logisticFunction(linearRatio, K, M);
-					//实际获得的护甲值
-					double exactProtection = baseProtection * (sCurveRatio);
-					//加到获得的总护甲值里面
-					protection = protection + exactProtection;
-				}
-			}
-		}
-		//总护甲损耗
-		double protectionReduction = maxProtection-protection;
-
-
-		//设定玩家护甲
-		player.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).setBaseValue(-protectionReduction);
-		//拥有至少10点护甲时,获得抗性提升效果
-		if(protection>10) {
-			boolean hasResistance = player.hasStatusEffect(StatusEffects.RESISTANCE);
-			if (!hasResistance)
-				player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 120, 0, false, false, false));
-			else if (player.getStatusEffect(StatusEffects.RESISTANCE).getDuration()<=20) {
-				player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 120, 0, false, false, false));
-			}
-		}
-
-
-		Text text =Text.literal(String.format(
-					"满耐久护甲=%.2f, 衰减系数=%.2f%%, 实际护甲=%.2f",
-					maxProtection,
-					100*(float)(1-protection/maxProtection),
-					protection));
-
-//		if(!player.getWorld().isClient())
-//			player.sendMessage(text);
-		return text;
-
-
-
-
-		// 6. 可选：发送提示给玩家
-//		if(!player.getWorld().isClient())
-//			player.sendMessage(Text.literal(String.format(
-//					"满耐久护甲=%.2f, 衰减系数=%.2f%%, 实际护甲=%.2f",
-//					maxProtection,
-//					100*(float)(1-protection/maxProtection),
-//					protection
-//			)), true);
-	}
 
 
 
@@ -263,21 +294,6 @@ public class MITEequilibrium implements ModInitializer {
 //        ), true);
 
 
-	/**
-	 * logisticFunction(r, k, m):
-	 *   r: 线性比例 (0 ~ 1)
-	 *   k: 陡峭度 (越大曲线越陡)
-	 *   m: 中点 (0 ~ 1)
-	 */
-	private static double logisticFunction(double r, double k, double m) {
-		// 避免溢出，可做一些极值保护
-		// 例如 r 超过 [0,1] 范围时先 clamp 到 [0,1]
-		r = Math.max(0.0, Math.min(1.0, r));
-
-		return 1.0 / (1.0 + Math.exp(-k * (r - m)));
-	}
-
-
 
 
 
@@ -290,20 +306,6 @@ public class MITEequilibrium implements ModInitializer {
 //	private static int executeLocateStructure(ServerCommandSource source) throws CommandSyntaxException {
 //        return 0;
 //    }
-public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
-	ServerCommandSource source = context.getSource();
-	MinecraftServer server = source.getServer();
-	StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(server);
-	boolean isVillageCanGenerate=serverState.isPickAxeCrafted && ServerInfoRecorder.getDay()>=16;
-	if(isVillageCanGenerate){
-		if(context.getSource().getEntity().isPlayer())
-			context.getSource().getEntity().sendMessage(Text.of("村庄可以生成了"));}
-	else{
-		if(context.getSource().getEntity().isPlayer())
-			context.getSource().getEntity().sendMessage(Text.of("村庄还不能生成"));
-	}
-	return 1;
-}
 
 
 
@@ -318,44 +320,7 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 	private void onNewDay(MinecraftServer server, ServerWorld world, long worldTime) {
 	}
 
-	public static TypedActionResult<ItemStack> onUseCrystalItem(ItemStack itemStack , PlayerEntity player,World world,int experience){
 
-		// 播放玻璃破碎的声音
-		player.playSound(SoundEvents.BLOCK_GLASS_BREAK, 1.0F, 1.0F);
-		//经验球获取的声音
-		player.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
-		// 返回成功，表示已处理
-
-		//增加经验
-		player.addExperience(experience);
-
-		// 获取玩家眼前的方向和位置
-		Vec3d eyePos = player.getEyePos();  // 玩家眼睛的位置
-		Vec3d lookDir = player.getRotationVector();  // 玩家视线方向
-
-		// 计算在玩家眼前的一定距离处的位置
-		double distance = 0.5;  // 控制粒子生成的距离
-		Vec3d particlePos = eyePos.add(lookDir.multiply(distance));
-
-		// 创建物品材质的破碎粒子
-		ItemStackParticleEffect particleEffect = new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack);
-
-		// 生成青金石物品的破碎粒子
-		for (int i = 0; i < 10; i++) {
-			double xOffset = (Math.random() - 0.5) * 0.85;  // 随机偏移
-			double yOffset = (Math.random() - 0.5) * 0.85;
-			double zOffset = (Math.random() - 0.5) * 0.85;
-
-			// 使用 `ITEM` 粒子类型生成青金石物品的破碎效果
-			world.addParticle(particleEffect,
-					particlePos.x + xOffset, particlePos.y + yOffset, particlePos.z + zOffset,
-					0, 0, 0);  // 可根据需要调整粒子速度
-		}
-		//消耗一个晶体
-		itemStack.setCount(itemStack.getCount()-1);
-		return TypedActionResult.success(itemStack);
-
-	}
 
 
 
@@ -368,10 +333,35 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 			ServerInfoRecorder.setServerInstance(server);  // 保存服务器实例
 			ServerInfoRecorder.setDay((int) server.getWorld(World.OVERWORLD).getTimeOfDay());
-			//锁定游戏难度:困难
-			server.setDifficulty(Difficulty.HARD,true);
+			//锁定游戏难度
 			server.setDifficultyLocked(true);
+
+
+//			StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(server);
+//			int level = serverState.difficultyLevel;
+//			//极限模式下不生效
+//			switch (level){
+//				case 0:
+//					server.setDifficulty(Difficulty.EASY,true);
+//					break;
+//				case 1:
+//					server.setDifficulty(Difficulty.NORMAL,true);
+//					break;
+//				case 2:
+//					server.setDifficulty(Difficulty.HARD,true);
+//					break;
+//				default:
+//					server.setDifficulty(Difficulty.NORMAL,true);
+//					break;
+//			}
+
+
+
 		});
+
+
+
+
 
 
 		// 注册服务器 tick 事件
@@ -474,18 +464,10 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 				}
 			}
-
-
-
-
-
-
-
-
             //护甲更新,玩家游戏模式更新
 			if (tickCount %(TICK_INTERVAL/10) == 0) {
 				for(ServerPlayerEntity serverPlayerEntity : server.getPlayerManager().getPlayerList()) {
-					updatePlayerArmor(serverPlayerEntity);
+					OnServerInitializeMethod.updatePlayerArmor(serverPlayerEntity);
 //					if(serverPlayerEntity.isCreative())
 //						serverPlayerEntity.changeGameMode(GameMode.SURVIVAL);
 				}
@@ -514,10 +496,6 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 				tickCount = 0; // 重置 tick 计数器
 			}
 		});
-
-
-
-
 		//使用物品监听器
 		UseItemCallback.EVENT.register((player, world, hand) -> {
 			// 获取玩家手中的物品
@@ -539,7 +517,6 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 			// 其他物品时不做处理
 			return TypedActionResult.pass(itemStack);
         });
-
 		//原版物品添加tooltip
 		//不能和数据生成一起使用
 
@@ -607,49 +584,25 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 			}
 			return ActionResult.PASS;
 		});
-
-
-
-
 		//命令注册
 		CommandRegistrationCallback.EVENT.register(this::registerCommands);
-
-
-
-
-
-
-
-
-
 		//附魔注册(记得把数据驱动部分也做好)
 		registerAllOfEnchantments();
-
-
-
 		//僵尸破坏方块进度列表
 		init();
-
 		//护甲添加
 		registerArmors();
-
-
-
 		//物品栏添加
 		ModItemGroup.registerModItemGroup();
-
-
-
 		//物品添加测试
 		ModItems.registerModItemTest();
 		//方块添加测试
 		ModBlocks.registerModBlocks();
-
 		//以下开始正式添加物品:
+
 
 		//添加硬币物品
 		registerCoinItems();
-
 		//添加工具物品
 		Tools.registerModItemTools();
 		//添加锭
@@ -659,33 +612,22 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 		//粗矿
 		registerModItemRaw();
 		//注册矿物
-
 		registerModOre();
-
 		//注册实体
 		registerModEntities();
-
-
-		//修改战利品表
-		modifierLootTables();
-
+		//修改战利品表(已经弃用,用数据包代替)
+//		modifierLootTables();
 		//注册事件
 		PlayerBlockBreakEvents.AFTER.register(new BreakBlockEvent());
-
-
-
 		//创建标签
 		registerModBlockTags();
 		registerModItemTags();
-
 		//注册(药水)效果
 		registerStatusEffects();
 
 
-
-
-		config = new Config();
-		config.load();
+//		config = new Config();
+//		config.load();
 
 		BlockInit.registerBlocks();
 		BlockInit.registerBlockItems();
@@ -698,7 +640,6 @@ public int isPickAxeCrafted(CommandContext<ServerCommandSource> context) {
 
 		CreativeGroup.addGroup();
 		UseBlock.init();
-
 
 		registrySoundEvents();
 

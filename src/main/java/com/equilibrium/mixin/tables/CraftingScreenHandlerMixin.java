@@ -1,6 +1,6 @@
 package com.equilibrium.mixin.tables;
 
-import com.equilibrium.config.CommonConfig;
+
 import com.equilibrium.craft_time_register.BlockInit;
 import com.equilibrium.craft_time_worklevel.CraftingIngredients;
 import com.equilibrium.item.Metal;

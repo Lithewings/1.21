@@ -38,7 +38,13 @@ public class ModArmorMaterials {
 
 
 
-
+    public static final RegistryEntry<ArmorMaterial> ANCIENT_METAL_CHAINMAIL = register("ancient_metal_chainmail", Util.make(new EnumMap(ArmorItem.Type.class), map -> {
+        map.put(ArmorItem.Type.BOOTS, 1);
+        map.put(ArmorItem.Type.LEGGINGS, 3);
+        map.put(ArmorItem.Type.CHESTPLATE, 4);
+        map.put(ArmorItem.Type.HELMET, 2);
+        map.put(ArmorItem.Type.BODY, 4);
+    }), 24, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 0F, 0F, () -> Ingredient.ofItems());
 
 
 

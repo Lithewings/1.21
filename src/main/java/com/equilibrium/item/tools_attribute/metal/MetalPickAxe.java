@@ -62,7 +62,7 @@ public class MetalPickAxe extends ToolItem {
 
     @Override
     public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        attacker.sendMessage(Text.of("击中实体的工具损伤"));
+//        attacker.sendMessage(Text.of("击中实体的工具损伤"));
         stack.damage(300, attacker, EquipmentSlot.MAINHAND);
     }
     @Override

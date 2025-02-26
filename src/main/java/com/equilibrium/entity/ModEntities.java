@@ -1,13 +1,11 @@
 package com.equilibrium.entity;
 
 import com.equilibrium.entity.mob.*;
-import com.equilibrium.mixin.entitymixin.HostileAttributesMixin;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.registry.Registries;
@@ -47,6 +45,21 @@ public class ModEntities {
             //fixed(width, height)
             FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, WightEntity::new).dimensions(EntityDimensions.fixed(0.75f, 1.95f)).build());
 
+
+
+    public static final EntityType<LongDeadEntity> LONG_DEAD = Registry.register(Registries.ENTITY_TYPE,
+            Identifier.of(MOD_ID,"longdead"),
+            //fixed(width, height)
+            FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, LongDeadEntity::new).dimensions(EntityDimensions.fixed(0.75f, 1.95f)).build());
+
+
+    public static final EntityType< PuddingSlimeEntity> PUDDING = Registry.register(Registries.ENTITY_TYPE,
+            Identifier.of(MOD_ID,"pudding"),
+            //fixed(width, height)
+            FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, PuddingSlimeEntity::new).dimensions(EntityDimensions.fixed(0.75f, 1.95f)).build());
+
+
+
     //注册属性
     public static void registerModEntities(){
 //        FabricDefaultAttributeRegistry.register(TEST_ZOMBIE, TestZombieEntity.createZombieAttributes());
@@ -84,6 +97,20 @@ public class ModEntities {
                 .add(EntityAttributes.GENERIC_ARMOR, 2.0)
                 .add(EntityAttributes.ZOMBIE_SPAWN_REINFORCEMENTS)
                 .add(EntityAttributes.GENERIC_MAX_HEALTH,20));
+
+        FabricDefaultAttributeRegistry.register(LONG_DEAD, HostileEntity.createHostileAttributes()
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25F)
+                .add(EntityAttributes.GENERIC_ARMOR, 2.0)
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 0.5));
+
+
+       //setSize中会引用这三个属性
+        FabricDefaultAttributeRegistry.register(PUDDING, HostileEntity.createHostileAttributes()
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED)
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH));
+
+
 
     }
 

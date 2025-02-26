@@ -24,14 +24,14 @@ public class SilverSword extends MetalSword{
 
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        tooltip.add(Text.literal("对亡灵生物造成1.5倍伤害").formatted(Formatting.AQUA));
-        tooltip.add(Text.literal("对亡灵生物给予最后一击后,获得5秒的再生I").formatted(Formatting.AQUA));
+        tooltip.add(Text.literal("对亡灵生物造成2倍伤害").formatted(Formatting.AQUA));
+        tooltip.add(Text.literal("对亡灵生物给予最后一击后,获得5秒的再生II").formatted(Formatting.AQUA));
     }
     @Override
     public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         super.postDamageEntity(stack, target, attacker);
         if(target.isDead() && target.getType().isIn(EntityTypeTags.UNDEAD))
-            attacker.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION,100));
+            attacker.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION,100,1));
     }
 
 

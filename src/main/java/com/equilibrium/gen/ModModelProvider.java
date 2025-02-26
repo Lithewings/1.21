@@ -1,15 +1,11 @@
 package com.equilibrium.gen;
 
-import com.equilibrium.block.ModBlocks;
 import com.equilibrium.item.Armors;
-import com.equilibrium.item.Metal;
-import com.equilibrium.item.Tools;
-import com.equilibrium.item.extend_item.CoinItems;
+import com.equilibrium.item.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
-import net.minecraft.data.client.Model;
 import net.minecraft.data.client.Models;
 import net.minecraft.item.ArmorItem;
 
@@ -51,8 +47,20 @@ public class ModModelProvider extends FabricModelProvider {
 
     @Override
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
-        itemModelGenerator.register(CoinItems.COPPER_COIN, Models.GENERATED);
-        itemModelGenerator.register(CoinItems.IRON_COIN, Models.GENERATED);
+
+        itemModelGenerator.register(ModItems.PUDDING_SLIME_BALL, Models.GENERATED);
+
+
+
+//        itemModelGenerator.registerArmor((ArmorItem) Armors.ANCIENT_METAL_CHAINMAIL_BOOTS);
+//        itemModelGenerator.registerArmor((ArmorItem) Armors.ANCIENT_METAL_CHAINMAIL_CHEST_PLATE);
+//        itemModelGenerator.registerArmor((ArmorItem) Armors.ANCIENT_METAL_CHAINMAIL_HELMET);
+//        itemModelGenerator.registerArmor((ArmorItem) Armors.ANCIENT_METAL_CHAINMAIL_LEGGINGS);
+
+
+
+//        itemModelGenerator.register(CoinItems.COPPER_COIN, Models.GENERATED);
+//        itemModelGenerator.register(CoinItems.IRON_COIN, Models.GENERATED);
 
 //        itemModelGenerator.register(Metal.ADAMANTIUM_RAW, Models.GENERATED);
 //        itemModelGenerator.register(Metal.MITHRIL_RAW, Models.GENERATED);
