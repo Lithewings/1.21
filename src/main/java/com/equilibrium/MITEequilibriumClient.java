@@ -1,10 +1,8 @@
 package com.equilibrium;
 
 
-import com.equilibrium.client.render.entity.GhoulModel;
-import com.equilibrium.client.render.entity.InvisibleStalkerModel;
-import com.equilibrium.client.render.entity.ShadowEntityModel;
-import com.equilibrium.client.render.entity.WightEntityModel;
+import com.equilibrium.client.render.entity.renderer.*;
+import com.equilibrium.entity.mob.PuddingSlimeEntity;
 import com.equilibrium.util.MyCommands;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -35,14 +33,16 @@ public class MITEequilibriumClient implements ClientModInitializer {
 
 
 
-        //将注册的实体和模型结合起来
+        //注册渲染器(渲染器中包含了实体和模型)
 
 
-        EntityRendererRegistry.register(INVISIBLE_STALKER, InvisibleStalkerModel::new);
-        EntityRendererRegistry.register(GHOUL, GhoulModel::new);
-        EntityRendererRegistry.register(SHADOW, ShadowEntityModel::new);
-        EntityRendererRegistry.register(WIGHT, WightEntityModel::new);
+        EntityRendererRegistry.register(INVISIBLE_STALKER, InvisibleStalkerEntityRenderer::new);
+        EntityRendererRegistry.register(GHOUL, GhoulEntityRenderer::new);
+        EntityRendererRegistry.register(SHADOW, ShadowEntityRenderer::new);
+        EntityRendererRegistry.register(WIGHT, WightEntityRenderer::new);
 
+        EntityRendererRegistry.register(LONG_DEAD, LongDeadEntityRenderer::new);
+        EntityRendererRegistry.register(PUDDING, PuddingSlimeEntityRenderer::new);
 
 
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {

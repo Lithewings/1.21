@@ -23,7 +23,13 @@ public class StateSaverAndLoader extends PersistentState {
     public int playerDeathTimes = 0 ;
 
 
-
+//    //世界难度,默认普通
+//    public int difficultyLevel = 1 ;
+//
+//
+//    //世界是否在下一次保存时保持为极限模式?
+//
+//    public boolean keepHardcore = false ;
 
 
     @Override
@@ -32,6 +38,9 @@ public class StateSaverAndLoader extends PersistentState {
         nbt.putBoolean("isPickAxeCrafted", isPickAxeCrafted);
         nbt.putBoolean("onFirstDay", onFirstInTheWorld);
         nbt.putInt("playerDeathTimes", playerDeathTimes);
+//        nbt.putInt("difficultyLevel", difficultyLevel);
+//        nbt.putBoolean("keepHardcore", keepHardcore);
+
 
         return nbt;
     }
@@ -44,6 +53,11 @@ public class StateSaverAndLoader extends PersistentState {
         stateSaverAndLoader.isPickAxeCrafted = tag.getBoolean("isPickAxeCrafted");
         stateSaverAndLoader.onFirstInTheWorld = tag.getBoolean("onFirstDay");
         stateSaverAndLoader.playerDeathTimes = tag.getInt("playerDeathTimes");
+//        stateSaverAndLoader.difficultyLevel = tag.getInt("difficultyLevel");
+//        stateSaverAndLoader.keepHardcore = tag.getBoolean("keepHardcore");
+
+
+
 
         return stateSaverAndLoader;
     }
@@ -57,7 +71,7 @@ public class StateSaverAndLoader extends PersistentState {
                 state.isPickAxeCrafted = nbt.getBoolean("isPickAxeCrafted");
                 state.onFirstInTheWorld =nbt.getBoolean("onFirstDay");
                 state.playerDeathTimes=nbt.getInt("playerDeathTimes");
-
+//                state.difficultyLevel=nbt.getInt("difficultyLevel");
 
                 return state;
             },

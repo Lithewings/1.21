@@ -27,6 +27,14 @@
         "minCount": 1,
         "weight": 100
       },
+
+      {
+        "type": "miteequilibrium:longdead",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 20
+      },
+
       {
         "type": "minecraft:zombie",
         "maxCount": 1,

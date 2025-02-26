@@ -86,6 +86,10 @@
   "item.miteequilibrium.iron_coin": "铁制硬币",
 
 
+  "item.miteequilibrium.ancient_metal_chainmail_helmet": "远古金属锁链头盔",
+  "item.miteequilibrium.ancient_metal_chainmail_chest_plate": "远古金属锁链胸甲",
+  "item.miteequilibrium.ancient_metal_chainmail_leggings": "远古金属锁链护腿",
+  "item.miteequilibrium.ancient_metal_chainmail_boots": "远古金属锁链靴子",
 
   "block.miteequilibrium.example_block": "TestBlock",
   "itemgroup.testgroup": "MITEequilibrium",

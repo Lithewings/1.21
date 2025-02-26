@@ -21,8 +21,9 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-import static com.equilibrium.MITEequilibrium.updatePlayerArmor;
+
 import static com.equilibrium.event.MoonPhaseEvent.getMoonType;
+import static com.equilibrium.util.OnServerInitializeMethod.updatePlayerArmor;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 
 public class MyCommands {
@@ -79,7 +80,15 @@ public class MyCommands {
                     return 1;
                 })
         );
+        dispatcher.register(ClientCommandManager.literal("deathTime")
+                .executes(context -> {
+                    PlayerEntity player = context.getSource().getPlayer();
+                    StateSaverAndLoader stateSaverAndLoader = StateSaverAndLoader.getServerState(ServerInfoRecorder.getServerInstance());
+                    player.sendMessage(Text.of("你的死亡次数为: "+ stateSaverAndLoader.playerDeathTimes+ "（存在一定计算延迟）"));
 
+                    return 1;
+                })
+        );
 
         // 注册 tickSpeed 命令
         dispatcher.register(ClientCommandManager.literal("randomTickSpeed")

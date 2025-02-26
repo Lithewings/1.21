@@ -21,7 +21,7 @@ public class MITEequilibriumDataGenerator implements DataGeneratorEntrypoint {
 //		pack.addProvider(ModLootTableProvider::new);
 //		pack.addProvider(ModEnchantmentDynamicRegistryProvider::new);
 
-		pack.addProvider(ModAdventureProvider::new);
+//		pack.addProvider(ModAdventureProvider::new);
 
 	}
 

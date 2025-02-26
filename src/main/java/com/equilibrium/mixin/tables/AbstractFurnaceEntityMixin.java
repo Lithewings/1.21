@@ -1,7 +1,6 @@
 package com.equilibrium.mixin.tables;
 
-import com.equilibrium.MITEequilibrium;
-import com.equilibrium.config.CommonConfig;
+
 
 import com.equilibrium.craft_time_register.BlockInit;
 import com.equilibrium.tags.ModItemTags;
@@ -251,10 +250,10 @@ public abstract class AbstractFurnaceEntityMixin extends BlockEntity {
 //                time= (int) Double.POSITIVE_INFINITY;
 //                MITEequilibrium.LOGGER.info("illegal condition for  continue melting");
 //            }
-
-            if(CommonConfig.itemCooktimeMap.containsKey(name0)){
-                time = CommonConfig.itemCooktimeMap.get(name0);
-            }
+//
+//            if(CommonConfig.itemCooktimeMap.containsKey(name0)){
+//                time = CommonConfig.itemCooktimeMap.get(name0);
+//            }
 
             if (block == Blocks.FURNACE || block == BlockInit.CLAY_FURNACE) {
                 ca.setReturnValue(time);

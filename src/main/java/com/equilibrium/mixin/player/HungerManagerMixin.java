@@ -2,11 +2,13 @@ package com.equilibrium.mixin.player;
 
 import com.equilibrium.util.PlayerMaxHealthOrFoodLevelHelper;
 import net.minecraft.entity.player.HungerManager;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -47,6 +49,18 @@ public abstract class HungerManagerMixin {
 
 
 
+
+    @Redirect(
+            method = "update",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/player/PlayerEntity;getHealth()F"
+            )
+    )
+    private float forceHealthCheck(PlayerEntity player) {
+        // 强制返回一个大于 10 的值，使得 `player.getHealth() > 10.0F` 永远为 true
+        return 20.0F; // 玩家满血时返回 20.0F，但任意大于 10 的值均可
+    }
 
 
 

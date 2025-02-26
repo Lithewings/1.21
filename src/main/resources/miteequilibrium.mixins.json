@@ -42,8 +42,6 @@
     "internal_mod.fence_link_together.FenceBlockMixin",
     "internal_mod.fence_link_together.PaneBlockMixin",
     "internal_mod.fence_link_together.WallBlockMixin",
-    "internal_mod.hot_bar_should_not_loop.HotBarShouldNotLoop",
-    "loot_table.BlockLootTableMixin",
     "player.HungerManagerMixin",
     "player.PlayerEntityMixin",
     "player.PlayerManagerMixin",
@@ -80,6 +78,7 @@
     "vanilla_itemsmixin.AbstractCauldronBlockMixin",
     "vanilla_itemsmixin.BucketItemMixin",
     "vanilla_itemsmixin.ItemsMixin",
+    "world.LevelPropertiesMixin",
     "world.ServerWorldMixin"
   ],
   "injectors": {
@@ -92,12 +91,16 @@
     "crafttime.MixinCraftingScreen",
     "crafttime.MixinInventoryScreen",
     "player.ClientPlayerEntityMixin",
+    "render.CreativeWorldScreenGameTabMixin",
     "render.CreativeWorldScreenMixin",
+    "render.CreativeWorldScreenWorldTabMixin",
     "render.DeathScreenMixin",
     "render.DebugHudMixin",
     "render.EntityRenderDispatcherMixinForRenderHitBox",
     "render.GameMenuScreenMixin",
     "render.InGameHudMixin",
+    "render.IntegratedServerLoaderMixin",
+    "render.WorldCreatorMixin",
     "render.WorldRendererMixin",
     "tables.AnvilScreenHandlerMixin",
     "world.EditGameRulesScreenMixin"

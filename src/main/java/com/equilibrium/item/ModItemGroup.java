@@ -136,7 +136,12 @@ public class ModItemGroup {
                                 entries.add(CoinItems.COPPER_COIN);
                                 entries.add(CoinItems.IRON_COIN);
 
+                                entries.add(Armors.ANCIENT_METAL_CHAINMAIL_BOOTS);
+                                entries.add(Armors.ANCIENT_METAL_CHAINMAIL_LEGGINGS);
+                                entries.add(Armors.ANCIENT_METAL_CHAINMAIL_CHEST_PLATE);
+                                entries.add(Armors.ANCIENT_METAL_CHAINMAIL_HELMET);
 
+                                entries.add(ModItems.PUDDING_SLIME_BALL);
 
                             }
                     ).build());

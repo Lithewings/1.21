@@ -30,6 +30,14 @@ public class SoundEventRegistry {
     public static final SoundEvent ENTITY_GHOUL_DEATH = register("mob.ghoul.death");
 
 
+    public static final SoundEvent ENTITY_WIGHT_HURT1 = register("mob.wight.hurt1");
+    public static final SoundEvent ENTITY_WIGHT_HURT2 = register("mob.wight.hurt2");
+
+    public static final SoundEvent ENTITY_WIGHT_DEATH = register("mob.wight.death");
+
+    public static final SoundEvent ENTITY_WIGHT_AMBIENT1 = register("mob.wight.say1");
+    public static final SoundEvent ENTITY_WIGHT_AMBIENT2 = register("mob.wight.say2");
+
 
     public static SoundEvent register(String name){
         Identifier id = Identifier.of(MOD_ID,name);

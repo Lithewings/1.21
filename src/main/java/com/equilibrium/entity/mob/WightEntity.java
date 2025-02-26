@@ -114,8 +114,8 @@ public class WightEntity extends ZombieEntity{
     @Override
     protected SoundEvent getAmbientSound() {
         return switch (1 + this.getRandom().nextInt(1)) {
-            case 1 -> ENTITY_GHOUL_AMBIENT1;
-            case 2 -> ENTITY_GHOUL_AMBIENT2;
+            case 1 -> ENTITY_WIGHT_AMBIENT1;
+            case 2 -> ENTITY_WIGHT_AMBIENT2;
             default -> SoundEvents.INTENTIONALLY_EMPTY;
         };
     }
@@ -123,15 +123,15 @@ public class WightEntity extends ZombieEntity{
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
         return switch (1 + this.getRandom().nextInt(1)) {
-            case 1 -> ENTITY_GHOUL_HURT1;
-            case 2 -> ENTITY_GHOUL_HURT2;
+            case 1 -> ENTITY_WIGHT_HURT1;
+            case 2 -> ENTITY_WIGHT_HURT2;
             default -> SoundEvents.INTENTIONALLY_EMPTY;
         };
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return ENTITY_GHOUL_DEATH;
+        return ENTITY_WIGHT_DEATH;
     }
 
 }
