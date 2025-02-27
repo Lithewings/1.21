@@ -13,6 +13,11 @@ public class ModPlacementGenerator {
     public static final RegistryKey<PlacedFeature> CUSTOM_ORE_OVERWORLD = RegistryKey.of(RegistryKeys.PLACED_FEATURE,
             Identifier.of("miteequilibrium", "ore_custom_overworld"));
 
+    //Identifier名字要与json文件对应
+    public static final RegistryKey<PlacedFeature> SILVER_OVERWORLD = RegistryKey.of(RegistryKeys.PLACED_FEATURE,
+            Identifier.of("miteequilibrium", "silver_ore_overworld"));
+
+
 
     //为地下世界添加的矿物
     public static final RegistryKey<PlacedFeature> CUSTOM_ORE_UNDERWORLD = RegistryKey.of(RegistryKeys.PLACED_FEATURE,
@@ -79,6 +84,7 @@ public class ModPlacementGenerator {
         //用自己实现的类在指定维度注册矿物
         //主世界添加矿物
         BiomeModifications.addFeature(context -> context.canGenerateIn(UnderWorldDimensionOptions.OVERWORLD), GenerationStep.Feature.UNDERGROUND_ORES, CUSTOM_ORE_OVERWORLD);
+        BiomeModifications.addFeature(context -> context.canGenerateIn(UnderWorldDimensionOptions.OVERWORLD), GenerationStep.Feature.UNDERGROUND_ORES, SILVER_OVERWORLD);
 
 
         //地下世界添加矿物

@@ -144,6 +144,7 @@ public class AStarPathfinder {
     /**
      * 判断方块是否可通过。此处仅示例判断"是空气"。
      * 可根据需求改为 "方块要么是空气、要么是门" 等。
+     * 非固体方块不认为是不可通行的
      */
     private static boolean isPassable(World world, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
@@ -154,6 +155,9 @@ public class AStarPathfinder {
         }
         if(blockState.isIn(BlockTags.FENCE_GATES)) {
             return blockState.get(Properties.OPEN);
+        }
+        if(!blockState.isSolidBlock(world,pos)) {
+            return true;
         }
         return false;
     }

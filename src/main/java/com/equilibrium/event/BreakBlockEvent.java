@@ -114,7 +114,7 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
 
 
             int randomNumber = random.nextInt(100-furtuneLevel*30);
-            if(randomNumber<5) {
+            if(randomNumber<=5) {
                 itemDrop = new ItemEntity(world, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5,
                         new ItemStack(Items.STICK));
                 world.spawnEntity(itemDrop);
@@ -141,38 +141,36 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
 
 
 
-            int randomNumber2 = random.nextInt(100);
+            double randomNumber2 = random.nextDouble(1000);
 
 
             ItemEntity itemDrop;
             if(randomNumber2==0){
-                //0,就1个,1%
+                //0,就1个,0.1%
                 itemDrop = new ItemEntity( world, pos.getX()+0.5, pos.getY(), pos.getZ()+0.5,
-                        new ItemStack(Metal.copper_nugget));
-                world.spawnEntity(itemDrop);
-                world.spawnEntity(itemDrop);
+                        new ItemStack(Items.REDSTONE));
                 world.spawnEntity(itemDrop);
 
-            } else if(randomNumber2<=8) {
-                //1-8,共8个 8%
+            } else if(randomNumber2<=80) {
+                //1-80,共80个 8%
                 itemDrop = new ItemEntity( world, pos.getX()+0.5, pos.getY(), pos.getZ()+0.5,
                         new ItemStack(Metal.silver_nugget));
                 world.spawnEntity(itemDrop);
 
-            } else if (randomNumber2 <= 24) {
-                //9-24,共16个 16%
+            } else if (randomNumber2 <= 240) {
+                //90-240,共160个 16%
                 itemDrop = new ItemEntity( world, pos.getX()+0.5, pos.getY(), pos.getZ()+0.5,
                         new ItemStack(Items.FLINT));
                 world.spawnEntity(itemDrop);
 
-            } else if (randomNumber2 <= 46) {
-                //25-46,共22个 22%
+            } else if (randomNumber2 <= 460) {
+                //250-460,共220个 22%
                 itemDrop = new ItemEntity( world, pos.getX()+0.5, pos.getY(), pos.getZ()+0.5,
                         new ItemStack(Metal.copper_nugget));
                 world.spawnEntity(itemDrop);
 
             }else{
-                //47-99,共53个 53%
+                //470-999,共530个 53%
                 itemDrop = new ItemEntity(world, pos.getX()+0.5, pos.getY(), pos.getZ()+0.5,
                         new ItemStack(Metal.FLINT));
                 world.spawnEntity(itemDrop);
@@ -187,15 +185,18 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
                 //4~7次掉落
                 dropTime= 4+ random.nextInt(4);
 
+
+            if(random.nextInt(10)>=(10-furtuneLevel)) {
+                //若时运为3,则表示随机的数字 0 1 2 3 4 5 6 7 8 9 中大于等于7的概率,即0.3
+                //时运触发时,相当于本次产出翻倍
+                dropTime *= 2;
+            }
             //掉落1次还是4次
             for(int i =0 ;i<dropTime;i++){
                 world.spawnEntity(new ItemEntity(world, pos.getX()+0.5, pos.getY(), pos.getZ()+0.5,
                         new ItemStack(item)));
-                //若时运为3,则表示随机的数字 0 1 2 3 4 5 6 7 8 9 中大于等于7的概率,即0.3
-                //时运触发时,相当于又挖了一块相同的矿石
-                if(random.nextInt(10)>=(10-furtuneLevel)){
-                    world.spawnEntity(new ItemEntity(world, pos.getX()+0.5, pos.getY(), pos.getZ()+0.5,
-                            new ItemStack(item)));
+
+
                 }
             }
 
@@ -222,7 +223,7 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
 
 
 
-}
+
 
 
 
