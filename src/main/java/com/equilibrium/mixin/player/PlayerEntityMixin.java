@@ -12,6 +12,7 @@ import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
@@ -82,9 +83,14 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
     }
 
+
+
+
+
     @Override
     public void dropInventory() {
         super.dropInventory();
+
         serverState = StateSaverAndLoader.getServerState(ServerInfoRecorder.getServerInstance());
         //首次死亡的掉落保护
         if(serverState.playerDeathTimes==1)
@@ -192,7 +198,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 //        }
 
         if (stack.isIn(ModItemTags.HARMFOOD)){
-            this.phytonutrient-=2000;
+            this.phytonutrient-=48000;
             StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.POISON, 400,0,true,true,true);
             this.setStatusEffect(statusEffectInstance,null);
         }
@@ -464,8 +470,41 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Shadow public abstract void sendMessage(Text message, boolean overlay);
 
+
+
+
+
+    @Unique
+    private double lastSleepTime = 0;
+
+
+
+
+    @Inject(method = "wakeUp(ZZ)V",at = @At("TAIL"))
+    public void wakeUp(boolean skipSleepTimer, boolean updateSleepingPlayers, CallbackInfo ci) {
+        if (!this.getWorld().isClient) {
+            double timeNow = this.getWorld().getTimeOfDay();
+            if (timeNow - this.lastSleepTime > 7000) {
+//                this.sendMessage(Text.of("睡得好!"));
+                this.addExhaustion(7f);
+                this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 150, 1));
+            } else if (timeNow - this.lastSleepTime > 4000) {
+//                this.sendMessage(Text.of("睡得还好!"));
+                this.addExhaustion(4f);
+                this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 75, 0));
+            }
+            else
+                this.addExhaustion(3f);
+        }
+
+    }
+
     @Inject(method = "tick", at = @At("HEAD"))
     public void tick(CallbackInfo ci){
+
+        if(this.isSleeping()&&!this.getWorld().isClient())
+            this.lastSleepTime = this.getWorld().getTimeOfDay();
+
 
 
 
@@ -493,7 +532,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             //施加饥饿效果
             if (this.phytonutrient < 100) {
                 if (!this.hasStatusEffect(registerStatusEffect.PHYTONUTRIENT)) {
-                    StatusEffectInstance statusEffectInstance1 = new StatusEffectInstance(registerStatusEffect.PHYTONUTRIENT, -1, 1, false, false, false);
+                    StatusEffectInstance statusEffectInstance1 = new StatusEffectInstance(registerStatusEffect.PHYTONUTRIENT, -1, 0, false, false, false);
                     StatusEffectUtil.addEffectToPlayersWithinDistance((ServerWorld) this.getWorld(), this, this.getPos(), 16, statusEffectInstance1, -1);
 
                 }

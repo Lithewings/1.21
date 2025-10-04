@@ -43,5 +43,6 @@
   "container.netherrack_furnace": "Netherrack Furnace",
   "container.obsidian_furnace": "Obsidian Furnace",
   "crafttime.join_info": "Crafttable and Dnchantment tablecan be synthesized on low-level workbench.",
-  "crafttime.group": "Craft Time"
+  "crafttime.group": "Craft Time",
+  "effect.miteequilibrium.phytonutrient": "phytonutrient"
 }

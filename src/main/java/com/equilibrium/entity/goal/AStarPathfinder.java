@@ -2,6 +2,7 @@ package com.equilibrium.entity.goal;
 
 import java.util.*;
 
+import com.equilibrium.tags.ModBlockTags;
 import net.minecraft.block.DoorBlock;
 import net.minecraft.block.FenceGateBlock;
 import net.minecraft.registry.tag.BlockTags;
@@ -156,7 +157,21 @@ public class AStarPathfinder {
         if(blockState.isIn(BlockTags.FENCE_GATES)) {
             return blockState.get(Properties.OPEN);
         }
-        if(!blockState.isSolidBlock(world,pos)) {
+        if(blockState.isIn(ModBlockTags.GLASS_MADE)) {
+            //玻璃
+            return false;
+        }
+        if(blockState.isIn(BlockTags.STAIRS)) {
+            //楼梯屋顶
+            return false;
+        }
+
+        if(blockState.isIn(BlockTags.SLABS)) {
+            //半砖
+            return false;
+        }
+        if(blockState.isSolidBlock(world,pos)) {
+            //其余不合规非固体方块
             return true;
         }
         return false;

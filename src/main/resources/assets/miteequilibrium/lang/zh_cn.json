@@ -116,5 +116,6 @@
   "container.netherrack_furnace": "下界岩熔炉",
   "container.obsidian_furnace": "黑曜石熔炉",
   "crafttime.join_info": "Crafttable and Dnchantment tablecan be synthesized on low-level workbench.",
-  "crafttime.group": "合成耗时"
+  "crafttime.group": "合成耗时",
+  "effect.miteequilibrium.phytonutrient": "营养失衡"
 }

@@ -1,5 +1,6 @@
 package com.equilibrium.item.tools_attribute.metal;
 
+import com.equilibrium.entity.mob.GhoulEntity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -30,7 +31,7 @@ public class SilverSword extends MetalSword{
     @Override
     public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         super.postDamageEntity(stack, target, attacker);
-        if(target.isDead() && target.getType().isIn(EntityTypeTags.UNDEAD))
+        if(target.isDead() && (target.getType().isIn(EntityTypeTags.UNDEAD)||target instanceof GhoulEntity))
             attacker.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION,100,1));
     }
 

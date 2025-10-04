@@ -117,11 +117,12 @@ public class structurePoolBasedGeneratorMixin {
 //        cir.cancel();
         MinecraftServer server = ServerInfoRecorder.getServerInstance();
 
-
-        if (server != null && ServerInfoRecorder.getDay() >= 16 && getStructureGenerateValidity(server)) {
+        boolean far = (pos.getX()<-1000 || pos.getX()>1000)&& (pos.getZ()<-1000 || pos.getZ()>1000);
+        if (server != null && ServerInfoRecorder.getDay() >= 10 && getStructureGenerateValidity(server) && far) {
             //正常生成结构,包括村庄
         } else {
             //对村庄进行拦截
+
             if (regEntryContains(structurePool, "village")) {
                 cir.setReturnValue(Optional.empty());
                 cir.cancel();

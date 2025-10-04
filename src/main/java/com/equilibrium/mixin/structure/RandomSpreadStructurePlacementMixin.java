@@ -65,12 +65,11 @@ public class RandomSpreadStructurePlacementMixin {
     public void getStartChunk(long seed, int chunkX, int chunkZ, CallbackInfoReturnable<ChunkPos> cir) {
         cir.cancel();
         MinecraftServer server = ServerInfoRecorder.getServerInstance();
-        boolean generate = getStructureGenerateValidity(server);
+
         int spacing = this.spacing;
         int separation = this.separation;
-        if((-3200<chunkX&&chunkX<3200 && -3200<chunkZ&&chunkZ<3200)) {
-            spacing = generate?spacing+360:spacing+720;
-            separation = (int) (spacing/1.5);
+//        if((-1000<chunkX&&chunkX<1000 && -1000<chunkZ&&chunkZ<1000)) {
+//            spacing = spacing+160;
 //            if(server!=null)
 //                for(ServerWorld world :server.getWorlds()) {
 //                    if (!world.getPlayers().isEmpty()) {
@@ -78,8 +77,7 @@ public class RandomSpreadStructurePlacementMixin {
 //                        world.getPlayers().getFirst().sendMessage(Text.of("separation is " + separation));
 //                    }
 //            }
-
-        }
+//        }
         int i = Math.floorDiv(chunkX, spacing);
         int j = Math.floorDiv(chunkZ, spacing);
         ChunkRandom chunkRandom = new ChunkRandom(new CheckedRandom(0L));
