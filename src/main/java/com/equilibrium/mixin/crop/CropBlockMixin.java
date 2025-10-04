@@ -32,7 +32,7 @@ public abstract class CropBlockMixin extends PlantBlock implements Fertilizable 
     protected CropBlockMixin(Settings settings) {
         super(settings);
     }
-    @Shadow
+   @Shadow
     public int getMaxAge() {
         return 7;
     }
@@ -69,8 +69,5 @@ public abstract class CropBlockMixin extends PlantBlock implements Fertilizable 
 
 
 
-    }
 
-
-
-}
+}}

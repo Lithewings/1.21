@@ -1,5 +1,6 @@
 package com.equilibrium.item.tools_attribute.metal;
 
+import com.equilibrium.entity.mob.GhoulEntity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -30,7 +31,8 @@ public class SilverDagger extends MetalDagger{
     @Override
     public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         super.postDamageEntity(stack, target, attacker);
-        if(target.isDead() && target.getType().isIn(EntityTypeTags.UNDEAD))
+        //只有食尸鬼是模组种属于亡灵的一员
+        if(target.isDead() && (target.getType().isIn(EntityTypeTags.UNDEAD))||target instanceof GhoulEntity)
             attacker.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION,50,1));
     }
 

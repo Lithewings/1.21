@@ -326,6 +326,8 @@ public class MITEequilibrium implements ModInitializer {
 
 
 
+
+
 	public void onInitialize() {
 		//记录服务器实例
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
