@@ -17,10 +17,11 @@ public abstract class CreativeWorldScreenWorldTabMixin  {
 //    @Shadow
 //    private static final Text AMPLIFIED_GENERATOR_INFO_TEXT = Text.translatable("generator.minecraft.amplified.info");
 
+    //奖励箱选项始终不可用
     @ModifyArg(method = "<init>",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/world/WorldScreenOptionGrid$Builder;add(Lnet/minecraft/text/Text;Ljava/util/function/BooleanSupplier;Ljava/util/function/Consumer;)Lnet/minecraft/client/gui/screen/world/WorldScreenOptionGrid$OptionBuilder;",ordinal = 1),index = 1)
     public BooleanSupplier setValue(BooleanSupplier getter){
         return OnServerInitializeMethod::alwaysFalse;
-    }
+
 
 //    @ModifyArg(method = "<init>",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/world/WorldScreenOptionGrid$Builder;add(Lnet/minecraft/text/Text;Ljava/util/function/BooleanSupplier;Ljava/util/function/Consumer;)Lnet/minecraft/client/gui/screen/world/WorldScreenOptionGrid$OptionBuilder;",ordinal = 1),index = 2)
 //    public Consumer<Boolean> setValue2(Consumer<Boolean> setter){
@@ -51,4 +52,4 @@ public abstract class CreativeWorldScreenWorldTabMixin  {
 
 
 
-}
+}}

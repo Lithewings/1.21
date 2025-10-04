@@ -158,7 +158,7 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
                 world.spawnEntity(itemDrop);
 
             } else if (randomNumber2 <= 240) {
-                //90-240,共160个 16%
+                //80-240,共160个 16%
                 itemDrop = new ItemEntity( world, pos.getX()+0.5, pos.getY(), pos.getZ()+0.5,
                         new ItemStack(Items.FLINT));
                 world.spawnEntity(itemDrop);
@@ -170,7 +170,7 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
                 world.spawnEntity(itemDrop);
 
             }else{
-                //470-999,共530个 53%
+                //460-999,共540个 54%
                 itemDrop = new ItemEntity(world, pos.getX()+0.5, pos.getY(), pos.getZ()+0.5,
                         new ItemStack(Metal.FLINT));
                 world.spawnEntity(itemDrop);

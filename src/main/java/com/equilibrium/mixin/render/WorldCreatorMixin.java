@@ -15,9 +15,16 @@ import java.nio.file.Path;
 )
 
 public class WorldCreatorMixin {
+    @Unique
+    private final String fileName = "Finish The Game Once.dat";
+    @Unique
+    private final Path configPath = FabricLoader.getInstance().getConfigDir().normalize().resolve(fileName);
 
     @Inject(method = "areCheatsEnabled",at = @At("HEAD"), cancellable = true)
     public void areCheatsEnabled(CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(false);
+        if(!BooleanStorageUtil.load(configPath.toString(), false)) {
+            cir.setReturnValue(false);
+        }
+
     }
 }

@@ -3,11 +3,11 @@ plugins {
 	id 'maven-publish'
 }
 
-version = project.mod_version
+version = "Bata-1.0.1"
 group = project.maven_group
 
 base {
-	archivesName = project.archives_base_name
+	archivesName = "MITE-Equilibrium"
 }
 
 repositories {

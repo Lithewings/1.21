@@ -10,6 +10,9 @@ import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.Monster;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -50,6 +53,11 @@ public abstract class EnderDragonEntityMixin  extends MobEntity implements Monst
         // 保存到自定义路径
         try {
             BooleanStorageUtil.save(true, configPath.toFile().getPath());
+            for( PlayerEntity player :this.getServer().getPlayerManager().getPlayerList()){
+                player.sendMessage(Text.of("主线完成,现所有世界选项按钮均已解锁(游戏重启生效)"));
+            }
+
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
