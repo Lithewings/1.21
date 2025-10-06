@@ -1,5 +1,6 @@
 package com.equilibrium.mixin.player;
 
+import com.equilibrium.item.Armors;
 import com.equilibrium.item.Tools;
 import com.equilibrium.persistent_state.StateSaverAndLoader;
 import com.equilibrium.status.registerStatusEffect;
@@ -87,6 +88,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
 
 
+
     @Override
     public void dropInventory() {
         super.dropInventory();
@@ -146,7 +148,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     //植物营养素
     @Unique
-    public long phytonutrient = 192000;
+    public long phytonutrient = 0;
     //生物交互距离增益
     @Unique
     public float entityInteractBonus = 0;
@@ -251,6 +253,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo ci) {
+//        if(!this.getWorld().isClient)
+//            this.sendMessage(Text.of(String.valueOf(this.regerationFactor)));
+
 //        this.sendMessage(Text.of(this.getWorld().getDifficulty().getName()));
         //202501230630 完成了测试,直接把不可合成的药水名字换成迅捷药水之类的即可,不过最好用translate的那种
 //        this.getMainHandStack().set(POTION_CONTENTS, new PotionContentsComponent(Optional.empty(),Optional.empty(),List.of(new StatusEffectInstance(SPEED, 20, 0, true, true))));
@@ -362,13 +367,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     }
 
 
-
-
-
-
-
-
-
     //修改挖掘速度
     @Inject(method = "getBlockBreakingSpeed", at = @At("HEAD"), cancellable = true)
     public void getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> cir) {
@@ -471,11 +469,23 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Shadow public abstract void sendMessage(Text message, boolean overlay);
 
 
+    @Shadow public abstract Iterable<ItemStack> getArmorItems();
 
 
+    @Shadow public abstract void tick();
+
+    @Shadow public abstract float getAbsorptionAmount();
 
     @Unique
     private double lastSleepTime = 0;
+
+
+
+
+
+
+
+
 
 
 
@@ -499,8 +509,31 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     }
 
+
+
+
+
+
+
+
+
+    @Unique
+    private float regerationFactor = 1;
+
+
+
+
+
+
     @Inject(method = "tick", at = @At("HEAD"))
     public void tick(CallbackInfo ci){
+        //首日保护
+        if(this.getWorld().getTimeOfDay()<24000)
+            this.phytonutrient=192000;
+
+
+
+
 
         if(this.isSleeping()&&!this.getWorld().isClient())
             this.lastSleepTime = this.getWorld().getTimeOfDay();
@@ -514,11 +547,18 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
         //更新生命值上限和饱食度上限
         this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(PlayerMaxHealthOrFoodLevelHelper.getMaxHealthOrFoodLevel());
-        if (!this.isCreative()) {
+
+
+        //更新回血速率
+        this.regerationFactor = this.regerationFactor * this.phytonutrient < 100 ? 4 : 1;
+        //秘银胸甲提供两倍回血速率
+        if(this.getEquippedStack(EquipmentSlot.CHEST).isOf(Armors.MITHRIL_CHEST_PLATE))
+            this.regerationFactor = this.regerationFactor * 0.5f;
+
+        int maxHealth = PlayerMaxHealthOrFoodLevelHelper.getMaxHealthOrFoodLevel();
+        if (this.age % (960 * regerationFactor) == 0) {
             //在tick中加入生命回复任务
-            int maxHealth = PlayerMaxHealthOrFoodLevelHelper.getMaxHealthOrFoodLevel();
-            this.malnourishedForSlowHealing= this.phytonutrient < 100 ? 4 : 1;
-            if (this.getHealth() < maxHealth && this.age % (960 * this.malnourishedForSlowHealing) == 0) {
+            if (this.getHealth() < maxHealth) {
                 this.heal(1.0F);
 //                MITEequilibrium.LOGGER.info("Natural Regeneration +1 ");
             }

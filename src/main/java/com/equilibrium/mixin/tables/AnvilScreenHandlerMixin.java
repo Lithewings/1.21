@@ -1,8 +1,10 @@
 package com.equilibrium.mixin.tables;
 
+import com.equilibrium.util.ServerInfoRecorder;
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -11,12 +13,14 @@ import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.screen.*;
 import net.minecraft.world.WorldEvents;
 import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Random;
 
 @Mixin(AnvilScreenHandler.class)
 public abstract  class AnvilScreenHandlerMixin extends ForgingScreenHandler {
@@ -29,6 +33,11 @@ public abstract  class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         super(type, syncId, playerInventory, context);
     }
 
+    //最大200级就可以无限回复耐久了
+    @Inject(method = "getNextCost",at = @At("HEAD"), cancellable = true)
+    private static void getNextCost(int cost, CallbackInfoReturnable<Integer> cir) {
+        cir.setReturnValue ((int)Math.min((long)cost * 2L + 1L, 199));
+    }
 
 
     @Inject(method = "canTakeOutput",at = @At("HEAD"),cancellable = true)
@@ -40,8 +49,11 @@ public abstract  class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         cir.setReturnValue(preCondition&& !additionalCondition );
     }
 
-
-
+    //即便大于39级,也可以拿出来,只是显示的是红字而已,实际上可以拿出来
+    @Redirect(method = "updateResult", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;creativeMode:Z",ordinal = 1,opcode = Opcodes.GETFIELD))
+    public boolean updateResult(PlayerAbilities instance){
+        return true;
+    }
 
 
 
@@ -52,6 +64,8 @@ public abstract  class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 //        if (!player.getAbilities().creativeMode) {
 //            player.addExperienceLevels(-this.levelCost.get());
 //        }
+
+
         this.input.setStack(0, ItemStack.EMPTY);
         if (this.repairItemUsage > 0) {
             ItemStack itemStack = this.input.getStack(1);
@@ -67,14 +81,29 @@ public abstract  class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
         this.levelCost.set(0);
         this.context.run((world, pos) -> {
+
+
+
             BlockState blockState = world.getBlockState(pos);
-            if (!player.isInCreativeMode() && blockState.isIn(BlockTags.ANVIL) && player.getRandom().nextFloat() < 0.05F) {
-                BlockState blockState2 = AnvilBlock.getLandingState(blockState);
-                if (blockState2 == null) {
+
+
+            if (!player.isInCreativeMode() && blockState.isIn(BlockTags.ANVIL)) {
+                //以下逻辑为铁砧损坏,getLandingState就是执行了一次阶段损坏逻辑
+
+
+
+
+                if(player.getRandom().nextInt(40)==0)
+                    blockState = AnvilBlock.getLandingState(blockState);
+
+
+
+
+                if (blockState == null) {
                     world.removeBlock(pos, false);
                     world.syncWorldEvent(WorldEvents.ANVIL_DESTROYED, pos, 0);
                 } else {
-                    world.setBlockState(pos, blockState2, Block.NOTIFY_LISTENERS);
+                    world.setBlockState(pos, blockState, Block.NOTIFY_LISTENERS);
                     world.syncWorldEvent(WorldEvents.ANVIL_USED, pos, 0);
                 }
             } else {

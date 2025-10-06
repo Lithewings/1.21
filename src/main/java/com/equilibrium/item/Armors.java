@@ -1,10 +1,17 @@
 package com.equilibrium.item;
 
+import net.minecraft.client.gui.tooltip.Tooltip;
+import net.minecraft.component.ComponentType;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Unit;
+
+import java.util.Optional;
 
 import static com.equilibrium.MITEequilibrium.MOD_ID;
 
@@ -25,6 +32,7 @@ public class Armors {
 
     public static final Item ANCIENT_METAL_CHAINMAIL_HELMET =new ArmorItem(ModArmorMaterials.ANCIENT_METAL_CHAINMAIL, ArmorItem.Type.HELMET,new Item.Settings().maxDamage(5*32));
     public static final Item ANCIENT_METAL_CHAINMAIL_CHEST_PLATE =new ArmorItem(ModArmorMaterials.ANCIENT_METAL_CHAINMAIL, ArmorItem.Type.CHESTPLATE,new Item.Settings().maxDamage(8*32));
+
     public static final Item ANCIENT_METAL_CHAINMAIL_LEGGINGS =new ArmorItem(ModArmorMaterials.ANCIENT_METAL_CHAINMAIL, ArmorItem.Type.LEGGINGS,new Item.Settings().maxDamage(7*32));
     public static final Item ANCIENT_METAL_CHAINMAIL_BOOTS =new ArmorItem(ModArmorMaterials.ANCIENT_METAL_CHAINMAIL, ArmorItem.Type.BOOTS,new Item.Settings().maxDamage(4*32));
 

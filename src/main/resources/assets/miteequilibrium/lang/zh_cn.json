@@ -91,6 +91,12 @@
   "item.miteequilibrium.ancient_metal_chainmail_leggings": "远古金属锁链护腿",
   "item.miteequilibrium.ancient_metal_chainmail_boots": "远古金属锁链靴子",
 
+
+
+  "item.miteequilibrium.pumpkin_soup": "南瓜汤",
+
+
+
   "block.miteequilibrium.example_block": "TestBlock",
   "itemgroup.testgroup": "MITEequilibrium",
   "teleport.overworld": "你将被传送至主世界",

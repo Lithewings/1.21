@@ -6,9 +6,8 @@
     "minecraft:golden_apple",
     "minecraft:enchanted_golden_apple",
     "minecraft:melon_slice",
-    "minecraft:beetroot",
-    "minecraft:baked_potato",
-    "minecraft:potato",
-    "minecraft:beetroot"
+
+    "miteequilibrium:pumpkin_soup"
+
   ]
 }

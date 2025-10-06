@@ -13,6 +13,7 @@
     "recipeModifier",
     "ThreadCheck",
     "crafttime.ScreenHandlerMixin",
+    "crop.BoneMealItemMixin",
     "crop.CropBlockMixin",
     "crop.SaplingBlockMixin",
     "crop.StemBlockMixin",

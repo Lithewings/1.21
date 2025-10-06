@@ -3,11 +3,9 @@ package com.equilibrium.entity.mob;
 import com.equilibrium.item.Armors;
 import com.equilibrium.item.Tools;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
@@ -23,14 +21,12 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 
-public class LongDeadEntity extends ModAbstractSkeletonEntity  {
+public class LongDeadEntity extends ModAbstractSkeletonEntity {
 
     public LongDeadEntity(EntityType<? extends ModAbstractSkeletonEntity> entityType, World world) {
         super(entityType, world);
@@ -48,8 +44,32 @@ public class LongDeadEntity extends ModAbstractSkeletonEntity  {
 
     }
 
+    public BlockPos adjustPosition(WorldView world, BlockPos pos) {
+        BlockPos blockPos = pos.down();
+        return world.getBlockState(blockPos).canPathfindThrough(NavigationType.LAND) ? blockPos : pos;
+    }
+
+    private BlockPos findGroundPosition(World world, BlockPos start) {
+        // 我们从start开始向下搜索，直到世界底部或者找到合适的地面
+        for (int y = start.getY(); start.getY()-y<=32&&y>-64; y--) {
+            BlockPos pos = new BlockPos(start.getX(), y, start.getZ());
+            if(world.isTopSolid(pos,this))
+                return pos.offset(Direction.Axis.Y,1); // 返回这个方块的位置，我们将在其上方生成生物
+        }
+        // 如果没有找到，返回null
+        return null;
+    }
+
     @Override
     public boolean canSpawn(WorldAccess world, SpawnReason spawnReason) {
+        //只在地下世界发现悬空生成的情况,奇怪
+        if(!this.isOnGround()){
+            BlockPos pos = findGroundPosition(this.getWorld(),this.getBlockPos());
+            if(pos!=null)
+                this.setPosition(pos.getX(),pos.getY(),pos.getZ());
+            else
+                return false;
+        }
         return super.canSpawn(world, spawnReason);
     }
 

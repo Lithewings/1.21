@@ -3,6 +3,7 @@ package com.equilibrium.entity.goal;
 import java.util.*;
 
 import com.equilibrium.tags.ModBlockTags;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.DoorBlock;
 import net.minecraft.block.FenceGateBlock;
 import net.minecraft.registry.tag.BlockTags;
@@ -149,32 +150,22 @@ public class AStarPathfinder {
      */
     private static boolean isPassable(World world, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
-        if(blockState.isAir())
+        if (blockState.isAir())
             return true;
-        if(blockState.isIn(BlockTags.DOORS)) {
+        if (blockState.isIn(BlockTags.DOORS)) {
             return blockState.get(Properties.OPEN);
         }
-        if(blockState.isIn(BlockTags.FENCE_GATES)) {
+        if (blockState.isIn(BlockTags.FENCE_GATES)) {
             return blockState.get(Properties.OPEN);
         }
-        if(blockState.isIn(ModBlockTags.GLASS_MADE)) {
-            //玻璃
-            return false;
-        }
-        if(blockState.isIn(BlockTags.STAIRS)) {
-            //楼梯屋顶
-            return false;
-        }
-
-        if(blockState.isIn(BlockTags.SLABS)) {
-            //半砖
-            return false;
-        }
-        if(blockState.isSolidBlock(world,pos)) {
-            //其余不合规非固体方块
-            return true;
+        if (!blockState.isSolidBlock(world, pos)) {
+            if (blockState.isOf(Blocks.GLASS)||blockState.isIn(ModBlockTags.GLASS_MADE) || blockState.isIn(BlockTags.STAIRS) || blockState.isIn(BlockTags.SLABS)) {
+                return false;
+            } else
+                return true;
         }
         return false;
+
     }
 
     /**
