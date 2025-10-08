@@ -31,7 +31,7 @@ public class SilverSword extends MetalSword{
     @Override
     public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         super.postDamageEntity(stack, target, attacker);
-        if(target.isDead() && (target.getType().isIn(EntityTypeTags.UNDEAD)||target instanceof GhoulEntity))
+        if(target.isDead() && (target.getType().isIn(EntityTypeTags.UNDEAD)))
             attacker.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION,100,1));
     }
 

@@ -91,12 +91,13 @@ public class MyCommands {
         );
 
         // 注册 tickSpeed 命令
+        //需要用服务器的实例检测随机刻速度,而不是客户端的世界
         dispatcher.register(ClientCommandManager.literal("randomTickSpeed")
                 .executes(context -> {
-                    PlayerEntity player = context.getSource().getPlayer();
-                    int speed = context.getSource().getWorld().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED);
 
-                    player.sendMessage(Text.of("Random tick speed is"+speed));
+                    int speed = ServerInfoRecorder.getServerInstance().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED);
+
+                    context.getSource().getPlayer().sendMessage(Text.of("Random tick speed is"+speed));
 
                     return 1;
                 })

@@ -56,7 +56,20 @@ public class Tools {
     public static final Item SILVER_HOE = createMetalHoeItem(ModToolMaterials.SILVER_HOE,4,3f);
     public static final Item IRON_HOE = createMetalHoeItem(ModToolMaterials.IRON_HOE,5,3f);
     public static final Item MITHRIL_HOE = createMetalHoeItem(ModToolMaterials.MITHRIL_HOE,6,3f);
-    public static final Item ADAMANTIUM_HOE =createMetalHoeItem(ModToolMaterials.ADAMANTIUM_HOE,7,3f);
+
+
+    public static final Item ADAMANTIUM_HOE =createAdamantiumHoeItem(ModToolMaterials.ADAMANTIUM_HOE,7,3f);
+
+
+    public static Item createAdamantiumHoeItem(ToolMaterial material, int finalDamage,float finalDamageSpeed){
+        return new AdamantiumHoe(material,new Item.Settings().
+                attributeModifiers(MiningToolItem.createAttributeModifiers(material,-1+finalDamage,-4+finalDamageSpeed))
+        );
+    }
+
+
+
+
 
 
     public static final Item COPPER_SHOVEL = createMetalShovelItem(ModToolMaterials.COPPER_SHOVEL,3,4f);

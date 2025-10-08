@@ -25,6 +25,12 @@ public class RegisterEnchantments {
 
     public static final RegistryKey<Enchantment> ENCHANTED_FOOD= of("enchanted_food");
 
+    public static final RegistryKey<Enchantment> SPEED= of("speed");
+
+
+
+
+
     private static void register(Registerable<Enchantment> registry, RegistryKey<Enchantment> key, Enchantment.Builder builder) {
         registry.register(key, builder.build(key.getValue()));
     }
@@ -64,18 +70,33 @@ public class RegisterEnchantments {
                 ENCHANTED_FOOD,
                 Enchantment.builder(
                         Enchantment.definition(
-                                RegistryEntryList.of(Items.GOLDEN_APPLE.getRegistryEntry()),
+                                RegistryEntryList.of(Items.BUCKET.getRegistryEntry()),
                                 2,
                                 1,
                                 Enchantment.leveledCost(5, 9),
                                 Enchantment.leveledCost(65, 9),
                                 20,
-                                AttributeModifierSlot.ANY
+                                AttributeModifierSlot.ARMOR
                         )
 
                 )
         );
+        register(
+                registry,
+                SPEED,
+                Enchantment.builder(
+                        Enchantment.definition(
+                                RegistryEntryList.of(Items.LEATHER_BOOTS.getRegistryEntry()),
+                                2,
+                                1,
+                                Enchantment.leveledCost(5, 9),
+                                Enchantment.leveledCost(65, 9),
+                                20,
+                                AttributeModifierSlot.ARMOR
+                        )
 
+                )
+        );
 
     }
 

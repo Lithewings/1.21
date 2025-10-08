@@ -141,7 +141,7 @@ public abstract class BrewingStandBlockEntityMixin extends LockableContainerBloc
                 ItemStack potion = blockEntity.getStack(i);
                 PotionContentsComponent potionContentsComponent =potion.get(POTION_CONTENTS);
 
-                if (potionContentsComponent.hasEffects()) {
+                if (potionContentsComponent != null && potionContentsComponent.hasEffects()) {
                     Iterator<StatusEffectInstance> iterator = potionContentsComponent.getEffects().iterator();
                     StatusEffectInstance statusEffectInstance = iterator.next();
                     String s = potion.getTranslationKey();
@@ -166,10 +166,10 @@ public abstract class BrewingStandBlockEntityMixin extends LockableContainerBloc
                     if (blockEntity.itemBrewing == Items.GLOWSTONE_DUST)
                         //不对最后的等级进行增益,只动增益时间
                         duration = (int) (duration * 1.5);
-                    for (PlayerEntity playerEntity : world.getPlayers()) {
-                        playerEntity.sendMessage(Text.of("这是一个有效果的药水"));
-                        playerEntity.sendMessage(Text.of("它的效果是" + effectName));
-                    }
+//                    for (PlayerEntity playerEntity : world.getPlayers()) {
+//                        playerEntity.sendMessage(Text.of("这是一个有效果的药水"));
+//                        playerEntity.sendMessage(Text.of("它的效果是" + effectName));
+//                    }
 
                     StatusEffectInstance newstatusEffectInstance = new StatusEffectInstance(StatusEffect, duration, amplify, false, true, true);
                     PotionContentsComponent newPotionContentsComponent = new PotionContentsComponent(Optional.empty(), Optional.empty(), List.of(newstatusEffectInstance));

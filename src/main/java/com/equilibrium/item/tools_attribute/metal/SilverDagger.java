@@ -31,8 +31,8 @@ public class SilverDagger extends MetalDagger{
     @Override
     public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         super.postDamageEntity(stack, target, attacker);
-        //只有食尸鬼是模组种属于亡灵的一员
-        if(target.isDead() && (target.getType().isIn(EntityTypeTags.UNDEAD))||target instanceof GhoulEntity)
+
+        if(target.isDead() && (target.getType().isIn(EntityTypeTags.UNDEAD)))
             attacker.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION,50,1));
     }
 

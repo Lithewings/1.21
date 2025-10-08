@@ -1,8 +1,10 @@
 package com.equilibrium.item;
 
 import com.equilibrium.MITEequilibrium;
+import com.equilibrium.block.ModBlocks;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -34,6 +36,9 @@ public class ModArmorMaterials {
         map.put(ArmorItem.Type.HELMET, 3);
         map.put(ArmorItem.Type.BODY, 11);
     }), 24, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.0F, 0.0F, () -> Ingredient.ofItems(Metal.mithril_nugget));
+
+
+
 
 
 

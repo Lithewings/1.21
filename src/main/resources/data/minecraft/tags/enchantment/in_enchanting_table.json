@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "miteequilibrium:reaching"
+    "miteequilibrium:reaching",
+    "miteequilibrium:speed"
   ]
 }

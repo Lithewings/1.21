@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.World;
@@ -23,7 +24,13 @@ import static com.equilibrium.event.sound.SoundEventRegistry.*;
 import static net.minecraft.entity.effect.StatusEffects.SLOWNESS;
 
 public class ShadowEntity extends ZombieEntity {
-    //黑色食尸鬼,会主动破坏光源,若在主世界,只会在世界最黑暗处且y位置小于0生成
+    //黑色食尸鬼,(应该主动破坏火把)若在主世界,只会在世界最黑暗处且y位置小于0生成
+
+
+
+
+
+
     public ShadowEntity(EntityType<? extends ZombieEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -54,14 +61,35 @@ public class ShadowEntity extends ZombieEntity {
     }
 
 
+    private BlockPos findGroundPosition(World world, BlockPos start) {
+        // 我们从start开始向下搜索，直到世界底部或者找到合适的地面
+        for (int y = start.getY(); start.getY()-y<=32&&y>-64; y--) {
+            BlockPos pos = new BlockPos(start.getX(), y, start.getZ());
+            if(world.isTopSolid(pos,this))
+                return pos.offset(Direction.Axis.Y,1); // 返回这个方块的位置，我们将在其上方生成生物
+        }
+        // 如果没有找到，返回null
+        return null;
+    }
+
 
     @Override
     public boolean canSpawn(WorldAccess world, SpawnReason spawnReason) {
         if(this.getWorld().getRegistryKey()== World.OVERWORLD && this.getY()>=0)
             return false;
-        //只会在亮度为0的位置生成
+        //若在主世界中,则只在亮度为0的位置生成
         if(world.getLightLevel(BlockPos.ofFloored(this.getPos()))!=0)
             return false;
+
+        if(!this.isOnGround()){
+            BlockPos pos = findGroundPosition(this.getWorld(),this.getBlockPos());
+            if(pos!=null)
+                this.setPosition(pos.getX(),pos.getY(),pos.getZ());
+            else
+                return false;
+        }
+
+
         return super.canSpawn(world, spawnReason);
     }
 

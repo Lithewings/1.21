@@ -399,9 +399,7 @@ public class MoonPhaseEvent {
 
 
     public static void RandomTickModifier(ServerWorld world, int randomTickSpeed) {
-        PlayerEntity player = world.getRandomAlivePlayer();
-        if (player != null)
-            player.getWorld().getGameRules().get(GameRules.RANDOM_TICK_SPEED).set(randomTickSpeed, player.getServer());
+        world.getGameRules().get(GameRules.RANDOM_TICK_SPEED).set(randomTickSpeed,world.getServer());
     }
 
 

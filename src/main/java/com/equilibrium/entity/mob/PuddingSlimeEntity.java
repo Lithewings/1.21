@@ -82,18 +82,20 @@ public class PuddingSlimeEntity extends BaseSlimeEntity{
         this.setPosition(d, e, f);
     }
 
+
+
     @Override
     public boolean damage(DamageSource source, float amount) {
-        //箭矢只对史莱姆造成0.1的伤害,表现为史莱姆吃掉箭矢,史莱姆会立刻分解掉箭矢
+        //箭矢只对史莱姆造成0.1的伤害
         if(source.isOf(DamageTypes.ARROW))
             return super.damage(source,0f);
         //
         if( source.isOf(DamageTypes.PLAYER_ATTACK)) {
             PlayerEntity player = (PlayerEntity)  source.getAttacker();
             ItemStack weapon = player.getMainHandStack();
-            //以2%的进度腐蚀玩家的武器
+            //以5%的进度腐蚀玩家的武器
             if (isCorruptibleItems.contains(weapon.getItem())) {
-                weapon.damage((int) (weapon.getMaxDamage() * 0.02), player, EquipmentSlot.MAINHAND);
+                weapon.damage((int) (weapon.getMaxDamage() * 0.05), player, EquipmentSlot.MAINHAND);
                 this.playSound(SoundEvents.BLOCK_LAVA_EXTINGUISH, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
 
                 // --------------- 新增粒子生成逻辑 ---------------
@@ -125,7 +127,7 @@ public class PuddingSlimeEntity extends BaseSlimeEntity{
             if (!weapon.hasEnchantments())
                 return false;
         }
-
+        //腐蚀盔甲的逻辑在baseSlimeEntity中
 
         return super.damage(source , amount);
     }
@@ -222,12 +224,40 @@ public class PuddingSlimeEntity extends BaseSlimeEntity{
             this.setSize(4, true);
         return super.initialize(world, difficulty, spawnReason, entityData);
     }
+    private BlockPos findGroundPosition(World world, BlockPos start) {
+        // 我们从start开始向下搜索，直到世界底部或者找到合适的地面
+        for (int y = start.getY(); start.getY()-y<=32&&y>-64; y--) {
+            BlockPos pos = new BlockPos(start.getX(), y, start.getZ());
+            if(
+                    //3*3
+            world.isTopSolid(pos,this)&&
+            world.isTopSolid(pos.offset(Direction.Axis.X,1),this)&&
+            world.isTopSolid(pos.offset(Direction.Axis.X,-1),this)&&
+            world.isTopSolid(pos.offset(Direction.Axis.Z,1),this)&&
+            world.isTopSolid(pos.offset(Direction.Axis.Z,-1),this)&&
+            world.isTopSolid(pos.offset(Direction.Axis.X,1).offset(Direction.Axis.Z,1),this)&&
+            world.isTopSolid(pos.offset(Direction.Axis.X,1).offset(Direction.Axis.Z,-1),this)&&
+            world.isTopSolid(pos.offset(Direction.Axis.X,-1).offset(Direction.Axis.Z,1),this)&&
+            world.isTopSolid(pos.offset(Direction.Axis.X,-1).offset(Direction.Axis.Z,-1),this)
+            )
+                return pos.offset(Direction.Axis.Y,1); // 返回这个方块的位置，我们将在其上方生成生物
+        }
 
+        // 如果没有找到，返回null
+        return null;
+    }
     @Override
     public boolean canSpawn(WorldAccess world, SpawnReason spawnReason) {
-        if(world== World.OVERWORLD&&this.getY()>40)
-            return false;
-        return true;
+        //只在地下世界发现悬空生成的情况,奇怪
+        if(!this.isOnGround()){
+            BlockPos pos = findGroundPosition(this.getWorld(),this.getBlockPos());
+            if(pos!=null)
+                this.setPosition(pos.getX(),pos.getY(),pos.getZ());
+            else
+                return false;
+        }
+        return super.canSpawn(world, spawnReason);
+
     }
 
 }

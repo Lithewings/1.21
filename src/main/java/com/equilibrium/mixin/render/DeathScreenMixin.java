@@ -137,6 +137,7 @@ public abstract class DeathScreenMixin extends Screen {
 
         context.drawCenteredTextWithShadow(this.textRenderer, nextReviveTime, this.width / 2, 100, 16777215);
 
+        context.drawCenteredTextWithShadow(this.textRenderer, "不必冒险，你有无限次重来的机会，这个世界永远等待着你" , this.width / 2, 115, 16777215);
 
         if (this.message != null && mouseY > 85 && mouseY < 85 + 9) {
             Style style = this.getTextComponentUnderMouse(mouseX);

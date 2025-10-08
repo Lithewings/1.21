@@ -9,9 +9,12 @@ import com.equilibrium.tags.ModItemTags;
 import com.equilibrium.util.*;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.block.BlockState;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.component.type.FoodComponent;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -19,6 +22,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonPart;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.entity.effect.StatusEffects;
@@ -31,7 +35,10 @@ import net.minecraft.entity.projectile.FishingBobberEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.Potions;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
@@ -54,6 +61,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -251,8 +259,27 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
 
 
+//    StatusEffectInstance NIGHT_VISION = new StatusEffectInstance(StatusEffects.NIGHT_VISION,2000);
+//    StatusEffectInstance MINING_FATIGUE = new StatusEffectInstance(StatusEffects.MINING_FATIGUE,2000);
+
+
+
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo ci) {
+
+//        ItemStack stack = new ItemStack(Items.POTION, 1);
+//        stack.set(DataComponentTypes.POTION_CONTENTS,new PotionContentsComponent(
+//                Optional.empty(), Optional.of(114514), List.of(NIGHT_VISION,MINING_FATIGUE))
+//
+//        );
+//        stack.set(DataComponentTypes.ITEM_NAME,Text.translatable("item.effect.miteequilibrium.sub_night_vision"))
+//        ;
+//        this.getInventory().insertStack(stack);
+
+
+
+
+
 //        if(!this.getWorld().isClient)
 //            this.sendMessage(Text.of(String.valueOf(this.regerationFactor)));
 
@@ -309,7 +336,11 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             setEntityInteractBonus(0f);
         }
         //潜行向下看时,增加生物交互距离
-        if(this.isSneaking() && this.getPitch()>60)
+        RegistryKey<World> end = World.END;
+        if(this.getWorld().getRegistryKey()==end){
+            cir.setReturnValue( 4.5 + entityInteractBonus);
+        }
+        else if(this.isSneaking() && this.getPitch()>60)
             cir.setReturnValue( 3.0 + entityInteractBonus);
         else{
             cir.setReturnValue((2.0 + entityInteractBonus));
@@ -475,6 +506,14 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Shadow public abstract void tick();
 
     @Shadow public abstract float getAbsorptionAmount();
+
+    @Shadow @Final protected static TrackedData<Byte> MAIN_ARM;
+
+    @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
+
+    @Shadow public abstract boolean isInvulnerableTo(DamageSource damageSource);
+
+    @Shadow public abstract PlayerInventory getInventory();
 
     @Unique
     private double lastSleepTime = 0;

@@ -53,7 +53,7 @@ public abstract class EnderDragonEntityMixin  extends MobEntity implements Monst
         // 保存到自定义路径
         try {
             BooleanStorageUtil.save(true, configPath.toFile().getPath());
-            for( PlayerEntity player :this.getServer().getPlayerManager().getPlayerList()){
+            for( PlayerEntity player : ServerInfoRecorder.getServerInstance().getPlayerManager().getPlayerList()){
                 player.sendMessage(Text.of("主线完成,现所有世界选项按钮均已解锁(游戏重启生效)"));
             }
 

@@ -380,10 +380,12 @@ public class MITEequilibrium implements ModInitializer {
 
 
 			if (isNoPlayersInTheOverWorld) {
-				if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 3)
+				if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 3) {
 					for (PlayerEntity player : server.getPlayerManager().getPlayerList())
 						player.sendMessage(Text.of("由于主世界没有玩家,随机刻速度已回调至默认值"), true);
-				RandomTickModifier(serverOverWorld, 3);
+					//有可能目前是蓝月,但玩家在地底世界,所以会陷入这里恢复默认,但蓝月那边又改成5,这样反复执行了这段代码
+					RandomTickModifier(serverOverWorld, 3);
+				}
 
 			}
 
