@@ -1,6 +1,6 @@
 # 项目介绍
   本项目是针对Minecraft Fabric 1.21所建立的。
-  前置模组：Craft-Time（不必安装，我参考了代码内核，大幅调整优化后已嵌入核心系统）
+  前置模组：Craft-Time（已预安装）
   https://github.com/ChongYuCN/Craft-Time
  
 # 使用说明
