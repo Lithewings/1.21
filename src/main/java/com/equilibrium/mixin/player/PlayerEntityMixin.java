@@ -1,5 +1,6 @@
 package com.equilibrium.mixin.player;
 
+import com.equilibrium.item.Armors;
 import com.equilibrium.item.Tools;
 import com.equilibrium.persistent_state.StateSaverAndLoader;
 import com.equilibrium.status.registerStatusEffect;
@@ -8,15 +9,20 @@ import com.equilibrium.tags.ModItemTags;
 import com.equilibrium.util.*;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.block.BlockState;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.component.type.FoodComponent;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonPart;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.entity.effect.StatusEffects;
@@ -29,7 +35,10 @@ import net.minecraft.entity.projectile.FishingBobberEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.Potions;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
@@ -52,6 +61,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -82,9 +92,15 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
     }
 
+
+
+
+
+
     @Override
     public void dropInventory() {
         super.dropInventory();
+
         serverState = StateSaverAndLoader.getServerState(ServerInfoRecorder.getServerInstance());
         //首次死亡的掉落保护
         if(serverState.playerDeathTimes==1)
@@ -140,7 +156,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     //植物营养素
     @Unique
-    public long phytonutrient = 192000;
+    public long phytonutrient = 0;
     //生物交互距离增益
     @Unique
     public float entityInteractBonus = 0;
@@ -192,7 +208,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 //        }
 
         if (stack.isIn(ModItemTags.HARMFOOD)){
-            this.phytonutrient-=2000;
+            this.phytonutrient-=48000;
             StatusEffectInstance statusEffectInstance = new StatusEffectInstance(StatusEffects.POISON, 400,0,true,true,true);
             this.setStatusEffect(statusEffectInstance,null);
         }
@@ -243,9 +259,31 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
 
 
+//    StatusEffectInstance NIGHT_VISION = new StatusEffectInstance(StatusEffects.NIGHT_VISION,2000);
+//    StatusEffectInstance MINING_FATIGUE = new StatusEffectInstance(StatusEffects.MINING_FATIGUE,2000);
+
+
+
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo ci) {
-        this.sendMessage(Text.of(this.getWorld().getDifficulty().getName()));
+
+//        ItemStack stack = new ItemStack(Items.POTION, 1);
+//        stack.set(DataComponentTypes.POTION_CONTENTS,new PotionContentsComponent(
+//                Optional.empty(), Optional.of(114514), List.of(NIGHT_VISION,MINING_FATIGUE))
+//
+//        );
+//        stack.set(DataComponentTypes.ITEM_NAME,Text.translatable("item.effect.miteequilibrium.sub_night_vision"))
+//        ;
+//        this.getInventory().insertStack(stack);
+
+
+
+
+
+//        if(!this.getWorld().isClient)
+//            this.sendMessage(Text.of(String.valueOf(this.regerationFactor)));
+
+//        this.sendMessage(Text.of(this.getWorld().getDifficulty().getName()));
         //202501230630 完成了测试,直接把不可合成的药水名字换成迅捷药水之类的即可,不过最好用translate的那种
 //        this.getMainHandStack().set(POTION_CONTENTS, new PotionContentsComponent(Optional.empty(),Optional.empty(),List.of(new StatusEffectInstance(SPEED, 20, 0, true, true))));
 //        this.getMainHandStack().set(ITEM_NAME,Text.of("dd"));
@@ -298,7 +336,11 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             setEntityInteractBonus(0f);
         }
         //潜行向下看时,增加生物交互距离
-        if(this.isSneaking() && this.getPitch()>60)
+        RegistryKey<World> end = World.END;
+        if(this.getWorld().getRegistryKey()==end){
+            cir.setReturnValue( 4.5 + entityInteractBonus);
+        }
+        else if(this.isSneaking() && this.getPitch()>60)
             cir.setReturnValue( 3.0 + entityInteractBonus);
         else{
             cir.setReturnValue((2.0 + entityInteractBonus));
@@ -354,13 +396,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             }
         }
     }
-
-
-
-
-
-
-
 
 
     //修改挖掘速度
@@ -464,8 +499,84 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Shadow public abstract void sendMessage(Text message, boolean overlay);
 
+
+    @Shadow public abstract Iterable<ItemStack> getArmorItems();
+
+
+    @Shadow public abstract void tick();
+
+    @Shadow public abstract float getAbsorptionAmount();
+
+    @Shadow @Final protected static TrackedData<Byte> MAIN_ARM;
+
+    @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
+
+    @Shadow public abstract boolean isInvulnerableTo(DamageSource damageSource);
+
+    @Shadow public abstract PlayerInventory getInventory();
+
+    @Unique
+    private double lastSleepTime = 0;
+
+
+
+
+
+
+
+
+
+
+
+
+    @Inject(method = "wakeUp(ZZ)V",at = @At("TAIL"))
+    public void wakeUp(boolean skipSleepTimer, boolean updateSleepingPlayers, CallbackInfo ci) {
+        if (!this.getWorld().isClient) {
+            double timeNow = this.getWorld().getTimeOfDay();
+            if (timeNow - this.lastSleepTime > 7000) {
+//                this.sendMessage(Text.of("睡得好!"));
+                this.addExhaustion(7f);
+                this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 150, 1));
+            } else if (timeNow - this.lastSleepTime > 4000) {
+//                this.sendMessage(Text.of("睡得还好!"));
+                this.addExhaustion(4f);
+                this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 75, 0));
+            }
+            else
+                this.addExhaustion(3f);
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+    @Unique
+    private float regerationFactor = 1;
+
+
+
+
+
+
     @Inject(method = "tick", at = @At("HEAD"))
     public void tick(CallbackInfo ci){
+        //首日保护
+        if(this.getWorld().getTimeOfDay()<24000)
+            this.phytonutrient=192000;
+
+
+
+
+
+        if(this.isSleeping()&&!this.getWorld().isClient())
+            this.lastSleepTime = this.getWorld().getTimeOfDay();
+
 
 
 
@@ -475,11 +586,18 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
         //更新生命值上限和饱食度上限
         this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(PlayerMaxHealthOrFoodLevelHelper.getMaxHealthOrFoodLevel());
-        if (!this.isCreative()) {
+
+
+        //更新回血速率
+        this.regerationFactor = this.regerationFactor * this.phytonutrient < 100 ? 4 : 1;
+        //秘银胸甲提供两倍回血速率
+        if(this.getEquippedStack(EquipmentSlot.CHEST).isOf(Armors.MITHRIL_CHEST_PLATE))
+            this.regerationFactor = this.regerationFactor * 0.5f;
+
+        int maxHealth = PlayerMaxHealthOrFoodLevelHelper.getMaxHealthOrFoodLevel();
+        if (this.age % (960 * regerationFactor) == 0) {
             //在tick中加入生命回复任务
-            int maxHealth = PlayerMaxHealthOrFoodLevelHelper.getMaxHealthOrFoodLevel();
-            this.malnourishedForSlowHealing= this.phytonutrient < 100 ? 4 : 1;
-            if (this.getHealth() < maxHealth && this.age % (960 * this.malnourishedForSlowHealing) == 0) {
+            if (this.getHealth() < maxHealth) {
                 this.heal(1.0F);
 //                MITEequilibrium.LOGGER.info("Natural Regeneration +1 ");
             }
@@ -493,7 +611,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             //施加饥饿效果
             if (this.phytonutrient < 100) {
                 if (!this.hasStatusEffect(registerStatusEffect.PHYTONUTRIENT)) {
-                    StatusEffectInstance statusEffectInstance1 = new StatusEffectInstance(registerStatusEffect.PHYTONUTRIENT, -1, 1, false, false, false);
+                    StatusEffectInstance statusEffectInstance1 = new StatusEffectInstance(registerStatusEffect.PHYTONUTRIENT, -1, 0, false, false, false);
                     StatusEffectUtil.addEffectToPlayersWithinDistance((ServerWorld) this.getWorld(), this, this.getPos(), 16, statusEffectInstance1, -1);
 
                 }

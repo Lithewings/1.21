@@ -65,7 +65,7 @@ public class OnServerInitializeMethod {
         ServerCommandSource source = context.getSource();
         MinecraftServer server = source.getServer();
         StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(server);
-        boolean isVillageCanGenerate=serverState.isPickAxeCrafted && ServerInfoRecorder.getDay()>=16;
+        boolean isVillageCanGenerate=serverState.isPickAxeCrafted && ServerInfoRecorder.getDay()>=10;
         if(isVillageCanGenerate){
             if(context.getSource().getEntity().isPlayer())
                 context.getSource().getEntity().sendMessage(Text.of("村庄可以生成了"));}

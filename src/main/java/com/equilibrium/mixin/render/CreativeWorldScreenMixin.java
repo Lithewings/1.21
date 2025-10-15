@@ -102,17 +102,17 @@ public abstract class CreativeWorldScreenMixin extends Screen {
     ) {
 
         //末影龙击败后该选项不会再变化了,引入更多世界类型
-        if(BooleanStorageUtil.load(configPath.toString(), false))
-            return;
-
-        //只把默认世界带入进来
-        WorldCreator.WorldType worldType = this.worldCreator.getNormalWorldTypes().getFirst();
-        this.worldCreator.getNormalWorldTypes().clear();
-        this.worldCreator.getNormalWorldTypes().add(worldType);
+        //目前主世界的地形固定,在json里写死了,无论何种世界,都是一个默认世界
+        if(!BooleanStorageUtil.load(configPath.toString(), false)){
+            //只把默认世界带入进来
+            WorldCreator.WorldType worldType = this.worldCreator.getNormalWorldTypes().getFirst();
+            this.worldCreator.getNormalWorldTypes().clear();
+            this.worldCreator.getNormalWorldTypes().add(worldType);
+        }
     }
 
 
-
+    //是否允许作弊,见WorldCreatorMixin中的设置
 
 
     @Override

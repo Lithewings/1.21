@@ -76,8 +76,10 @@ public class CraftingDifficultyHelper {
 	public static float getDifficulty(Item item) {
 		String name =  Registries.ITEM.getId(item).toString();
 
-
-
+		//金胡萝卜合成冷萃夜视药水时使用
+		if(item==Items.GOLDEN_CARROT){
+			return 3200f*9;
+		}
 		if(item==Items.IRON_BLOCK){
 			return 3200f*9;
 		}

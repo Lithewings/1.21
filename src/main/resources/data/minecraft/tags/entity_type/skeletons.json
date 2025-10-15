@@ -5,6 +5,9 @@
     "minecraft:wither_skeleton",
     "minecraft:skeleton_horse",
     "minecraft:bogged",
-    "miteequilibrium:longdead"
+    "miteequilibrium:longdead",
+    "miteequilibrium:wight",
+    "miteequilibrium:ghoul",
+    "miteequilibrium:invisible_stalker"
   ]
 }

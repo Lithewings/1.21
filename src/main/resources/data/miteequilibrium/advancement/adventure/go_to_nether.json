@@ -25,6 +25,9 @@
     ]
   ],
   "rewards": {
+    "loot": [
+      "miteequilibrium:chests/loot_table_go_to_nether"
+    ],
     "experience": 200
   },
   "sends_telemetry_event": true

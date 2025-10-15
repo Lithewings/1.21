@@ -128,6 +128,7 @@ public class BreakBlockGoal extends Goal {
 
     public boolean canBreakBlock(@NotNull BlockState state) {
         boolean hardBlock = state.isIn(ModBlockTags.HARVEST_ONE) || state.isIn(ModBlockTags.HARVEST_TWO)||state.isIn(ModBlockTags.HARVEST_THREE)||state.isIn(ModBlockTags.HARVEST_FOUR) ;
+        //可能会存在隔着透明方块也能打到之后的方块
         return !state.isAir() && !hardBlock && !state.isIn(BlockTags.PLANKS);
     }
 

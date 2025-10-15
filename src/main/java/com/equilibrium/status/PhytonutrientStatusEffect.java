@@ -25,12 +25,21 @@ public class PhytonutrientStatusEffect extends StatusEffect {
     }
 
 
+
     // 这个方法在应用药水效果时会被调用，所以我们可以在这里实现自定义功能。
     @Override
     public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
         if (entity instanceof PlayerEntity playerEntity) {
-            playerEntity.addExhaustion(0.005F * (float)(amplifier + 1));
-            return true;
+
+            //玩家在复杂移动时施加饥饿度
+            if(playerEntity.isSprinting()||playerEntity.isClimbing()||playerEntity.isSwimming()){
+                playerEntity.addExhaustion(0.0010f * (float)(amplifier + 1));
+                return true;
+            }
+            else{
+                playerEntity.addExhaustion(0.0001f * (float)(amplifier + 1));
+                return true;
+            }
         }
         return false;
     }

@@ -2,6 +2,8 @@ package com.equilibrium.entity.goal;
 
 import java.util.*;
 
+import com.equilibrium.tags.ModBlockTags;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.DoorBlock;
 import net.minecraft.block.FenceGateBlock;
 import net.minecraft.registry.tag.BlockTags;
@@ -144,19 +146,28 @@ public class AStarPathfinder {
     /**
      * 判断方块是否可通过。此处仅示例判断"是空气"。
      * 可根据需求改为 "方块要么是空气、要么是门" 等。
+     * 非固体方块不认为是不可通行的
      */
     private static boolean isPassable(World world, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
-        if(blockState.isAir())
+        if (blockState.isAir())
             return true;
-        if(blockState.isIn(BlockTags.DOORS)) {
+        if (blockState.isIn(BlockTags.DOORS)) {
             return blockState.get(Properties.OPEN);
         }
-        if(blockState.isIn(BlockTags.FENCE_GATES)) {
+        if (blockState.isIn(BlockTags.FENCE_GATES)) {
             return blockState.get(Properties.OPEN);
+        }
+        if (!blockState.isSolidBlock(world, pos)) {
+            if (blockState.isOf(Blocks.GLASS)||blockState.isIn(ModBlockTags.GLASS_MADE) || blockState.isIn(BlockTags.STAIRS) || blockState.isIn(BlockTags.SLABS)) {
+                return false;
+            } else
+                return true;
         }
         return false;
     }
+
+
 
     /**
      * 从终点节点逐级向父节点回溯，构建整条路径(从起点 -> 终点)。

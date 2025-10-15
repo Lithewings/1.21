@@ -1,7 +1,10 @@
 package com.equilibrium.mixin.render;
 
+import com.equilibrium.util.BooleanStorageUtil;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.gui.screen.world.WorldCreator;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.CyclingButtonWidget;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.text.Text;
@@ -9,6 +12,8 @@ import net.minecraft.world.Difficulty;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
+
+import java.nio.file.Path;
 
 @Mixin(CreateWorldScreen.GameTab.class)
 public class CreativeWorldScreenGameTabMixin {
@@ -38,14 +43,28 @@ public class CreativeWorldScreenGameTabMixin {
                 Difficulty.EASY
         };
     }
+    @Unique
+    private final String fileName = "Finish The Game Once.dat";
+    @Unique
+    private final Path configPath = FabricLoader.getInstance().getConfigDir().normalize().resolve(fileName);
+
+
 
     @ModifyArg(method = "<init>",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/CyclingButtonWidget$Builder;values([Ljava/lang/Object;)Lnet/minecraft/client/gui/widget/CyclingButtonWidget$Builder;",ordinal = 0))
     public Object[] modifyWorldCreatorMode(Object[] originalValues) {
         // 替换为自定义的 WorldCreator.Mode 数组
-        return new Object[] {
-                WorldCreator.Mode.SURVIVAL,
-                WorldCreator.Mode.HARDCORE
-        };
+        if(BooleanStorageUtil.load(configPath.toString(), false)) {
+            return new Object[] {
+                    WorldCreator.Mode.SURVIVAL,
+                    WorldCreator.Mode.HARDCORE,
+                    WorldCreator.Mode.CREATIVE
+            };
+        }
+        else
+            return new Object[] {
+                    WorldCreator.Mode.SURVIVAL,
+
+            };
     }
 //
 //        return (T) CyclingButtonWidget.<WorldCreator.Mode>builder(value -> value.name)

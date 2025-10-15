@@ -18,6 +18,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -42,6 +43,7 @@ public abstract class BedBlockMixin extends HorizontalFacingBlock implements Blo
      * @param start 起始位置
      * @return 找到的第一个空气方块位置；未找到则返回 null
      */
+    @Unique
     private BlockPos findFirstAirAbove(World world, BlockPos start) {
         int maxHeight = world.getHeight(); // 获取世界最大高度
         BlockPos mutablePos = new BlockPos(start.getX(), start.getY(), start.getZ());
@@ -103,17 +105,10 @@ public abstract class BedBlockMixin extends HorizontalFacingBlock implements Blo
 
 
         if (!world.isClient) {
-            // 找到床头位置（如果是床尾则偏移到床头）
-            if (state.get(BedBlock.PART) != BedPart.HEAD) {
-                pos = pos.offset(state.get(BedBlock.FACING));
-                state = world.getBlockState(pos);
-                if (!state.isOf((BedBlock) (Object) this)) {
-                    return; // 如果位置不是床块，则直接退出
-                }
-            }
 
             // 向上搜索第一个空气方块
             BlockPos firstAirPos = findFirstAirAbove(world, pos);
+
 
             if (firstAirPos != null) {
                 // 向玩家发送找到的坐标信息

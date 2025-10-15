@@ -21,7 +21,8 @@ public abstract class ActiveTargetMixin <T extends LivingEntity> extends TrackTa
     }
     @Override
     public double getFollowRange(){
-        double range = getMoonType(mob.getWorld()).equals("bloodMoon")? 256:32;
+        double range = getMoonType(mob.getWorld()).equals("bloodMoon")? 256:64;
+        //不在主世界也依然是64
         if(mob.getWorld().getRegistryKey()== RegistryKey.of(RegistryKeys.WORLD, Identifier.of(MOD_ID, "underworld")))
             range=range*0.75;
         return range;

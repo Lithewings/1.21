@@ -2,19 +2,18 @@ package com.equilibrium.mixin.tables;
 
 
 import com.equilibrium.craft_time_register.BlockInit;
-import com.equilibrium.craft_time_worklevel.CraftingIngredients;
-import com.equilibrium.item.Metal;
 import com.equilibrium.item.Tools;
 import com.equilibrium.item.extend_item.CoinItems;
 import com.equilibrium.tags.ModItemTags;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.CraftingTableBlock;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.RecipeInputInventory;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
@@ -22,13 +21,10 @@ import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
@@ -37,10 +33,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Mixin(CraftingScreenHandler.class)
 public abstract class CraftingScreenHandlerMixin extends AbstractRecipeScreenHandler<CraftingRecipeInput, CraftingRecipe> {
@@ -195,6 +188,38 @@ public abstract class CraftingScreenHandlerMixin extends AbstractRecipeScreenHan
 
 	@Shadow public abstract boolean matches(RecipeEntry<CraftingRecipe> recipe);
 
+
+
+
+
+
+
+
+	@Unique
+	//根据混合的颜色,来判断是何种药水,然后施加自定义属性
+	private static ItemStack potion(int color) {
+
+		StatusEffectInstance NIGHT_VISION = new StatusEffectInstance(StatusEffects.NIGHT_VISION, 2400);
+		StatusEffectInstance MINING_FATIGUE = new StatusEffectInstance(StatusEffects.MINING_FATIGUE, 2400);
+
+		//添加药水
+		//1、冷萃夜视药水
+		ItemStack coldBrewNightVisionPotion = new ItemStack(Items.POTION, 1);
+		coldBrewNightVisionPotion.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(
+				Optional.empty(), Optional.of(3145968), List.of(NIGHT_VISION, MINING_FATIGUE))
+		);
+		coldBrewNightVisionPotion.set(DataComponentTypes.ITEM_NAME, Text.translatable("item.effect.miteequilibrium.sub_night_vision"));
+
+
+		//根据混合的颜色,来判断最初是何种药水
+		Map<Integer, ItemStack> potionMap = Map.of(
+				-7954370, coldBrewNightVisionPotion
+		);
+		return potionMap.getOrDefault(color, ItemStack.EMPTY);
+	}
+
+
+
 	@Inject(method = "updateResult",at = @At(value = "HEAD"),cancellable = true)
 	private static void updateResults(
 			ScreenHandler handler, World world, PlayerEntity player, RecipeInputInventory craftingInventory, CraftingResultInventory resultInventory, @Nullable RecipeEntry<CraftingRecipe> recipe, CallbackInfo ci
@@ -223,6 +248,18 @@ public abstract class CraftingScreenHandlerMixin extends AbstractRecipeScreenHan
 			//先删除要移除的物品
 			if(itemStack.isIn(ModItemTags.REMOVEITEM))
 				itemStack = ItemStack.EMPTY;
+
+
+
+			if(itemStack.isOf(Items.POTION)){
+				itemStack =potion(itemStack.getComponents().get(DataComponentTypes.POTION_CONTENTS).getColor());
+
+			};
+
+
+
+
+
 
 			//金苹果至少需要200xp才能合成
 			if(itemStack.isOf(Items.GOLDEN_APPLE) && player.totalExperience<200 && !player.isCreative())

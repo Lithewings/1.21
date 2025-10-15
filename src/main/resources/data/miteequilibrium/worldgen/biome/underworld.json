@@ -32,7 +32,27 @@
         "type": "miteequilibrium:longdead",
         "maxCount": 3,
         "minCount": 1,
-        "weight": 20
+        "weight": 5
+      },
+
+
+      {
+        "type": "miteequilibrium:pudding",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 10
+      },
+      {
+        "type": "miteequilibrium:invisible_stalker",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 10
+      },
+      {
+        "type": "miteequilibrium:wight",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 10
       },
 
       {

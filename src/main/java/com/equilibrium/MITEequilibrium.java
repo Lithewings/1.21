@@ -7,10 +7,7 @@ import com.equilibrium.craft_time_register.UseBlock;
 import com.equilibrium.entity.goal.BreakBlockGoal;
 import com.equilibrium.event.BreakBlockEvent;
 import com.equilibrium.event.CraftingMetalPickAxeCallback;
-import com.equilibrium.item.Metal;
-import com.equilibrium.item.ModItemGroup;
-import com.equilibrium.item.ModItems;
-import com.equilibrium.item.Tools;
+import com.equilibrium.item.*;
 import com.equilibrium.mixin.player.ClientPlayerEntityMixin;
 import com.equilibrium.persistent_state.StateSaverAndLoader;
 import com.equilibrium.util.OnServerInitializeMethod;
@@ -20,6 +17,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -84,6 +82,7 @@ import static com.equilibrium.event.sound.SoundEventRegistry.registrySoundEvents
 import static com.equilibrium.item.Armors.registerArmors;
 import static com.equilibrium.item.Metal.registerModItemRaw;
 import static com.equilibrium.item.extend_item.CoinItems.registerCoinItems;
+import static com.equilibrium.item.food.FoodItems.registerFoodItems;
 import static com.equilibrium.status.registerStatusEffect.registerStatusEffects;
 import static com.equilibrium.tags.ModBlockTags.registerModBlockTags;
 import static com.equilibrium.tags.ModItemTags.registerModItemTags;
@@ -381,10 +380,12 @@ public class MITEequilibrium implements ModInitializer {
 
 
 			if (isNoPlayersInTheOverWorld) {
-				if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 3)
+				if (serverOverWorld.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED) != 3) {
 					for (PlayerEntity player : server.getPlayerManager().getPlayerList())
 						player.sendMessage(Text.of("由于主世界没有玩家,随机刻速度已回调至默认值"), true);
-				RandomTickModifier(serverOverWorld, 3);
+					//有可能目前是蓝月,但玩家在地底世界,所以会陷入这里恢复默认,但蓝月那边又改成5,这样反复执行了这段代码
+					RandomTickModifier(serverOverWorld, 3);
+				}
 
 			}
 
@@ -517,25 +518,36 @@ public class MITEequilibrium implements ModInitializer {
 			// 其他物品时不做处理
 			return TypedActionResult.pass(itemStack);
         });
+
+
 		//原版物品添加tooltip
 		//不能和数据生成一起使用
 
-//		ItemTooltipCallback.EVENT.register((stack, context, type,lines) -> {
-//			// 判断物品是青金石（Lapis Lazuli）或其他物品
-//			if (stack.getItem() == Items.LAPIS_LAZULI) {
-//				lines.add(Text.literal("每个25XP").formatted(Formatting.DARK_GRAY));
-//			}
-//			if (stack.getItem() == Items.QUARTZ) {
-//				lines.add(Text.literal("每个50XP").formatted(Formatting.DARK_GRAY));
-//			}
-//			if (stack.getItem() == Items.DIAMOND) {
-//				lines.add(Text.literal("每个500XP").formatted(Formatting.DARK_GRAY));
-//			}
-//			if (stack.getItem() == Items.GOLDEN_APPLE) {
-//				lines.add(Text.literal("生命恢复 II（00:40）").formatted(Formatting.BLUE));
-//				lines.add(Text.literal("抗火（00:40）").formatted(Formatting.BLUE));
-//			}
-//		});
+		ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> {
+			// 判断物品是青金石（Lapis Lazuli）或其他物品
+			if (stack.getItem() == Items.LAPIS_LAZULI) {
+				lines.add(Text.literal("每个25XP").formatted(Formatting.DARK_GRAY));
+			}
+			if (stack.getItem() == Items.QUARTZ) {
+				lines.add(Text.literal("每个50XP").formatted(Formatting.DARK_GRAY));
+			}
+			if (stack.getItem() == Items.DIAMOND) {
+				lines.add(Text.literal("每个500XP").formatted(Formatting.DARK_GRAY));
+			}
+			if (stack.getItem() == Items.GOLDEN_APPLE) {
+				lines.add(Text.literal("生命恢复 II（00:40）").formatted(Formatting.BLUE));
+				lines.add(Text.literal("抗火（00:40）").formatted(Formatting.BLUE));
+			}
+
+			if (stack.getItem() == Armors.MITHRIL_CHEST_PLATE) {
+				lines.add(Text.literal("再生：生命恢复速度翻倍").formatted(Formatting.BLUE));
+
+			}
+
+
+
+
+		});
 
 
 		//玩家食用食品监听器
@@ -600,7 +612,8 @@ public class MITEequilibrium implements ModInitializer {
 		ModBlocks.registerModBlocks();
 		//以下开始正式添加物品:
 
-
+		//食物
+		registerFoodItems();
 		//添加硬币物品
 		registerCoinItems();
 		//添加工具物品

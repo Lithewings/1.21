@@ -9,6 +9,10 @@ import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.advancement.criterion.InventoryChangedCriterion;
 import net.minecraft.advancement.criterion.UsedEnderEyeCriterion;
 import net.minecraft.item.Items;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.condition.SurvivesExplosionLootCondition;
+import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.predicate.NumberRange;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -26,8 +30,10 @@ public class ModAdventure  implements Consumer<Consumer<AdvancementEntry>>{
 
 
 
+
     @Override
     public void accept(Consumer<AdvancementEntry> exporter) {
+
         AdvancementEntry rootAdventure = Advancement.Builder.create()
                 .display(
                         // 显示的图标

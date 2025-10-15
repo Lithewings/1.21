@@ -27,9 +27,20 @@ public class ItemsMixin {
 
 
 
+    @Shadow
+    @Final
+    public static final Item MELON_SLICE = register("melon_slice", new Item(new Item.Settings().food(new FoodComponent.Builder().nutrition(1).saturationModifier(0).build())));
 
 
+    @Shadow
+    @Final
+    public static final Item BREAD = register("bread", new Item(new Item.Settings().food(new FoodComponent.Builder().nutrition(2).saturationModifier(8).build())));
 
-//    private final static Item LAPIS_LAZULI = register("lapis_lazuli", new Item(new Item.Settings()));
+    @Shadow
+    @Final
+    public static final Item BAKED_POTATO = register("baked_potato", new Item(new Item.Settings().food(new FoodComponent.Builder().nutrition(2).saturationModifier(6).build())));
+
+
+    //    private final static Item LAPIS_LAZULI = register("lapis_lazuli", new Item(new Item.Settings()));
 
 }

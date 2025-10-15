@@ -237,6 +237,7 @@ public class BaseSlimeEntity extends MobEntity implements Monster {
 
 
     //所有的史莱姆均具有腐蚀性
+    //damage函数是攻击者和被攻击者两者之间使用,如果强调是主动攻击的一方,应该用onattack
     protected void damage(LivingEntity target) {
         if (this.isAlive() && this.isInAttackRange(target) && this.canSee(target)) {
             DamageSource damageSource = this.getDamageSources().mobAttack(this);
@@ -244,7 +245,7 @@ public class BaseSlimeEntity extends MobEntity implements Monster {
                 this.playSound(SoundEvents.ENTITY_SLIME_ATTACK, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
                 target.getAllArmorItems().forEach(itemStack -> {
                     if(isCorruptibleItems.contains(itemStack.getItem())) {
-                        itemStack.damage((int) (itemStack.getMaxDamage() * 0.01), target, this.getSlotForStack(itemStack, List.of()));
+                        itemStack.damage((int) (itemStack.getMaxDamage() * 0.05), target, this.getSlotForStack(itemStack, List.of()));
                         this.playSound(SoundEvents.BLOCK_LAVA_EXTINGUISH, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
                     }
                 });

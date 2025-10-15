@@ -1,6 +1,7 @@
 package com.equilibrium.item;
 
 
+import net.minecraft.component.type.FoodComponents;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
