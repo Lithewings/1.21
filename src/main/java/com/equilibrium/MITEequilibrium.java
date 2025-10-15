@@ -41,6 +41,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Text;
@@ -63,6 +64,7 @@ import com.equilibrium.event.sound.SoundEventRegistry;
 import com.equilibrium.util.CreativeGroup;
 import com.equilibrium.craft_time_worklevel.CraftingIngredients;
 import com.equilibrium.craft_time_worklevel.FurnaceIngredients;
+import org.spongepowered.asm.mixin.Unique;
 
 
 import java.util.ArrayList;
@@ -103,6 +105,7 @@ public class MITEequilibrium implements ModInitializer {
 
 
 
+	public static final BooleanProperty FERTILIZED = BooleanProperty.of("fertilized");
 
 
 	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);

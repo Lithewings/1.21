@@ -1,5 +1,6 @@
 package com.equilibrium.mixin.crop;
 
+import com.equilibrium.MITEequilibrium;
 import com.equilibrium.util.ServerInfoRecorder;
 import net.minecraft.block.*;
 import net.minecraft.server.world.ServerWorld;
@@ -18,6 +19,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Collections;
 import java.util.List;
+
+import static com.equilibrium.MITEequilibrium.FERTILIZED;
+import static com.equilibrium.MITEequilibrium.MOD_ID;
 
 @Mixin(CropBlock.class)
 public abstract class CropBlockMixin extends PlantBlock implements Fertilizable {
@@ -60,7 +64,20 @@ public abstract class CropBlockMixin extends PlantBlock implements Fertilizable 
             int i = this.getAge(state);
             if (i < this.getMaxAge()) {
                 float f = CropBlock.getAvailableMoisture(this, world, pos);
-                if (random.nextInt((int)(128*25.0F / f) + 1) == 0) {
+                float times = 128;
+                //检查农田是否具有施肥标签
+                if(world.getBlockState(pos.down()).contains(FERTILIZED)) {
+                    if (world.getBlockState(pos.down()).get(FERTILIZED) == true)
+                        //原先的两倍加速
+                        times=64f;
+                    else
+                        times=128;
+                }
+                else
+                    MITEequilibrium.LOGGER.error("No such Block State called fertilized");
+
+
+                if (random.nextInt((int)(times*25.0F / f) + 1) == 0) {
                     world.setBlockState(pos, this.withAge(i + 1), Block.NOTIFY_LISTENERS);
                 }
             }

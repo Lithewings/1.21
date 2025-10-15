@@ -15,6 +15,7 @@
     "crafttime.ScreenHandlerMixin",
     "crop.BoneMealItemMixin",
     "crop.CropBlockMixin",
+    "crop.FarmlandBlockMixin",
     "crop.SaplingBlockMixin",
     "crop.StemBlockMixin",
     "crop.SugarCaneBlockMixn",
