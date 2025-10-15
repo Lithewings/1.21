@@ -39,7 +39,8 @@ public class OnServerInitializeMethod {
     public static void doNothing() {
     }
 
-
+    public static void doNothing(Boolean aBoolean) {
+    }
 
 
 
@@ -208,6 +209,7 @@ public class OnServerInitializeMethod {
 //					protection
 //			)), true);
     }
+
 
 
 }

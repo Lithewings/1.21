@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class EntityRenderDispatcherMixinForRenderHitBox {
     @Inject(method = "renderHitbox",at = @At("HEAD"), cancellable = true)
     private static void renderHitbox(MatrixStack matrices, VertexConsumer vertices, Entity entity, float tickDelta, float red, float green, float blue, CallbackInfo ci) {
-        //不渲染生物碰撞箱的条件:不是那个隐形的怪
+        //取消对隐形潜伏者的碰撞箱渲染
         if(entity instanceof InvisibleStalkerEntity)
             ci.cancel();
     }

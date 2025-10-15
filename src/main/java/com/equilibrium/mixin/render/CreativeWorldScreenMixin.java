@@ -147,7 +147,7 @@ public abstract class CreativeWorldScreenMixin extends Screen {
                 //当按钮只有一个选项时,如果设置不活跃,再怎么激发别的按钮,这个按钮也不会刷新(一闪一闪的)
                 if (buttonMessage.contains("mapType")){
 //                    cyclingButtonWidget.active=false;
-                    cyclingButtonWidget.setTooltip(Tooltip.of(Text.of("使用模组设定好的地形（在任意世界击败一次末影龙以解锁该按钮的其他选项）")));
+                    cyclingButtonWidget.setTooltip(Tooltip.of(Text.of("目前版本只能使用模组设定好的地形")));
                 }
 //                if (cyclingButtonWidget.getMessage().toString().contains("Command")) {
 //                    cyclingButtonWidget.active = false;

@@ -100,7 +100,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Override
     public void dropInventory() {
         super.dropInventory();
-
         serverState = StateSaverAndLoader.getServerState(ServerInfoRecorder.getServerInstance());
         //首次死亡的掉落保护
         if(serverState.playerDeathTimes==1)
@@ -108,6 +107,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         else if ((this.experienceLevel<5)) {
             this.getWorld().getGameRules().get(GameRules.KEEP_INVENTORY).set(false,this.getServer());
             this.vanishCursedItems();
+        //掉落所有物品
             this.inventory.dropAll();
 
         }else{
@@ -202,6 +202,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "eatFood", at = @At(value = "HEAD"))
     public void eatFood(World world, ItemStack stack, FoodComponent foodComponent, CallbackInfoReturnable<ItemStack> cir) {
+
+
+
         //触发使用食物的事件
 //        if(!world.isClient()) {
 //            ActionResult result = OnPlayerEntityEatEvent.EVENT.invoker().interact(this.getWorld().getPlayerByUuid(this.getUuid()));
@@ -266,6 +269,12 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo ci) {
+
+//        if(!this.getWorld().isClient) {
+//            this.sendMessage(Text.of("饱食度为" + this.getHungerManager().getFoodLevel()));
+//            this.sendMessage(Text.of("营养值为" + this.getHungerManager().getSaturationLevel()));
+//        }
+
 
 //        ItemStack stack = new ItemStack(Items.POTION, 1);
 //        stack.set(DataComponentTypes.POTION_CONTENTS,new PotionContentsComponent(
@@ -403,6 +412,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     public void getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> cir) {
         cir.cancel();
         this.addExhaustion(0.0005f);
+//        this.addExhaustion(555555f);
         ItemStack stack = this.getMainHandStack();
         float f = this.inventory.getBlockBreakingSpeed(block);
         if (f > 1.0F) {
@@ -514,6 +524,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Shadow public abstract boolean isInvulnerableTo(DamageSource damageSource);
 
     @Shadow public abstract PlayerInventory getInventory();
+
+    @Shadow public abstract HungerManager getHungerManager();
 
     @Unique
     private double lastSleepTime = 0;

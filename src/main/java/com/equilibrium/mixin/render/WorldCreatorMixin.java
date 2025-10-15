@@ -20,11 +20,11 @@ public class WorldCreatorMixin {
     @Unique
     private final Path configPath = FabricLoader.getInstance().getConfigDir().normalize().resolve(fileName);
 
-    @Inject(method = "areCheatsEnabled",at = @At("HEAD"), cancellable = true)
-    public void areCheatsEnabled(CallbackInfoReturnable<Boolean> cir) {
-        if(!BooleanStorageUtil.load(configPath.toString(), false)) {
-            cir.setReturnValue(false);
-        }
-
-    }
+//    @Inject(method = "areCheatsEnabled",at = @At("HEAD"), cancellable = true)
+//    public void areCheatsEnabled(CallbackInfoReturnable<Boolean> cir) {
+//        if(!BooleanStorageUtil.load(configPath.toString(), false)) {
+//            cir.setReturnValue(false);
+//        }
+//
+//    }
 }

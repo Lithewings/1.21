@@ -1,6 +1,7 @@
 package com.equilibrium.mixin.render;
 
 import com.equilibrium.MITEequilibrium;
+import com.equilibrium.util.ServerInfoRecorder;
 import com.google.common.collect.Lists;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -133,12 +134,12 @@ public abstract class DeathScreenMixin extends Screen {
         if (this.message != null) {
             context.drawCenteredTextWithShadow(this.textRenderer, this.message, this.width / 2, 85, 16777215);
         }
-        String nextReviveTime = "距离下次可用的重生还有: "+getNextReviveTime()+" s";
 
-        context.drawCenteredTextWithShadow(this.textRenderer, nextReviveTime, this.width / 2, 100, 16777215);
-
-        context.drawCenteredTextWithShadow(this.textRenderer, "不必冒险，你有无限次重来的机会，这个世界永远等待着你" , this.width / 2, 115, 16777215);
-
+        if(!isHardcore) {
+            String nextReviveTime = "距离下次可用的重生还有: "+getNextReviveTime()+" s";
+            context.drawCenteredTextWithShadow(this.textRenderer, nextReviveTime, this.width / 2, 100, 16777215);
+            context.drawCenteredTextWithShadow(this.textRenderer, "不必冒险，你有无限次重来的机会，这个世界永远等待着你", this.width / 2, 115, 16777215);
+        }
         if (this.message != null && mouseY > 85 && mouseY < 85 + 9) {
             Style style = this.getTextComponentUnderMouse(mouseX);
             context.drawHoverEvent(this.textRenderer, style, mouseX, mouseY);

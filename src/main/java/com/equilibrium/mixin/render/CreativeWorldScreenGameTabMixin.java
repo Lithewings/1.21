@@ -6,19 +6,24 @@ import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.gui.screen.world.WorldCreator;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.CyclingButtonWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.text.Text;
 import net.minecraft.world.Difficulty;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 
 import java.nio.file.Path;
+import java.util.function.Consumer;
 
 @Mixin(CreateWorldScreen.GameTab.class)
 public class CreativeWorldScreenGameTabMixin {
 
 
+    @Shadow @Final private TextFieldWidget worldNameField;
     @Unique
     private static final Text GAME_MODE_TEXT = Text.translatable("selectWorld.gameMode");
     @Unique
@@ -66,21 +71,33 @@ public class CreativeWorldScreenGameTabMixin {
 
             };
     }
-//
-//        return (T) CyclingButtonWidget.<WorldCreator.Mode>builder(value -> value.name)
-//            .values(WorldCreator.Mode.SURVIVAL, WorldCreator.Mode.HARDCORE)
-//                .build(0, 0, 210, 20, GAME_MODE_TEXT);
-//    @ModifyArg(method = "<init>",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/GridWidget$Adder;add(Lnet/minecraft/client/gui/widget/Widget;Lnet/minecraft/client/gui/widget/Positioner;)Lnet/minecraft/client/gui/widget/Widget;",ordinal = 2),index = 0)
-//    public <T extends Widget> T difficulty (T widget){
-//        return (T) CyclingButtonWidget.builder(Difficulty::getTranslatableName)
-//                .tooltip()
-//                .build(0, 0, 210, 20, Text.translatable("options.difficulty"));
-//    }
 
 
 
 
+    //现在默认为关,解放末地后可以开启
+    @ModifyArg(method = "<init>",at = @At(value = "INVOKE", target ="Lnet/minecraft/client/gui/widget/GridWidget$Adder;add(Lnet/minecraft/client/gui/widget/Widget;)Lnet/minecraft/client/gui/widget/Widget;",ordinal = 0))
+    public Widget modifyWorldCreatorMode(Widget widget) {
 
+        if(BooleanStorageUtil.load(configPath.toString(), false)) {
+            return widget;
+        }
+        else {
+            //跳转该分支,说明没有解放末地,所以限制按钮切换
+            ((CyclingButtonWidget<?>) widget).onPress();
+            ((CyclingButtonWidget<?>) widget).active=false;
+            return widget;
+        }
+    }
+    @ModifyArg(method = "<init>",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/world/WorldCreator;addListener(Ljava/util/function/Consumer;)V",ordinal = 3))
+    public Consumer<WorldCreator> modifyWorldCreatorMode(Consumer<WorldCreator> listener) {
+        if(BooleanStorageUtil.load(configPath.toString(), false)) {
+            return listener;
+        }
+        else return creator -> {
+            //跳转该分支,说明没有解放末地,所以按钮按照原来的参数不动
+        };
+    }
 
 }
 
