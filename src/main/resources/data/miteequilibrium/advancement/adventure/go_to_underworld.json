@@ -10,7 +10,7 @@
   },
   "display": {
     "announce_to_chat": false,
-    "description": "在主世界的最底部建立传送门，进入地下世界维度\n将获得200XP",
+    "description": "在主世界的最底部建立传送门，进入地下世界维度\n将获得200XP,铁块*3",
     "icon": {
       "count": 1,
       "id": "minecraft:flint_and_steel"
@@ -23,6 +23,9 @@
     ]
   ],
   "rewards": {
+    "loot": [
+      "miteequilibrium:chests/loot_table_go_to_nether"
+    ],
     "experience": 200
   },
   "sends_telemetry_event": true

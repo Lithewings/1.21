@@ -82,7 +82,8 @@
     "vanilla_itemsmixin.BucketItemMixin",
     "vanilla_itemsmixin.ItemsMixin",
     "world.LevelPropertiesMixin",
-    "world.ServerWorldMixin"
+    "world.ServerWorldMixin",
+    "world.WorldMixin"
   ],
   "injectors": {
     "defaultRequire": 1

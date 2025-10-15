@@ -127,6 +127,10 @@ public class structurePoolBasedGeneratorMixin {
                 cir.setReturnValue(Optional.empty());
                 cir.cancel();
             }
+            if (regEntryContains(structurePool, "pillager_outpost")) {
+                cir.setReturnValue(Optional.empty());
+                cir.cancel();
+            }
             //接着生成其他结构
         }
     }

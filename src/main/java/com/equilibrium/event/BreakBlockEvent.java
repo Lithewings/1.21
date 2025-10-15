@@ -35,6 +35,15 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
      * @param state       the block state <strong>before</strong> the block was broken
      * @param blockEntity the block entity of the broken block, can be {@code null}
      */
+
+
+
+   public static int guarantee = 0;
+   //最多12次沙砾必然不掉落自身,全服务器共享进度,重启时归零
+
+
+
+
     @Override
     public void afterBlockBreak(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity) {
 
@@ -132,12 +141,15 @@ public class BreakBlockEvent implements PlayerBlockBreakEvents.After{
             }
 
             int randomNumber1 = random.nextInt(100);
-            if(randomNumber1<75-furtuneLevel*15){
+            if(randomNumber1<75-furtuneLevel*15 && guarantee<12){
+                guarantee++;
                 world.spawnEntity(new ItemEntity(world, pos.getX()+0.5, pos.getY(), pos.getZ()+0.5,
                         new ItemStack(Items.GRAVEL)));
                 return;
             }
-
+            else {
+                guarantee=0;
+            }
 
 
 
