@@ -1,5 +1,5 @@
 # 项目介绍
-  本项目是针对Minecraft Fabric 1.21所建立的。
+  模组以Fabric1.21作为框架，还原了大部分MITE-R196的经典设定，并加入了其他改善游戏体验的细节。这是一个线性通关的游戏体验，以解放末地作为目标，这里没有过多的花哨细节，你要做的就是仔细思考当下环境，做出正确抉择。
   前置模组：Craft-Time（已预安装）
   https://github.com/ChongYuCN/Craft-Time
  
