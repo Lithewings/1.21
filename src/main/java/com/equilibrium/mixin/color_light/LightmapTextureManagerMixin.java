@@ -165,16 +165,10 @@ public abstract class LightmapTextureManagerMixin {
                         }
                         //夜视增益
                         //新建集合
-                        ArrayList<Integer> playerExperienceLevel = new ArrayList<>();
-                        if(ServerInfoRecorder.getServerInstance()!=null) {
-                            for(PlayerEntity player:ServerInfoRecorder.getServerInstance().getPlayerManager().getPlayerList()){
-                                //将玩家的经验值全部送入集合中
-                                playerExperienceLevel.add(player.experienceLevel);
-                            }
-                        }
+
 
                         //100级时获得最大增益值
-                        float nightVision = playerExperienceLevel.isEmpty() ? 0 : Math.clamp(Collections.max(playerExperienceLevel)*0.01F,0,1);
+                        float nightVision = Math.clamp((this.client.player.experienceLevel)*0.01F,0,1);
 
 
                         //返回方块底色颜色浓淡的因子

@@ -11,6 +11,8 @@
     "MiningToolItemMixin",
     "MITEequilibriumMixin",
     "recipeModifier",
+
+
     "ThreadCheck",
     "crafttime.ScreenHandlerMixin",
     "crop.BoneMealItemMixin",
@@ -63,7 +65,6 @@
     "structure.strong_hold.StrongholdGeneratorMixin",
     "structure.strong_hold.StrongholdGeneratorStartMixin",
     "structure.village.structurePoolBasedGeneratorMixin",
-    "structure.village.structurePoolBasedGeneratorMixin$StructurePoolGeneratorMixin",
     "tables.AbstractFurnaceEntityMixin",
     "tables.AnvilBlockMixin",
     "tables.AnvilScreenMixin",

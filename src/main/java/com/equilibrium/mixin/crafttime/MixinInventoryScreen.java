@@ -72,6 +72,7 @@ public abstract class MixinInventoryScreen extends AbstractInventoryScreen<Playe
         ItemStack resultStack = this.handler.getSlot(0).getStack();
 
 		boolean finished = player.craftTime$tick(resultStack);
+		//可以在这里定义金苹果合成消耗经验的逻辑
 
 		//problem:when mouse cursor has stack,this is not stop
 		if (finished) {

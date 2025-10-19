@@ -36,14 +36,6 @@ public abstract class InGameHudMixin {
     private final Random random = Random.create();
 
 
-
-
-
-
-
-
-
-
     //渲染多少生命值心? 已经弃用,直接修改最大生命值上限即可
 //    @ModifyArg(method = "renderStatusBars", at = @At(value = "INVOKE", target = "Ljava/lang/Math;max(FF)F"),index = 0)
 //    public float playerMaxHealth (float a){
@@ -52,13 +44,12 @@ public abstract class InGameHudMixin {
 //
 
 
-
-
-
-    @Inject(method = "renderFood",at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "renderFood", at = @At(value = "HEAD"), cancellable = true)
     private void renderFood(DrawContext context, PlayerEntity player, int top, int right, CallbackInfo ci) {
         ci.cancel();
         HungerManager hungerManager = player.getHungerManager();
+        //随时更新数据
+        hungerManager.update(player);
 
         int i = hungerManager.getFoodLevel();
         //获得额外的饱食度上限渲染
@@ -66,16 +57,13 @@ public abstract class InGameHudMixin {
 
         //仅仅是渲染,实际上限在hungerManager里面设置
 
-        int maxFoodLevel=PlayerMaxHealthOrFoodLevelHelper.getMaxHealthOrFoodLevel();
-
-
-
+        int maxFoodLevel = PlayerMaxHealthOrFoodLevelHelper.getMaxHealthOrFoodLevel(player);
 
 
 //        LOGGER.info("maxFoodLevel is "+maxFoodLevel);
         RenderSystem.enableBlend();
         //遍历10个鸡腿
-        for (int j = 0; j < maxFoodLevel/2; j++) {
+        for (int j = 0; j < maxFoodLevel / 2; j++) {
             int k = top;
             Identifier identifier;
             Identifier identifier2;
@@ -107,15 +95,6 @@ public abstract class InGameHudMixin {
 
         RenderSystem.disableBlend();
     }
-
-
-
-
-
-
-
-
-
 
 
 }

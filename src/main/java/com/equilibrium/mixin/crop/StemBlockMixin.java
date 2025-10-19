@@ -1,5 +1,6 @@
 package com.equilibrium.mixin.crop;
 
+import com.equilibrium.MITEequilibrium;
 import net.minecraft.block.*;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registry;
@@ -19,6 +20,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import java.util.Optional;
+
+import static com.equilibrium.MITEequilibrium.FERTILIZED;
 
 @Mixin(StemBlock.class)
 public abstract class StemBlockMixin extends PlantBlock implements Fertilizable {
@@ -41,7 +44,22 @@ public abstract class StemBlockMixin extends PlantBlock implements Fertilizable 
     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         if (world.getBaseLightLevel(pos, 0) >= 9) {
             float f = CropBlock.getAvailableMoisture(this, world, pos);
-            if (random.nextInt((int)(256*25.0F / f) + 1) == 0) {
+
+
+            float times = 128;
+            //检查农田是否具有施肥标签
+            if(world.getBlockState(pos.down()).contains(FERTILIZED)) {
+                if (world.getBlockState(pos.down()).get(FERTILIZED) == true)
+                    //原先的两倍加速
+                    times=64f;
+                else
+                    times=128;
+            }
+            else
+                MITEequilibrium.LOGGER.error("No such Block State called fertilized");
+
+
+            if (random.nextInt((int)(times*25.0F / f) + 1) == 0) {
                 int i = (Integer)state.get(AGE);
                 if (i < 7) {
                     state = state.with(AGE, Integer.valueOf(i + 1));

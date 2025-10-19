@@ -4,9 +4,15 @@ package com.equilibrium;
 import com.equilibrium.client.render.entity.renderer.*;
 import com.equilibrium.entity.mob.PuddingSlimeEntity;
 import com.equilibrium.util.MyCommands;
+import com.equilibrium.util.ServerInfoRecorder;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.text.Text;
+
 
 import static com.equilibrium.entity.ModEntities.*;
 
@@ -16,20 +22,8 @@ public class MITEequilibriumClient implements ClientModInitializer {
 
 
 
-
-
-
-
-
     @Override
     public void onInitializeClient() {
-
-
-
-
-
-
-
 
 
 

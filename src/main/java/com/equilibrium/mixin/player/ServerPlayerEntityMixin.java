@@ -63,11 +63,13 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 //    }
 
 
+    @Shadow public abstract ServerWorld getServerWorld();
+
     @Inject(method = "onDeath",at = @At("HEAD"))
     public void onDeath(DamageSource damageSource, CallbackInfo ci) {
         StateSaverAndLoader serverState;
         //创建一个持久状态类,传入当前服务器副本,再对这个持久状态类写入数据,当玩家退出时,自动把信息写回磁盘
-        serverState = StateSaverAndLoader.getServerState(ServerInfoRecorder.getServerInstance());
+        serverState = StateSaverAndLoader.getServerState(this.getServer());
         serverState.playerDeathTimes++;
     }
 

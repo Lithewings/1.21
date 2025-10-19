@@ -1,7 +1,7 @@
 package com.equilibrium.mixin.render;
 
 import com.equilibrium.MITEequilibrium;
-import com.equilibrium.util.ServerInfoRecorder;
+
 import com.google.common.collect.Lists;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;

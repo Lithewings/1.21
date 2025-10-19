@@ -1,5 +1,6 @@
 package com.equilibrium.mixin.player;
 
+import com.equilibrium.MITEequilibriumClient;
 import com.equilibrium.item.Armors;
 import com.equilibrium.item.Tools;
 import com.equilibrium.persistent_state.StateSaverAndLoader;
@@ -65,7 +66,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static com.equilibrium.event.MoonPhaseEvent.*;
+
 
 
 import static com.equilibrium.item.tools_attribute.ExtraDamageFromExperienceLevel.getDamageLevel;
@@ -100,7 +101,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Override
     public void dropInventory() {
         super.dropInventory();
-        serverState = StateSaverAndLoader.getServerState(ServerInfoRecorder.getServerInstance());
+        serverState = StateSaverAndLoader.getServerState(this.getServer());
         //首次死亡的掉落保护
         if(serverState.playerDeathTimes==1)
             this.getWorld().getGameRules().get(GameRules.KEEP_INVENTORY).set(true,this.getServer());
@@ -269,6 +270,12 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "jump", at = @At("TAIL"))
     public void jump(CallbackInfo ci) {
+
+
+
+
+
+
 
 //        if(!this.getWorld().isClient) {
 //            this.sendMessage(Text.of("饱食度为" + this.getHungerManager().getFoodLevel()));
@@ -527,6 +534,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Shadow public abstract HungerManager getHungerManager();
 
+    @Shadow public abstract void jump();
+
     @Unique
     private double lastSleepTime = 0;
 
@@ -596,8 +605,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         //不要在这里使用这个代码,这会使得无时无刻玩家基础伤害固定为这个值从而打不出跳劈伤害,请到武器栏使用这个
 //        this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(Math.min(1.0 + (this.experienceLevel * 0.01), 1.5));
 
-        //更新生命值上限和饱食度上限
-        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(PlayerMaxHealthOrFoodLevelHelper.getMaxHealthOrFoodLevel());
+        //更新生命值上限,最大生命值
+        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(PlayerMaxHealthOrFoodLevelHelper.getMaxHealthOrFoodLevel((PlayerEntity)(Object)this));
 
 
         //更新回血速率
@@ -606,7 +615,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         if(this.getEquippedStack(EquipmentSlot.CHEST).isOf(Armors.MITHRIL_CHEST_PLATE))
             this.regerationFactor = this.regerationFactor * 0.5f;
 
-        int maxHealth = PlayerMaxHealthOrFoodLevelHelper.getMaxHealthOrFoodLevel();
+        int maxHealth = PlayerMaxHealthOrFoodLevelHelper.getMaxHealthOrFoodLevel((PlayerEntity)(Object)this);
         if (this.age % (960 * regerationFactor) == 0) {
             //在tick中加入生命回复任务
             if (this.getHealth() < maxHealth) {

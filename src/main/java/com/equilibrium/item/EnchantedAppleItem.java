@@ -17,7 +17,7 @@ public class EnchantedAppleItem extends Item {
     public void onCraftByPlayer(ItemStack stack, World world, PlayerEntity player) {
         super.onCraft(stack, world);
         player.addExperience(-200);
-        player.sendMessage(Text.of("ItemStack is"+stack));
+//        player.sendMessage(Text.of("ItemStack is"+stack));
     }
 
 

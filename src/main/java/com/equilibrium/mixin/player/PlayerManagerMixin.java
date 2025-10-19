@@ -58,7 +58,11 @@ public abstract class PlayerManagerMixin {
 //        LOGGER.info("When finishing connect,the player xp level is " + player.experienceLevel);
 //        LOGGER.info("When finishing connect,the player health level is " + player.getHealth());
         //获取服务器的所有nbt数据
-        serverState = StateSaverAndLoader.getServerState(ServerInfoRecorder.getServerInstance());
+
+
+
+
+        serverState = StateSaverAndLoader.getServerState(this.server);
         if (serverState.onFirstInTheWorld) {
             //只触发一次
             serverState.onFirstInTheWorld = false;
@@ -89,9 +93,7 @@ public abstract class PlayerManagerMixin {
             long time = player.getWorld().getTimeOfDay();
             ServerInfoRecorder.setDay((int) time);
         }
-        //记录服务器实例
-        if (!ServerInfoRecorder.isServerInstanceSet())
-            ServerInfoRecorder.setServerInstance(server);
+
 
 
         if (!player.getWorld().isClient) {

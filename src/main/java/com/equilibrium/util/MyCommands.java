@@ -80,28 +80,28 @@ public class MyCommands {
                     return 1;
                 })
         );
-        dispatcher.register(ClientCommandManager.literal("deathTime")
-                .executes(context -> {
-                    PlayerEntity player = context.getSource().getPlayer();
-                    StateSaverAndLoader stateSaverAndLoader = StateSaverAndLoader.getServerState(ServerInfoRecorder.getServerInstance());
-                    player.sendMessage(Text.of("你的死亡次数为: "+ stateSaverAndLoader.playerDeathTimes+ "（存在一定计算延迟）"));
-
-                    return 1;
-                })
-        );
+//        dispatcher.register(ClientCommandManager.literal("deathTime")
+//                .executes(context -> {
+//                    PlayerEntity player = context.getSource().getPlayer();
+//                    StateSaverAndLoader stateSaverAndLoader = StateSaverAndLoader.getServerState(ServerInfoRecorder.getServerInstance());
+//                    player.sendMessage(Text.of("你的死亡次数为: "+ stateSaverAndLoader.playerDeathTimes+ "（存在一定计算延迟）"));
+//
+//                    return 1;
+//                })
+//        );
 
         // 注册 tickSpeed 命令
         //需要用服务器的实例检测随机刻速度,而不是客户端的世界
-        dispatcher.register(ClientCommandManager.literal("randomTickSpeed")
-                .executes(context -> {
-
-                    int speed = ServerInfoRecorder.getServerInstance().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED);
-
-                    context.getSource().getPlayer().sendMessage(Text.of("Random tick speed is"+speed));
-
-                    return 1;
-                })
-        );
+//        dispatcher.register(ClientCommandManager.literal("randomTickSpeed")
+//                .executes(context -> {
+//
+//                    int speed = ServerInfoRecorder.getServerInstance().getGameRules().getInt(GameRules.RANDOM_TICK_SPEED);
+//
+//                    context.getSource().getPlayer().sendMessage(Text.of("Random tick speed is"+speed));
+//
+//                    return 1;
+//                })
+//        );
 
         // 注册 A星算法 命令
         dispatcher.register(ClientCommandManager.literal("findPath")

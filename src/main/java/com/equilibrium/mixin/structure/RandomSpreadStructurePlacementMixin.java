@@ -64,7 +64,6 @@ public class RandomSpreadStructurePlacementMixin {
     @Inject(method = "getStartChunk",at = @At("HEAD"),cancellable = true)
     public void getStartChunk(long seed, int chunkX, int chunkZ, CallbackInfoReturnable<ChunkPos> cir) {
         cir.cancel();
-        MinecraftServer server = ServerInfoRecorder.getServerInstance();
 
         int spacing = this.spacing;
         int separation = this.separation;

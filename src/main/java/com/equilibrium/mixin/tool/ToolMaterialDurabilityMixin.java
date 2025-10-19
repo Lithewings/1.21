@@ -56,14 +56,14 @@ public abstract class ToolMaterialDurabilityMixin {
         if (Objects.equals(String.valueOf(this.inverseTag), "TagKey[minecraft:block / minecraft:incorrect_for_wooden_tool]"))
             cir.setReturnValue(160);
         else if (Objects.equals(String.valueOf(this.inverseTag),"TagKey[minecraft:block / minecraft:incorrect_for_gold_tool]"))
-            cir.setReturnValue(3200);
+            cir.setReturnValue(40);
         else if (Objects.equals(String.valueOf(this.inverseTag),"TagKey[minecraft:block / minecraft:incorrect_for_iron_tool]"))
-            cir.setReturnValue(9600);
+            cir.setReturnValue(200);
         //钻石很脆,秘银实际替代了钻石装备和工具,钻石工具唯一的用处是升级成下界合金(然而有艾德曼合金装备的存在后,也没有必要痴迷于下届合金装备了吧)
         else if (Objects.equals(String.valueOf(this.inverseTag),"TagKey[minecraft:block / minecraft:incorrect_for_diamond_tool]"))
             cir.setReturnValue(800);
         else if (Objects.equals(String.valueOf(this.inverseTag),"TagKey[minecraft:block / minecraft:incorrect_for_netherite_tool]"))
-            cir.setReturnValue(204800);
+            cir.setReturnValue(1000);
     }
 
 

@@ -11,7 +11,9 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,6 +31,8 @@ import java.nio.file.Path;
 public abstract class EnderDragonEntityMixin  extends MobEntity implements Monster {
     @Shadow
     public float prevWingPosition;
+
+    @Shadow public abstract boolean damage(DamageSource source, float amount);
 
     protected EnderDragonEntityMixin(EntityType<? extends MobEntity> entityType, World world) {
         super(entityType, world);
@@ -53,8 +57,11 @@ public abstract class EnderDragonEntityMixin  extends MobEntity implements Monst
         // 保存到自定义路径
         try {
             BooleanStorageUtil.save(true, configPath.toFile().getPath());
-            for( PlayerEntity player : ServerInfoRecorder.getServerInstance().getPlayerManager().getPlayerList()){
-                player.sendMessage(Text.of("主线完成,现所有世界选项按钮均已解锁(游戏重启生效)"));
+
+            if(this.getWorld() instanceof ServerWorld serverWorld){
+                for( PlayerEntity player : serverWorld.getPlayers()){
+                    player.sendMessage(Text.of("主线完成,现所有世界选项按钮均已解锁(游戏重启生效)"));
+                }
             }
 
 
@@ -69,15 +76,15 @@ public abstract class EnderDragonEntityMixin  extends MobEntity implements Monst
     @Unique
     StateSaverAndLoader stateSaverAndLoader;
 
-    @Unique
-    private int baseArmor(){
-        this.stateSaverAndLoader = StateSaverAndLoader.getServerState(ServerInfoRecorder.getServerInstance());
-        return Math.max(stateSaverAndLoader.playerDeathTimes,40);
-    }
 
-    @Inject(method = "tickMovement",at = @At("HEAD"))
-    public void tickMovement(CallbackInfo ci) {
-        this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).setBaseValue(baseArmor());
+    @Override
+    public void tick(){
+        super.tick();
+        if(this.getWorld() instanceof ServerWorld serverWorld){
+            this.stateSaverAndLoader = StateSaverAndLoader.getServerState(serverWorld.getServer());
+            this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).setBaseValue(Math.min(stateSaverAndLoader.playerDeathTimes,40));
+//            serverWorld.getPlayers().getFirst().sendMessage(Text.of("这条龙的护甲为"+this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).getBaseValue()),true);
+        }
     }
 }
 
