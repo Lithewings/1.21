@@ -44,7 +44,11 @@
   },
   "display": {
     "announce_to_chat": false,
-    "description": "穿上全套秘银护甲\n现在,没有什么能真正伤害到你了\n获得500XP",
+    "description": {
+      "translate": "adventure.get_mithril_armor"
+    },
+
+
     "icon": {
       "count": 1,
       "id": "miteequilibrium:mithril_chest_plate"

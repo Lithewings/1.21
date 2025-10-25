@@ -14,7 +14,13 @@
   },
   "display": {
     "announce_to_chat": false,
-    "description": "不断挖掘沙砾，获取第一颗银粒，收集9颗以制作银工作台\n将获得20XP",
+
+    "description": {
+      "translate": "adventure.get_silver"
+    },
+
+
+
     "icon": {
       "count": 1,
       "id": "miteequilibrium:silver_nugget"

@@ -12,7 +12,12 @@
   "display": {
     "frame": "challenge",
     "announce_to_chat": false,
-    "description": "进入下界\n你需要先设法来到地底世界的最底部，然后建立传送门，这将会是一场极为漫长的旅途\n获得500XP,铁块*3",
+
+
+    "description": {
+      "translate": "adventure.go_to_nether"
+    },
+
     "icon": {
       "count": 1,
       "id": "minecraft:netherrack"

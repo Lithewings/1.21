@@ -20,7 +20,7 @@
   },
   "display": {
     "description": {
-      "translate":  "找到地狱堡垒，奖励:金苹果*4"
+      "translate":  "adventure.find_fortress"
     },
     "icon": {
       "count": 1,

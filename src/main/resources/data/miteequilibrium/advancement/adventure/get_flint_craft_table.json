@@ -14,7 +14,10 @@
   },
   "display": {
     "announce_to_chat": false,
-    "description": "继续收集燧石，合成燧石小刀以制作燧石工作台",
+    "description": {
+      "translate": "adventure.get_flint_craft_table"
+    },
+
     "icon": {
       "count": 1,
       "id": "miteequilibrium:flint_crafting_table"

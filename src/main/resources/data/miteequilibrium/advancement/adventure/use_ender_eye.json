@@ -13,7 +13,12 @@
   },
   "display": {
     "announce_to_chat": false,
-    "description": "来到距出生点12km之外的位置(或者更远)，尝试成功投掷一次末影之眼",
+
+    "description": {
+      "translate": "adventure.use_ender_eye"
+    },
+
+
     "icon": {
       "count": 1,
       "id": "minecraft:ender_eye"

@@ -19,8 +19,10 @@
     }
   },
   "display": {
-    "description": "来到要塞,并在迷宫般的交错路口中找到传送门房间\n注意,传送门房间只会生成在据出生点至少12km以外的要塞中",
 
+    "description": {
+      "translate": "adventure.follow_ender_eye"
+    },
     "icon": {
       "count": 1,
       "id": "minecraft:end_portal_frame"

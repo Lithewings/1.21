@@ -16,7 +16,13 @@
   "display": {
     "frame": "challenge",
     "announce_to_chat": false,
-    "description": "制作你的第一把铜镐\n这是解锁村庄生成的条件之一\n将获得100XP",
+
+
+    "description": {
+      "translate": "adventure.get_metal_pickaxe"
+    },
+
+
     "icon": {
       "count": 1,
       "id": "miteequilibrium:copper_pickaxe"

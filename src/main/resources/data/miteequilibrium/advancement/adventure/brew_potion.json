@@ -6,9 +6,9 @@
     }
   },
   "display": {
-    "description":
-      "酿造出一瓶药水\n现在所有药水的时间强化效果翻倍\n多制作一些速度药水来跑图吧"
-    ,
+    "description": {
+      "translate": "adventure.brew_potion"
+    },
     "icon": {
       "count": 1,
       "id": "minecraft:potion"

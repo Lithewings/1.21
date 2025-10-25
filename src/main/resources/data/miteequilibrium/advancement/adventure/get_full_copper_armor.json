@@ -44,7 +44,11 @@
   },
   "display": {
     "announce_to_chat": false,
-    "description": "穿上全套铜护甲\n当你至少拥有10点护甲值时，获得永久性的抗性提升 I\n获得100XP",
+    "description": {
+      "translate": "adventure.get_full_copper_armor"
+    },
+
+
     "icon": {
       "count": 1,
       "id": "miteequilibrium:copper_chest_plate"

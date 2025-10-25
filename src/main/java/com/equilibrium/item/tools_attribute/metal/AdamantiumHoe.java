@@ -1,5 +1,7 @@
 package com.equilibrium.item.tools_attribute.metal;
 
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -10,6 +12,8 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -19,17 +23,23 @@ public class AdamantiumHoe extends MetalHoe{
         super(toolMaterial, settings);
     }
     private int count = 100;
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        if(count>=100 && entity instanceof PlayerEntity player && selected){
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED,400));
-            count=0;
+
+    @Override
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        if(!world.isClient()){
+            user.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 400, 0, false, false, false));
+            return TypedActionResult.success(user.getStackInHand(hand));
         }
-        count++;
+        else
+            return TypedActionResult.pass(user.getStackInHand(hand));
+
     }
+
+
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-        tooltip.add(Text.literal("获得20%的速度加成").formatted(Formatting.GRAY));
-        tooltip.add(Text.literal("泰然自若地快步行走").formatted(Formatting.AQUA));
+        tooltip.add(Text.translatable("item.miteequilibrium.adamantium_hoe.tooltip1").formatted(Formatting.GRAY));
+        tooltip.add(Text.translatable("item.miteequilibrium.adamantium_hoe.tooltip2").formatted(Formatting.AQUA));
 
     }
 }

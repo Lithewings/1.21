@@ -479,21 +479,21 @@ public class MITEequilibrium implements ModInitializer {
         ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> {
             // 判断物品是青金石（Lapis Lazuli）或其他物品
             if (stack.getItem() == Items.LAPIS_LAZULI) {
-                lines.add(Text.literal("每个25XP").formatted(Formatting.DARK_GRAY));
+                lines.add(Text.literal("25XP").formatted(Formatting.DARK_GRAY));
             }
             if (stack.getItem() == Items.QUARTZ) {
-                lines.add(Text.literal("每个50XP").formatted(Formatting.DARK_GRAY));
+                lines.add(Text.literal("50XP").formatted(Formatting.DARK_GRAY));
             }
             if (stack.getItem() == Items.DIAMOND) {
-                lines.add(Text.literal("每个500XP").formatted(Formatting.DARK_GRAY));
+                lines.add(Text.literal("500XP").formatted(Formatting.DARK_GRAY));
             }
             if (stack.getItem() == Items.GOLDEN_APPLE) {
-                lines.add(Text.literal("生命恢复 II（00:40）").formatted(Formatting.BLUE));
-                lines.add(Text.literal("抗火（00:40）").formatted(Formatting.BLUE));
+                lines.add(Text.literal("Regeneration II（00:40）").formatted(Formatting.BLUE));
+                lines.add(Text.literal("Fire Resistance（00:40）").formatted(Formatting.BLUE));
             }
 
             if (stack.getItem() == Armors.MITHRIL_CHEST_PLATE) {
-                lines.add(Text.literal("再生：生命恢复速度翻倍").formatted(Formatting.BLUE));
+                lines.add(Text.literal("Regeneration: Doubles the natural health recovery rate").formatted(Formatting.BLUE));
             }
         });
 //

@@ -14,7 +14,9 @@
   },
   "display": {
     "announce_to_chat": false,
-    "description": "在下界合金工作台上制作艾德曼镐\n这是唯一能够破坏末影水晶的工具",
+    "description": {
+      "translate": "adventure.get_adamantium_pickaxe"
+    },
     "icon": {
       "count": 1,
       "id": "miteequilibrium:adamantium_pickaxe"

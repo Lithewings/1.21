@@ -34,7 +34,13 @@ public class ItemComponentModifier {
             Items.BREAD, createFood(2, 8F,ItemStack.EMPTY,List.of()),
             Items.PUMPKIN_PIE, createFood(10, 12F,ItemStack.EMPTY,List.of()),
             Items.MELON_SLICE, createFood(1, 0F,ItemStack.EMPTY,List.of()),
-            Items.BAKED_POTATO, createFood(2, 6F,ItemStack.EMPTY,List.of())
+            Items.BAKED_POTATO, createFood(2, 6F,ItemStack.EMPTY,List.of()),
+
+            Items.WHEAT_SEEDS, createFood(1, 0F,ItemStack.EMPTY,List.of()),
+            Items.PUMPKIN_SEEDS,createFood(1, 1F,ItemStack.EMPTY,List.of()),
+            Items.MELON_SEEDS,createFood(1, 1F,ItemStack.EMPTY,List.of()),
+            Items.SUGAR,createFood(0, 1F,ItemStack.EMPTY,List.of())
+
     );
 
     public static void foodComponentModify() {

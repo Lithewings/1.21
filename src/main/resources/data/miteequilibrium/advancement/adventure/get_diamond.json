@@ -14,7 +14,10 @@
   },
   "display": {
     "announce_to_chat": false,
-    "description": "制作秘银镐以采集钻石，为制作附魔台做准备",
+    "description": {
+      "translate": "adventure.get_diamond"
+    },
+
     "icon": {
       "count": 1,
       "id": "minecraft:diamond"

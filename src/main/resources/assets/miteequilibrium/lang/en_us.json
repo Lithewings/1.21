@@ -1,10 +1,156 @@
 {
+  "adventure.get_flint.description": "Mine gravel to get a piece of flint, or a whole flint",
+  "adventure.brew_potion": "Brew a potion.\nAll potions now have doubled duration.",
+
+  "adventure.enter_the_end": "Reach the End and prepare to face the Ender Dragon — hopefully you didn't forget your Adamantium Pickaxe.",
+  "adventure.find_fortress": "Find a Nether Fortress and earn a reward of 4 Golden Apples.",
+  "adventure.follow_ender_eye": "Enter a Stronghold and locate the End Portal room within its maze of corridors. Note that the portal room only generates in Strongholds located over 12,000 blocks from the world's spawn point.",
+
+  "adventure.get_adamantium_pickaxe": "Craft an Adamantium Pickaxe at the Netherite Workbench. It is the only tool capable of destroying the Ender Crystal.",
+  "adventure.get_copper": "Obtain your first Copper Nugget, then collect 27 in total to craft a Copper Pickaxe. Reward: 20 XP.",
+  "adventure.get_diamond": "Craft a Mithril Pickaxe to mine Diamond Ore and prepare for creating an Enchanting Table.",
+
+  "adventure.get_enchantment_table": "Craft enchanted weapons with it - you can now able to deal damage to Blazes.",
+
+  "adventure.get_flint_craft_table": "Continue gathering flint and craft a Flint Knife to create the Flint Craft Table",
+  "adventure.get_full_copper_armor": "Equip a full set of Copper Armor. Reach 10 or more armor points to gain permanent Resistance I and receive 100 XP.",
+
+  "adventure.get_full_iron_armor": "Equip a full set of Iron Armor. Earn you 200 XP.",
+
+  "adventure.get_mithril_armor": "Equip a full set of Mithril Armor. This will make you nearly invulnerable and earn you 500 XP.",
+  "adventure.get_hatchet": "Obtain your first piece of flint and craft a Flint Hatchet to fell trees",
+  "adventure.get_iron_pickaxe": "Craft an Iron Pickaxe, use it to mine Obsidian, and earn 100 XP.",
+
+  "adventure.get_metal_pickaxe": "Craft your first Copper Pickaxe. This is required to unlock Village spawning and will earn you 100 XP.",
+
+  "adventure.get_mithril": "Smelt Mithril Ore in a Lava-powered Obsidian Furnace to obtain Mithril Ingots and earn 200 XP.",
+
+  "adventure.get_netherite_ingot": "Obtain Netherite Ingots to craft a Netherite Workbench. Mine for Ancient Debris in the depths of the Nether, or search the treasure rooms of Piglin Bastions to gather the required materials.",
+
+  "adventure.get_silver": "Obtain your first Silver Nugget, then collect 9 to craft a Silver Workbench and earn 20 XP.",
+
+
+
+  "adventure.go_to_nether": "Enter the Nether. Journey to the deepest layer of the underground world to construct a portal – a lengthy endeavor that will reward you with 500 XP and 3 Blocks of Iron.",
+
+  "adventure.go_to_underworld": "Construct a portal at the bottom of the Overworld to access the Underworld dimension, and earn 200 XP with 3 Blocks of Iron.",
+
+
+  "adventure.kill_dragon": "Defeat the Ender Dragon and reach the conclusion of your journey.",
+
+  "adventure.root": "A memento — from the chest at your spawn point.",
+
+
+  "adventure.use_ender_eye": "Reach a location at least 12,000 blocks from your spawn point and successfully throw an End Eye",
+
+
+
+
+
+
+
+  "item.miteequilibrium.adamantium_hoe.tooltip1": "Grants a 20% movement speed bonus",
+  "item.miteequilibrium.adamantium_hoe.tooltip2": "Walk with swift composure",
+
+  "enchantment.miteequilibrium.reaching": "Reaching",
+
+
+
+
+  "container.repair.require": "Level Requirement",
+
+  "You will transport to nether": "This portal will transport you to the Nether",
+  "You will transport to overworld": "This portal will transport you to the Overworld",
+  "You will transport to underworld": "This portal will transport you to the Underworld",
+
+  "block.miteequilibrium.adamantium_block": "Block of Adamantium",
+  "block.miteequilibrium.ancient_metal_block": "Block of Ancient Metal",
+  "block.miteequilibrium.copper_block": "Block of Copper",
+  "block.miteequilibrium.gold_block": "Block of Gold",
+  "block.miteequilibrium.mithril_block": "Block of Mithril",
+  "block.miteequilibrium.silver_block": "Block of Silver",
+
+  "item.miteequilibrium.adamantium": "Adamantium Ingot",
+  "item.miteequilibrium.adamantium_axe": "Adamantium Axe",
+  "item.miteequilibrium.adamantium_dagger": "Adamantium Dagger",
+  "item.miteequilibrium.adamantium_hoe": "Adamantium Hoe",
+  "item.miteequilibrium.adamantium_nugget": "Adamantium Nugget",
+  "item.miteequilibrium.adamantium_pickaxe": "Adamantium Pickaxe",
+  "item.miteequilibrium.adamantium_raw": "Raw Adamantium",
+  "item.miteequilibrium.adamantium_shovel": "Adamantium Shovel",
+  "item.miteequilibrium.adamantium_sword": "Adamantium Sword",
+
+  "item.miteequilibrium.ancient_metal": "Ancient Metal Ingot",
+  "item.miteequilibrium.ancient_metal_nugget": "Ancient Metal Nugget",
+
+  "item.miteequilibrium.copper": "Copper Ingot",
+  "item.miteequilibrium.copper_axe": "Copper Axe",
+  "item.miteequilibrium.copper_boots": "Copper Boots",
+  "item.miteequilibrium.copper_chest_plate": "Copper Chestplate",
+  "item.miteequilibrium.copper_helmet": "Copper Helmet",
+  "item.miteequilibrium.copper_leggings": "Copper Leggings",
+  "item.miteequilibrium.copper_dagger": "Copper Dagger",
+  "item.miteequilibrium.copper_hoe": "Copper Hoe",
+  "item.miteequilibrium.copper_nugget": "Copper Nugget",
+  "item.miteequilibrium.copper_pickaxe": "Copper Pickaxe",
+  "item.miteequilibrium.copper_shovel": "Copper Shovel",
+  "item.miteequilibrium.copper_sword": "Copper Sword",
+
+  "item.miteequilibrium.flint": "Flint Shard",
+  "item.miteequilibrium.flint_axe": "Flint Axe",
+  "item.miteequilibrium.flint_hatchet": "Flint Hatchet",
+  "item.miteequilibrium.flint_knife": "Flint Knife",
+  "item.miteequilibrium.flint_shovel": "Flint Shovel",
+
+  "item.miteequilibrium.gold": "Gold Ingot",
+  "item.miteequilibrium.gold_axe": "Golden Axe",
+  "item.miteequilibrium.gold_dagger": "Golden Dagger",
+  "item.miteequilibrium.gold_nugget": "Gold Nugget",
+  "item.miteequilibrium.gold_pickaxe": "Golden Pickaxe",
+  "item.miteequilibrium.gold_shovel": "Golden Shovel",
+  "item.miteequilibrium.gold_sword": "Golden Sword",
+
+  "item.miteequilibrium.iron_axe": "Iron Axe",
+  "item.miteequilibrium.iron_dagger": "Iron Dagger",
+  "item.miteequilibrium.iron_hoe": "Iron Hoe",
+  "item.miteequilibrium.iron_pickaxe": "Iron Pickaxe",
+  "item.miteequilibrium.iron_shovel": "Iron Shovel",
+  "item.miteequilibrium.iron_sword": "Iron Sword",
+
+  "item.miteequilibrium.mithril": "Mithril Ingot",
+  "item.miteequilibrium.mithril_axe": "Mithril Axe",
+  "item.miteequilibrium.mithril_dagger": "Mithril Dagger",
+  "item.miteequilibrium.mithril_hoe": "Mithril Hoe",
+  "item.miteequilibrium.mithril_nugget": "Mithril Nugget",
+  "item.miteequilibrium.mithril_pickaxe": "Mithril Pickaxe",
+  "item.miteequilibrium.mithril_raw": "Raw Mithril",
+  "item.miteequilibrium.mithril_shovel": "Mithril Shovel",
+  "item.miteequilibrium.mithril_sword": "Mithril Sword",
+  "item.miteequilibrium.mithril_boots": "Mithril Boots",
+  "item.miteequilibrium.mithril_chest_plate": "Mithril Chestplate",
+  "item.miteequilibrium.mithril_helmet": "Mithril Helmet",
+  "item.miteequilibrium.mithril_leggings": "Mithril Leggings",
+
+  "item.miteequilibrium.silver": "Silver Ingot",
+  "item.miteequilibrium.silver_nugget": "Silver Nugget",
+  "item.miteequilibrium.silver_raw": "Raw Silver",
+  "item.miteequilibrium.silver_axe": "Silver Axe",
+  "item.miteequilibrium.silver_dagger": "Silver Dagger",
+  "item.miteequilibrium.silver_hoe": "Silver Hoe",
+  "item.miteequilibrium.silver_pickaxe": "Silver Pickaxe",
+  "item.miteequilibrium.silver_shovel": "Silver Shovel",
+  "item.miteequilibrium.silver_sword": "Silver Sword",
+
+  "item.miteequilibrium.ancient_metal_chainmail_helmet": "Ancient Metal Chainmail Helmet",
+  "item.miteequilibrium.ancient_metal_chainmail_chest_plate": "Ancient Metal Chainmail Chestplate",
+  "item.miteequilibrium.ancient_metal_chainmail_leggings": "Ancient Metal Chainmail Leggings",
+  "item.miteequilibrium.ancient_metal_chainmail_boots": "Ancient Metal Chainmail Boots",
+
+
 
   "item.miteequilibrium.copper_coin": "Copper Coin",
 
   "item.miteequilibrium.iron_coin": "Iron Coin",
-
-
 
 
 

@@ -1,23 +1,26 @@
 {
-  "parent": "miteequilibrium:adventure/follow_ender_eye",
   "criteria": {
     "entered_end": {
       "conditions": {
         "to": "minecraft:the_end"
       },
-      "trigger": "minecraft:changed_dimension"
+      "trigger": "minecraft:impossible"
     }
   },
   "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/end.png",
     "description": {
-      "translate":"adventure.enter_the_end"
+      "translate": "advancements.end.root.description"
     },
     "icon": {
       "count": 1,
       "id": "minecraft:end_stone"
     },
-    "title": "落地水大考验"
-
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.end.root.title"
+    }
   },
   "requirements": [
     [

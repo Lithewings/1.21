@@ -10,7 +10,10 @@
   },
   "display": {
     "announce_to_chat": false,
-    "description": "在主世界的最底部建立传送门，进入地下世界维度\n将获得200XP,铁块*3",
+    "description": {
+      "translate": "adventure.go_to_underworld"
+    },
+
     "icon": {
       "count": 1,
       "id": "minecraft:flint_and_steel"

@@ -14,7 +14,11 @@
   },
   "display": {
     "announce_to_chat": false,
-    "description": "设法获取或合成第一块燧石，制作燧石手斧以砍伐树木",
+    "description": {
+      "translate": "adventure.get_hatchet"
+    },
+
+
     "icon": {
       "count": 1,
       "id": "miteequilibrium:flint_hatchet"

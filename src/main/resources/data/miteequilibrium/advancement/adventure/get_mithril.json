@@ -14,7 +14,10 @@
   },
   "display": {
     "announce_to_chat": false,
-    "description": "用岩浆驱动的黑曜石熔炉冶炼秘银矿石，获得秘银锭\n获得200XP",
+    "description": {
+      "translate": "adventure.get_mithril"
+    },
+
     "icon": {
       "count": 1,
       "id": "miteequilibrium:mithril"

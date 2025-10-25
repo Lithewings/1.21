@@ -24,7 +24,9 @@
   },
   "display": {
     "announce_to_chat": false,
-    "description": "挖掘沙砾，收集燧石碎片或者完整的燧石",
+    "description": {
+      "translate": "adventure.get_flint.description"
+    },
     "icon": {
       "count": 1,
       "id": "minecraft:gravel"

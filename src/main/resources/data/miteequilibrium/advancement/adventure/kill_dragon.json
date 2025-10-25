@@ -19,8 +19,10 @@
   },
   "display": {
     "frame": "challenge",
-    "description":
-      "击败末影龙,到达旅途的终点",
+    "description": {
+      "translate": "adventure.kill_dragon"
+    },
+
     "icon": {
       "count": 1,
       "id": "minecraft:dragon_head"

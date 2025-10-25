@@ -14,7 +14,17 @@
   },
   "display": {
     "announce_to_chat": false,
-    "description": "用它制作附魔武器\n现在你可以对烈焰人发起更有效的伤害了",
+
+
+    "description": {
+      "translate": "adventure.get_enchantment_table"
+    },
+
+
+
+
+
+
     "icon": {
       "count": 1,
       "id": "minecraft:enchanting_table"

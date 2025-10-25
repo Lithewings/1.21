@@ -14,7 +14,9 @@
   },
   "display": {
     "announce_to_chat": false,
-    "description": "制作铁镐，然后用它收集一些黑曜石\n获得100XP",
+    "description": {
+      "translate": "adventure.get_iron_pickaxe"
+    },
     "icon": {
       "count": 1,
       "id": "miteequilibrium:iron_pickaxe"

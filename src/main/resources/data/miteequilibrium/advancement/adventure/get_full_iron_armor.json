@@ -44,7 +44,11 @@
   },
   "display": {
     "announce_to_chat": false,
-    "description": "穿上全套铁护甲\n你可能要穿着它度过很长时间\n获得200XP",
+
+    "description": {
+      "translate": "adventure.get_full_iron_armor"
+    },
+
     "icon": {
       "count": 1,
       "id": "minecraft:iron_chestplate"

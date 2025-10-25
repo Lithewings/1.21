@@ -8,7 +8,7 @@
       {
         "amount": {
           "type": "minecraft:levels_squared",
-          "added": 3.0
+          "added": 24.0
         },
         "attribute": "minecraft:player.block_interaction_range",
         "id": "miteequilibrium:reaching",
