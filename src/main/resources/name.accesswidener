@@ -3,7 +3,7 @@ accessWidener v1 named
 
 
 
-
+accessible field net/minecraft/SharedConstants gameVersion Lnet/minecraft/GameVersion;
 
 accessible class net/minecraft/client/gui/screen/world/CreateWorldScreen$GameTab
 

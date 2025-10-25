@@ -1,4 +1,12 @@
 {
+
+  "select.world.wrong.version": "你无法打开非此模组版本的存档",
+
+
+
+
+
+
   "adventure.get_flint.description": "挖掘沙砾，获得燧石碎片，或是一整块燧石",
   "adventure.brew_potion":  "酿造出一瓶药水。\n现在所有药水的持续时间效果翻倍",
 

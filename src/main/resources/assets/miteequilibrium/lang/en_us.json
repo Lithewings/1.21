@@ -1,4 +1,11 @@
 {
+
+
+
+
+
+  "select.world.wrong.version": "You cannot load a world from an incompatible mod version",
+
   "adventure.get_flint.description": "Mine gravel to get a piece of flint, or a whole flint",
   "adventure.brew_potion": "Brew a potion.\nAll potions now have doubled duration.",
 

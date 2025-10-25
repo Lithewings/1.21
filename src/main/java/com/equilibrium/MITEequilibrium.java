@@ -18,10 +18,14 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.minecraft.GameVersion;
+import net.minecraft.SaveVersion;
+import net.minecraft.SharedConstants;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -45,6 +49,7 @@ import com.equilibrium.craft_time_worklevel.CraftingIngredients;
 import com.equilibrium.craft_time_worklevel.FurnaceIngredients;
 
 
+import java.util.Date;
 import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -70,6 +75,8 @@ import static com.equilibrium.tags.ModItemTags.registerModItemTags;
 
 import static com.equilibrium.ore_generator.ModPlacementGenerator.registerModOre;
 import static com.equilibrium.util.OnServerInitializeMethod.onUseCrystalItem;
+import static net.minecraft.SharedConstants.getGameVersion;
+import static net.minecraft.SharedConstants.setGameVersion;
 
 
 public class MITEequilibrium implements ModInitializer {
@@ -279,12 +286,42 @@ public class MITEequilibrium implements ModInitializer {
 
     public void onInitialize() {
 
+        SharedConstants.gameVersion = new GameVersion() {
+            @Override
+            public SaveVersion getSaveVersion() {
+                return new SaveVersion(121);
+            }
 
+            @Override
+            public String getId() {
+                return "MITE:Equilibrium";
+            }
 
+            @Override
+            public String getName() {
+                return "MITE：宁静";
+            }
 
+            @Override
+            public int getProtocolVersion() {
+                return 1;
+            }
 
+            @Override
+            public int getResourceVersion(ResourceType type) {
+                return 2;
+            }
 
+            @Override
+            public Date getBuildTime() {
+                return new Date();
+            }
 
+            @Override
+            public boolean isStable() {
+                return true;
+            }
+        };
 
 
 
@@ -296,6 +333,13 @@ public class MITEequilibrium implements ModInitializer {
 
             //锁定游戏难度
             server.setDifficultyLocked(true);
+
+
+
+
+
+
+
 
 
 
