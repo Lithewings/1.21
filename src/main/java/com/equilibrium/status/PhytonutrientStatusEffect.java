@@ -32,12 +32,12 @@ public class PhytonutrientStatusEffect extends StatusEffect {
         if (entity instanceof PlayerEntity playerEntity) {
 
             //玩家在复杂移动时施加饥饿度
-            if(playerEntity.isSprinting()||playerEntity.isClimbing()||playerEntity.isSwimming()){
+            if(playerEntity.isSprinting()||playerEntity.isClimbing()||playerEntity.isSwimming()||playerEntity.speed>0){
                 playerEntity.addExhaustion(0.0010f * (float)(amplifier + 1));
                 return true;
             }
             else{
-                playerEntity.addExhaustion(0.0001f * (float)(amplifier + 1));
+                playerEntity.addExhaustion(0.0003f * (float)(amplifier + 1));
                 return true;
             }
         }
