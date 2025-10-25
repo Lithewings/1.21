@@ -98,7 +98,6 @@
     "crafttime.MixinInventoryScreen",
     "player.ClientPlayerEntityMixin",
     "render.BackupPromptScreenMixin",
-    "render.CreativeWorldScreenGameTabMixin",
     "render.CreativeWorldScreenMixin",
     "render.CreativeWorldScreenWorldTabMixin",
     "render.DeathScreenMixin",

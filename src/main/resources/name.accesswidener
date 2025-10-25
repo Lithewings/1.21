@@ -1,12 +1,12 @@
 accessWidener v1 named
-
-
-
+accessible method net/minecraft/client/gui/screen/Screen setInitialFocus (Lnet/minecraft/client/gui/Element;)V
+accessible class net/minecraft/client/gui/screen/world/WorldScreenOptionGrid
+accessible field net/minecraft/client/gui/screen/Screen textRenderer Lnet/minecraft/client/font/TextRenderer;
 
 accessible field net/minecraft/SharedConstants gameVersion Lnet/minecraft/GameVersion;
-
+accessible field net/minecraft/client/gui/screen/Screen client Lnet/minecraft/client/MinecraftClient;
 accessible class net/minecraft/client/gui/screen/world/CreateWorldScreen$GameTab
-
+accessible method net/minecraft/client/gui/screen/world/WorldScreenOptionGrid refresh ()V
 accessible class net/minecraft/client/gui/screen/world/CreateWorldScreen$GameTab
 accessible field net/minecraft/client/network/ClientPlayerEntity client Lnet/minecraft/client/MinecraftClient;
 accessible method net/minecraft/entity/mob/ZombieVillagerEntity setConverting (Ljava/util/UUID;I)V

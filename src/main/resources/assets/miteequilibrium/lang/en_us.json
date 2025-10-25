@@ -1,6 +1,15 @@
 {
 
 
+  "mod.selectWorld.seedInfo": "Let the random number decide this",
+  "mod.options.difficulty.easy.info": "Hostile mobs spawn but deal less damage. Hunger bar depletes and drains all health.",
+  "mod.options.difficulty.hard.info": "Hostile mobs spawn and deal more damage. Hunger bar depletes and drains all health.",
+  "mod.options.difficulty.normal.info": "Hostile mobs spawn and deal standard damage. Hunger bar depletes and drains all health.",
+
+
+
+
+
 
 
 

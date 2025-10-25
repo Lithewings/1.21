@@ -1,10 +1,21 @@
 {
 
+
+
+  "mod.selectWorld.seedInfo":"让随机数决定这些",
+  "mod.options.difficulty.easy.info": "敌对生物会生成但造成较少伤害。饥饿条耗尽时会消耗生命值。",
+  "mod.options.difficulty.normal.info": "敌对生物会生成并造成标准伤害。饥饿条耗尽时会消耗生命值。",
+  "mod.options.difficulty.hard.info": "敌对生物会生成并造成更多伤害。饥饿条耗尽时会消耗生命值。",
+
+
+
+
+
+
+
+
+
   "select.world.wrong.version": "你无法打开非此模组版本的存档",
-
-
-
-
 
 
   "adventure.get_flint.description": "挖掘沙砾，获得燧石碎片，或是一整块燧石",

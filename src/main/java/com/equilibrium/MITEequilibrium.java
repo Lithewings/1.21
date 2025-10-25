@@ -324,11 +324,6 @@ public class MITEequilibrium implements ModInitializer {
         };
 
 
-
-
-
-
-
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 
             //锁定游戏难度
