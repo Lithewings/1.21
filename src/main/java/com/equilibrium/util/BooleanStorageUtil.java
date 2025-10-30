@@ -16,7 +16,7 @@ public final class BooleanStorageUtil {
 
 
     // AES 密钥
-    private static final String SECRET_KEY = "oU6BC9kCAwEAAQ=="; // 128-bit key
+    private static final String SECRET_KEY = "oU6BC0kCAwEAAQ=="; // 128-bit key
     private static final String ALGORITHM = "AES";
 
     // 私有构造器防止实例化

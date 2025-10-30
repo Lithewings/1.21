@@ -14,11 +14,11 @@
   "item.miteequilibrium.vegetable_soup": "蔬菜汤",
   "item.miteequilibrium.bowl_water": "一碗水",
 
+  "block.miteequilibrium.emerald_enchanting_table": "绿宝石附魔台",
 
 
 
-
-  "select.world.wrong.version": "你无法打开非此模组版本的存档",
+  "select.world.wrong.version": "你无法打开不可兼容版本的存档",
 
 
   "adventure.get_flint.description": "挖掘沙砾，获得燧石碎片，或是一整块燧石",

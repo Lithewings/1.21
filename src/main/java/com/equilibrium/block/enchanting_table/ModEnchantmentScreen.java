@@ -33,6 +33,14 @@ import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
 public class ModEnchantmentScreen extends HandledScreen<ModEnchantmentScreenHandler> {
+    //写好ScreenHandler,用type来指代,在在服务端注册
+
+    //写好Screen,在客户端把handler和screen连在一起,注册
+
+
+
+
+
     private static final Identifier[] LEVEL_TEXTURES = new Identifier[]{
             Identifier.ofVanilla("container/enchanting_table/level_1"),
             Identifier.ofVanilla("container/enchanting_table/level_2"),
@@ -105,6 +113,9 @@ public class ModEnchantmentScreen extends HandledScreen<ModEnchantmentScreenHand
             int m = i + 60;
             int n = m + 20;
             int o = this.handler.enchantmentPower[l];
+            if(l>0){
+                o=0;
+            }
             if (o == 0) {
                 RenderSystem.enableBlend();
                 context.drawGuiTexture(ENCHANTMENT_SLOT_DISABLED_TEXTURE, m, j + 14 + 19 * l, 108, 19);

@@ -103,6 +103,7 @@
     "render.GameMenuScreenMixin",
     "render.InGameHudMixin",
     "render.IntegratedServerLoaderMixin",
+    "render.OpenToLanScreenMixin",
     "render.WorldCreatorMixin",
     "render.WorldRendererMixin",
     "tables.AnvilScreenHandlerMixin",

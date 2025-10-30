@@ -28,11 +28,6 @@ public class EmeraldEnchantingTableBlock extends BlockWithEntity {
 
 
 
-
-
-
-
-
     @Override
     protected boolean hasSidedTransparency(BlockState state) {
         return true;

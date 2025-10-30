@@ -291,27 +291,27 @@ public class MITEequilibrium implements ModInitializer {
         SharedConstants.gameVersion = new GameVersion() {
             @Override
             public SaveVersion getSaveVersion() {
-                return new SaveVersion(121);
+                return new SaveVersion(106);
             }
 
             @Override
             public String getId() {
-                return "MITE:Equilibrium";
+                return "MITE:Equilibrium Beta v1.0.6";
             }
 
             @Override
             public String getName() {
-                return "MITE：宁静";
+                return "MITE:Equilibrium Beta v1.0.6";
             }
 
             @Override
             public int getProtocolVersion() {
-                return 1;
+                return 106;
             }
 
             @Override
             public int getResourceVersion(ResourceType type) {
-                return 2;
+                return 106;
             }
 
             @Override
@@ -530,11 +530,13 @@ public class MITEequilibrium implements ModInitializer {
             if (stack.getItem() == Items.DIAMOND) {
                 lines.add(Text.literal("500XP").formatted(Formatting.DARK_GRAY));
             }
-            if (stack.getItem() == Items.GOLDEN_APPLE) {
+            if (stack.getItem() == Items.ENCHANTED_GOLDEN_APPLE) {
                 lines.add(Text.literal("Regeneration II（00:40）").formatted(Formatting.BLUE));
                 lines.add(Text.literal("Fire Resistance（00:40）").formatted(Formatting.BLUE));
             }
-
+            if (stack.getItem() == Items.GOLDEN_APPLE) {
+                lines.add(Text.literal("Regeneration I（00:20）").formatted(Formatting.BLUE));
+            }
             if (stack.getItem() == Armors.MITHRIL_CHEST_PLATE) {
                 lines.add(Text.literal("Regeneration: Doubles the natural health recovery rate").formatted(Formatting.BLUE));
             }

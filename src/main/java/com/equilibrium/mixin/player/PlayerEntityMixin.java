@@ -280,6 +280,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 //        if(!this.getWorld().isClient) {
 //            this.sendMessage(Text.of("饱食度为" + this.getHungerManager().getFoodLevel()));
 //            this.sendMessage(Text.of("营养值为" + this.getHungerManager().getSaturationLevel()));
+//            this.sendMessage(Text.of("植物营养素为" + this.phytonutrient));
+//
 //        }
 
 
@@ -419,7 +421,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     public void getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> cir) {
         cir.cancel();
         this.addExhaustion(0.0005f);
-//        this.addExhaustion(555555f);
+        this.addExhaustion(555555f);
         ItemStack stack = this.getMainHandStack();
         float f = this.inventory.getBlockBreakingSpeed(block);
         if (f > 1.0F) {

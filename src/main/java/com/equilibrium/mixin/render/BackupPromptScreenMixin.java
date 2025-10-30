@@ -42,7 +42,7 @@ public class BackupPromptScreenMixin extends Screen {
     @ModifyArg(method = "init",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/world/BackupPromptScreen;addDrawableChild(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;",ordinal = 1))
     protected Element init2(Element par1) {
         ButtonWidget buttonWidget = (ButtonWidget) par1;
-//        buttonWidget.visible=false;
+        buttonWidget.visible=false;
         return buttonWidget;
     }
 

@@ -20,12 +20,17 @@ public class ItemComponentModifier {
     public static final FoodComponent GOLDEN_APPLE = new FoodComponent.Builder()
             .nutrition(4)
             .saturationModifier(1.2F)
+            .statusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 400, 0), 1.0F)
+            .alwaysEdible()
+            .build();
+
+    public static final FoodComponent ENCHANTING_GOLDEN_APPLE = new FoodComponent.Builder()
+            .nutrition(4)
+            .saturationModifier(1.2F)
             .statusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 800, 1), 1.0F)
             .statusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 800, 0), 1.0F)
             .alwaysEdible()
             .build();
-
-
 
 
     // 定义要修改的物品和对应的食物属性

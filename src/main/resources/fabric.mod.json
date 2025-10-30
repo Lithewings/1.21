@@ -1,11 +1,11 @@
 {
 	"schemaVersion": 1,
 	"id": "miteequilibrium",
-	"version": "Beta v1.0.5-fixed",
+	"version": "Beta v1.0.6",
 	"name": "MITE-宁静",
 	"description": "MITE的1.21移植，并在此基础上做了更适应高版本的一些改动",
 	"authors": [
-		"ReinZ_O"
+		"Riz_O"
 	],
 	"contact": {
 		"homepage": "",

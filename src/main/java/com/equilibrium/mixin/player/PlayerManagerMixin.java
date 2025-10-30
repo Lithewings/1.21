@@ -64,6 +64,7 @@ public abstract class PlayerManagerMixin {
 
         serverState = StateSaverAndLoader.getServerState(this.server);
         if (serverState.onFirstInTheWorld) {
+
             //只触发一次
             serverState.onFirstInTheWorld = false;
             player.sendMessage(Text.literal("在你的附近寻找箱子,取走物品以解锁成就栏").formatted(Formatting.YELLOW));

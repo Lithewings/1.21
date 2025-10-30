@@ -147,6 +147,7 @@ public class ModItemGroup {
                                 entries.add(FoodItems.WATER_BOWL);
                                 entries.add(FoodItems.VEGETABLE_SOUP);
                                 entries.add(FoodItems.BEEF_SOUP);
+                                entries.add(ModBlocks.EMERALD_ENCHANTING_TABLE);
                             }
                     ).build());
 

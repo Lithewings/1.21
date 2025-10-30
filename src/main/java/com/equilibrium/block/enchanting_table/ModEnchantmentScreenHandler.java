@@ -30,6 +30,7 @@ import net.minecraft.util.Util;
 import net.minecraft.util.collection.IndexedIterable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.World;
 
 import java.util.List;
 import java.util.Optional;
@@ -88,15 +89,15 @@ public class ModEnchantmentScreenHandler extends ScreenHandler {
         }
 
         this.addProperty(Property.create(this.enchantmentPower, 0));
-        this.addProperty(Property.create(this.enchantmentPower, 1));
-        this.addProperty(Property.create(this.enchantmentPower, 2));
+//        this.addProperty(Property.create(this.enchantmentPower, 1));
+//        this.addProperty(Property.create(this.enchantmentPower, 2));
         this.addProperty(this.seed).set(playerInventory.player.getEnchantmentTableSeed());
         this.addProperty(Property.create(this.enchantmentId, 0));
-        this.addProperty(Property.create(this.enchantmentId, 1));
-        this.addProperty(Property.create(this.enchantmentId, 2));
+//        this.addProperty(Property.create(this.enchantmentId, 1));
+//        this.addProperty(Property.create(this.enchantmentId, 2));
         this.addProperty(Property.create(this.enchantmentLevel, 0));
-        this.addProperty(Property.create(this.enchantmentLevel, 1));
-        this.addProperty(Property.create(this.enchantmentLevel, 2));
+//        this.addProperty(Property.create(this.enchantmentLevel, 1));
+//        this.addProperty(Property.create(this.enchantmentLevel, 2));
     }
 
 
@@ -141,7 +142,14 @@ public class ModEnchantmentScreenHandler extends ScreenHandler {
 
                     this.sendContentUpdates();
                 });
-            } else {
+            } else if(itemStack.isOf(Items.GOLDEN_APPLE)){
+                this.enchantmentPower[0] = 30;
+            }
+
+
+
+
+            else {
                 for (int i = 0; i < 3; i++) {
                     this.enchantmentPower[i] = 0;
                     this.enchantmentId[i] = -1;
@@ -157,15 +165,26 @@ public class ModEnchantmentScreenHandler extends ScreenHandler {
             ItemStack itemStack = this.inventory.getStack(0);
             ItemStack itemStack2 = this.inventory.getStack(1);
             int i = id + 1;
+
             if ((itemStack2.isEmpty() || itemStack2.getCount() < i) && !player.isInCreativeMode()) {
                 return false;
-            } else if (this.enchantmentPower[id] <= 0
+            }
+            else if (this.enchantmentPower[id] <= 0
                     || itemStack.isEmpty()
                     || (player.experienceLevel < i || player.experienceLevel < this.enchantmentPower[id]) && !player.getAbilities().creativeMode) {
                 return false;
             } else {
                 this.context.run((world, pos) -> {
                     ItemStack itemStack3 = itemStack;
+
+
+                    if(itemStack.isOf(Items.GOLDEN_APPLE)){
+                        player.applyEnchantmentCosts(itemStack, i);
+                        appleEnchantment(player, itemStack2, i, world, pos, itemStack3);
+                        this.inventory.setStack(0, Items.ENCHANTED_GOLDEN_APPLE.getDefaultStack());
+                    }
+
+
                     List<EnchantmentLevelEntry> list = this.generateEnchantments(world.getRegistryManager(), itemStack, id, this.enchantmentPower[id]);
                     if (!list.isEmpty()) {
                         player.applyEnchantmentCosts(itemStack, i);
@@ -178,20 +197,7 @@ public class ModEnchantmentScreenHandler extends ScreenHandler {
                             itemStack3.addEnchantment(enchantmentLevelEntry.enchantment, enchantmentLevelEntry.level);
                         }
 
-                        itemStack2.decrementUnlessCreative(i, player);
-                        if (itemStack2.isEmpty()) {
-                            this.inventory.setStack(1, ItemStack.EMPTY);
-                        }
-
-                        player.incrementStat(Stats.ENCHANT_ITEM);
-                        if (player instanceof ServerPlayerEntity) {
-                            Criteria.ENCHANTED_ITEM.trigger((ServerPlayerEntity)player, itemStack3, i);
-                        }
-
-                        this.inventory.markDirty();
-                        this.seed.set(player.getEnchantmentTableSeed());
-                        this.onContentChanged(this.inventory);
-                        world.playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
+                        appleEnchantment(player, itemStack2, i, world, pos, itemStack3);
                     }
                 });
                 return true;
@@ -200,6 +206,22 @@ public class ModEnchantmentScreenHandler extends ScreenHandler {
             Util.error(player.getName() + " pressed invalid button id: " + id);
             return false;
         }
+    }
+
+    private void appleEnchantment(PlayerEntity player, ItemStack itemStack2, int i, World world, BlockPos pos, ItemStack itemStack3) {
+        itemStack2.decrementUnlessCreative(i, player);
+        if (itemStack2.isEmpty()) {
+            this.inventory.setStack(1, ItemStack.EMPTY);
+        }
+
+        player.incrementStat(Stats.ENCHANT_ITEM);
+        if (player instanceof ServerPlayerEntity) {
+            Criteria.ENCHANTED_ITEM.trigger((ServerPlayerEntity)player, itemStack3, i);
+        }
+        this.inventory.markDirty();
+        this.seed.set(player.getEnchantmentTableSeed());
+        this.onContentChanged(this.inventory);
+        world.playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
     }
 
     private List<EnchantmentLevelEntry> generateEnchantments(DynamicRegistryManager registryManager, ItemStack stack, int slot, int level) {
