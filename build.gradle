@@ -3,7 +3,7 @@ plugins {
 	id 'maven-publish'
 }
 
-version = "Beta-1.0.41"
+version = "Beta-1.0.5-fixed"
 group = project.maven_group
 
 base {

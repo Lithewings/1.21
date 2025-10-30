@@ -1,23 +1,22 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "minecraft:crafting_shapeless",
   "category": "misc",
-  "key": {
-    "W": {
+  "ingredients": [
+    {
       "tag": "minecraft:logs"
     },
-    "X": {
+    {
       "item": "minecraft:diamond"
     },
-    "Y": {
+    {
       "item": "minecraft:stick"
     },
-    "Z": {
+    {
       "item": "minecraft:leather"
+    },
+    {
+      "item": "miteequilibrium:ancient_metal"
     }
-  },
-  "pattern": [
-    "XZ",
-    "YW"
   ],
   "result": {
     "count": 1,

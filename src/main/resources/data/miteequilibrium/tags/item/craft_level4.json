@@ -1,6 +1,8 @@
 {
   "values": [
-    "minecraft:netherite_ingot"
+    "minecraft:netherite_ingot",
+    "miteequilibrium:mithril",
+    "minecraft:diamond"
 
   ]
 }

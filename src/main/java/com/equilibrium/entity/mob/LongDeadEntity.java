@@ -17,14 +17,21 @@ import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.loot.LootTable;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
+
+import static com.equilibrium.MITEequilibrium.MOD_ID;
 
 public class LongDeadEntity extends ModAbstractSkeletonEntity {
 
@@ -42,6 +49,16 @@ public class LongDeadEntity extends ModAbstractSkeletonEntity {
     protected void initDataTracker(DataTracker.Builder builder) {
         super.initDataTracker(builder);
 
+    }
+
+    @Override
+    protected RegistryKey<LootTable> getLootTableId() {
+        return RegistryKey.of(RegistryKeys.LOOT_TABLE,Identifier.of(MOD_ID,"entity/longdead"));
+    }
+
+    @Override
+    public void onDeath(DamageSource damageSource) {
+        super.onDeath(damageSource);
     }
 
     public BlockPos adjustPosition(WorldView world, BlockPos pos) {

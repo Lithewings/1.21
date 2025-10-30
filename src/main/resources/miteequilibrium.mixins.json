@@ -11,8 +11,6 @@
     "MiningToolItemMixin",
     "MITEequilibriumMixin",
     "recipeModifier",
-
-
     "ThreadCheck",
     "crafttime.ScreenHandlerMixin",
     "crop.BoneMealItemMixin",
@@ -25,7 +23,6 @@
     "entitymixin.AxolotEntityMixin",
     "entitymixin.BlazeEntityMixin",
     "entitymixin.CatEntityMixin",
-    "entitymixin.CowEntityMixin",
     "entitymixin.EndCrystalEntityMixin",
     "entitymixin.EnderDragonEntityMixin",
     "entitymixin.EnderManEntity",

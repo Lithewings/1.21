@@ -56,6 +56,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static com.equilibrium.block.enchanting_table.ModBlockEntityTypes.modBlockEntityTypesInit;
+
+import static com.equilibrium.block.enchanting_table.ModScreenTypes.registerScreenHandlers;
 import static com.equilibrium.enchantments.EnchantmentsCodec.registerAllOfEnchantments;
 import static com.equilibrium.entity.ModEntities.registerModEntities;
 
@@ -68,6 +71,7 @@ import static com.equilibrium.item.Metal.registerModItemRaw;
 import static com.equilibrium.item.extend_item.CoinItems.registerCoinItems;
 import static com.equilibrium.item.food.FoodItems.registerFoodItems;
 import static com.equilibrium.item.food.ItemComponentModifier.foodComponentModify;
+import static com.equilibrium.item.food.WaterBowl.vanillaBowlItemUse;
 import static com.equilibrium.status.registerStatusEffect.registerStatusEffects;
 import static com.equilibrium.tags.ModBlockTags.registerModBlockTags;
 import static com.equilibrium.tags.ModItemTags.registerModItemTags;
@@ -75,8 +79,6 @@ import static com.equilibrium.tags.ModItemTags.registerModItemTags;
 
 import static com.equilibrium.ore_generator.ModPlacementGenerator.registerModOre;
 import static com.equilibrium.util.OnServerInitializeMethod.onUseCrystalItem;
-import static net.minecraft.SharedConstants.getGameVersion;
-import static net.minecraft.SharedConstants.setGameVersion;
 
 
 public class MITEequilibrium implements ModInitializer {
@@ -505,7 +507,9 @@ public class MITEequilibrium implements ModInitializer {
                 return onUseCrystalItem(itemStack, player, world, 500);
             }
 
-
+            if (itemStack.getItem() == Items.BOWL) {
+                return vanillaBowlItemUse(world,player,hand,itemStack);
+            }
             // 其他物品时不做处理
             return TypedActionResult.pass(itemStack);
         });
@@ -638,6 +642,10 @@ public class MITEequilibrium implements ModInitializer {
 //		config = new Config();
 //		config.load();
 
+        registerScreenHandlers();
+
+
+
         BlockInit.registerBlocks();
         BlockInit.registerBlockItems();
         BlockInit.registerFuels();
@@ -651,7 +659,7 @@ public class MITEequilibrium implements ModInitializer {
         UseBlock.init();
 
         registrySoundEvents();
-
+        modBlockEntityTypesInit();
         LOGGER.info("Hello Fabric world!");
     }
 

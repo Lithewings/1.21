@@ -4,6 +4,7 @@ import com.equilibrium.MITEequilibrium;
 
 import com.equilibrium.block.ModBlocks;
 import com.equilibrium.item.extend_item.CoinItems;
+import com.equilibrium.item.food.FoodItems;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -142,7 +143,10 @@ public class ModItemGroup {
                                 entries.add(Armors.ANCIENT_METAL_CHAINMAIL_HELMET);
 
                                 entries.add(ModItems.PUDDING_SLIME_BALL);
-
+                                entries.add(FoodItems.PUMPKIN_SOUP);
+                                entries.add(FoodItems.WATER_BOWL);
+                                entries.add(FoodItems.VEGETABLE_SOUP);
+                                entries.add(FoodItems.BEEF_SOUP);
                             }
                     ).build());
 

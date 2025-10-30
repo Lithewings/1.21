@@ -38,7 +38,7 @@ public class ItemComponentModifier {
 
             Items.WHEAT_SEEDS, createFood(1, 0F,ItemStack.EMPTY,List.of()),
             Items.PUMPKIN_SEEDS,createFood(1, 1F,ItemStack.EMPTY,List.of()),
-            Items.MELON_SEEDS,createFood(1, 1F,ItemStack.EMPTY,List.of()),
+            Items.MELON_SEEDS,createFood(0, 1F,ItemStack.EMPTY,List.of()),
             Items.SUGAR,createFood(0, 1F,ItemStack.EMPTY,List.of())
 
     );

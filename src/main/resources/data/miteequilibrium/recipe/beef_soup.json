@@ -3,14 +3,20 @@
   "category": "misc",
   "ingredients": [
     {
-      "item": "minecraft:pumpkin"
+      "item": "minecraft:cooked_beef"
     },
     {
       "item": "miteequilibrium:bowl_water"
+    },
+    {
+      "item": "minecraft:carrot"
+    },
+    {
+      "item": "minecraft:potato"
     }
   ],
   "result": {
     "count": 1,
-    "id": "miteequilibrium:pumpkin_soup"
+    "id": "miteequilibrium:vegetable_soup"
   }
 }
