@@ -9,6 +9,7 @@ import com.equilibrium.block.crop_blocks.BlueBerryBushBlock;
 import com.equilibrium.block.crop_blocks.OnionBlock;
 import com.equilibrium.block.enchanting_table.diamond.DiamondEnchantingTableBlock;
 import com.equilibrium.block.enchanting_table.emerald.EmeraldEnchantingTableBlock;
+import com.equilibrium.block.portalblock.PortalBlock;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.NoteBlockInstrument;
 import net.minecraft.block.piston.PistonBehavior;
@@ -101,6 +102,17 @@ public class ModBlocksRegistry {
             new ColorCode(-8356741),
             AbstractBlock.Settings.create().mapColor(MapColor.STONE_GRAY).instrument(NoteBlockInstrument.SNARE).strength(0.6F).sounds(BlockSoundGroup.GRAVEL)
     );
+
+    public static final Block PORTAL_BLOCK = new PortalBlock(Block.Settings.create()
+            .noCollision()
+            .ticksRandomly()
+            .strength(-1.0F)
+            .sounds(BlockSoundGroup.GLASS)
+            .luminance(state -> 11)
+            .pistonBehavior(PistonBehavior.BLOCK));
+
+
+
     //strength中第一个为硬度,第二个为爆炸抗性
 //    public static final Block UNDERWORLD_PORTAL =
 //            new UnderworldPortalBlock(
@@ -123,6 +135,9 @@ public class ModBlocksRegistry {
 //                            .pistonBehavior(PistonBehavior.BLOCK)
 //            );
     public static void registerModBlocks(){
+
+        Registry.register(Registries.BLOCK, Identifier.of(MOD_ID, "portal_block"), PORTAL_BLOCK);
+        Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "portal_block"), new BlockItem(PORTAL_BLOCK, new Item.Settings().maxCount(16)));
 
         Registry.register(Registries.BLOCK, Identifier.of(MOD_ID, "adamantium_anvil"), ADAMANTIUM_ANVIL);
         Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "adamantium_anvil"), new BlockItem(ADAMANTIUM_ANVIL, new Item.Settings().maxCount(16)));

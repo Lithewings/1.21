@@ -1,22 +1,27 @@
 package com.equilibrium.mixin.structure_and_dimension.portal;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.NetherPortalBlock;
-import net.minecraft.block.Portal;
+import com.equilibrium.block.ModBlocksRegistry;
+import com.equilibrium.block.portalblock.PortalBlockCast;
+import com.equilibrium.item.Metal;
+import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
@@ -44,9 +49,21 @@ public abstract class NetherPortalBlockMixin extends Block implements Portal {
 
     @Shadow @Final private static Logger LOGGER;
 
+    @Shadow @Final public static EnumProperty<Direction.Axis> AXIS;
+
     public NetherPortalBlockMixin(Settings settings) {
         super(settings);
     }
+
+
+    @Override
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        return PortalBlockCast.tryCastOnUse(state,world,pos,player,hit);
+    }
+
+
+
+
 
     // ---------- 延迟加载方法：每次调用时返回维度 Key，不会在类加载时触碰 World ----------
     @Unique
