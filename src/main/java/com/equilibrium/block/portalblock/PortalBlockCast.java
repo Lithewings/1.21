@@ -18,7 +18,7 @@ import static com.equilibrium.block.portalblock.PortalBlockFinder.replacePortalB
 
 public class PortalBlockCast {
 
-    private static final int NUGGET_COST = 12;
+    private static final int NUGGET_COST = 16;
     private static final int MAX_PORTAL_SEARCH_DEPTH = 64;
 
     public static ActionResult tryCastOnUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
