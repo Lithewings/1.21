@@ -154,7 +154,7 @@ public class DifficultyEntryRegister {
     );
 
 
-    public static void initGameRules() {
+    public static void initDifficultyEntryGameRules() {
     }
 
 }

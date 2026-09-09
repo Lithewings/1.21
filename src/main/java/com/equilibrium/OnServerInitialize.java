@@ -7,6 +7,7 @@ import com.equilibrium.entity.goal.BreakBlockGoal;
 import com.equilibrium.item.*;
 import com.equilibrium.block.UseBlockActionUtil;
 import com.equilibrium.network.*;
+import com.equilibrium.server_and_client.client.fog_weather_event.C2SUpdateFogWeather;
 import com.equilibrium.server_and_client.server.event.CropIllnessEvent;
 import com.equilibrium.server_and_client.server.event.UpdateArmorEvent;
 import com.equilibrium.server_and_client.server.command.ServerCommands;
@@ -58,8 +59,9 @@ import static com.equilibrium.block.enchanting_table.ModBlockEntityTypes.modBloc
 import static com.equilibrium.block.ModBlockScreenTypesRegister.registerScreenHandlers;
 import static com.equilibrium.block.reference.BlocksHardnessList.initModBlocksHardnessHashMap;
 import static com.equilibrium.block.reference.BlocksHardnessList.initVanillaBlocksHardnessHashMap;
+import static com.equilibrium.common_gamerules.GameRuleRegister.initGameRules;
 import static com.equilibrium.difficulty_entry.DifficultyEntryGetter.isAnyExtraEntryExisting;
-import static com.equilibrium.difficulty_entry.DifficultyEntryRegister.initGameRules;
+import static com.equilibrium.difficulty_entry.DifficultyEntryRegister.initDifficultyEntryGameRules;
 import static com.equilibrium.entity.ModEntities.registerModEntities;
 import static com.equilibrium.entity.ModSpawnRestriction.registerModSpawnRestriction;
 import static com.equilibrium.item.Armors.registerArmors;
@@ -165,7 +167,7 @@ public class OnServerInitialize implements ModInitializer {
             }
         };
         //难度词条
-        initGameRules();
+        initDifficultyEntryGameRules();
 
         //原版物品修改
         DefaultItemComponentEvents.MODIFY.register(new VanillaItemModifier());
@@ -333,11 +335,13 @@ public class OnServerInitialize implements ModInitializer {
         //S->C,发包
         S2CStockChangeGrassColorPacket.registerOnServer();
         S2CIllnessTextureBooleanPacket.registerOnServer();
-        S2CGameRuleSyncPayloadForBooleanPacket.registerOnServer();
+        S2CGameRuleDifficultyEntrySyncPayloadForBooleanPacket.registerOnServer();
+        S2CGameRuleBooleanSimplePacket.registerOnServer();
 
         //C->S,发包、接收
         C2SClickTimesPacket.registerOnServer();
         C2STriggerContentChangePacket.registerOnServer();
+        C2SUpdateFogWeather.registerOnServer();
 
         //合成金属镐监听器
         CraftingMetalPickAxeCallback.EVENT.register(OnCraftingMetalPickAxe::onCraftingMetalPickAxe);
@@ -403,7 +407,7 @@ public class OnServerInitialize implements ModInitializer {
         registrySoundEvents();
         modBlockEntityTypesInit();
 
-
+        initGameRules();
         LOGGER.info("Hello Fabric world!");
     }
 

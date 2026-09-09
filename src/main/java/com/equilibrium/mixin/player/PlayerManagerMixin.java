@@ -1,5 +1,7 @@
 package com.equilibrium.mixin.player;
 
+import com.equilibrium.common_gamerules.GameRuleUtil;
+import com.equilibrium.difficulty_entry.DifficultyEntryUtil;
 import com.equilibrium.server_and_client.server.persistent_state.StateSaverAndLoader;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -62,7 +64,9 @@ public abstract class PlayerManagerMixin {
         player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 255, false, false, false));
 
         //游戏规则同步,将服务器上的数据拷贝一份到客户端供使用
-        onPlayerConnectSynchronizingGameRulesForBoolean(player);
+        DifficultyEntryUtil.onPlayerConnectSynchronizingGameRulesForBoolean(player);
+        GameRuleUtil.onPlayerConnectSynchronizingGameRulesForBoolean(player);
+
 
         if (player.getHealth() <= 1) {
             player.damage(player.getDamageSources().badRespawnPoint(player.getPos()), 200);

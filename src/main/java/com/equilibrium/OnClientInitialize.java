@@ -10,6 +10,7 @@ import com.equilibrium.block.crafting_table.ModCraftingScreen;
 import com.equilibrium.block.enchanting_table.*;
 import com.equilibrium.block.enchanting_table.diamond.DiamondEnchantingTableBlockEntityRenderer;
 import com.equilibrium.block.enchanting_table.emerald.EmeraldEnchantingTableBlockEntityRenderer;
+import com.equilibrium.network.S2CGameRuleBooleanSimplePacket;
 import com.equilibrium.server_and_client.client.render.entity.model.BaseEarthElementalEntityModel;
 import com.equilibrium.server_and_client.client.render.entity.renderer.*;
 import com.equilibrium.server_and_client.client.render.entity.renderer.elemental.EndRockElementalEntityRenderer;
@@ -17,13 +18,15 @@ import com.equilibrium.server_and_client.client.render.entity.renderer.elemental
 import com.equilibrium.server_and_client.client.render.entity.renderer.elemental.ObsidianElementalEntityRenderer;
 import com.equilibrium.server_and_client.client.render.entity.renderer.elemental.StoneElementalEntityRenderer;
 import com.equilibrium.item.Armors;
-import com.equilibrium.network.S2CGameRuleSyncPayloadForBooleanPacket;
+import com.equilibrium.network.S2CGameRuleDifficultyEntrySyncPayloadForBooleanPacket;
 import com.equilibrium.network.S2CIllnessTextureBooleanPacket;
 import com.equilibrium.network.S2CStockChangeGrassColorPacket;
 import com.equilibrium.server_and_client.client.command.ClientCommands;
+import com.equilibrium.server_and_client.client.fog_weather_event.FogWeatherMediator;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
@@ -64,7 +67,8 @@ public class OnClientInitialize implements ClientModInitializer {
         //S->C,发包、接收
         S2CStockChangeGrassColorPacket.registerOnClient();
         S2CIllnessTextureBooleanPacket.registerOnClient();
-        S2CGameRuleSyncPayloadForBooleanPacket.registerOnClient();
+        S2CGameRuleDifficultyEntrySyncPayloadForBooleanPacket.registerOnClient();
+        S2CGameRuleBooleanSimplePacket.registerOnClient();
 
         ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> {
             // 判断物品是青金石（Lapis Lazuli）或其他物品
@@ -145,6 +149,9 @@ public class OnClientInitialize implements ClientModInitializer {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             ClientCommands.registerClientAllCommands(dispatcher);
         });
+
+        //只能注册一次,注意调用时机,不要再犯NeoForge那边的多次注册错误了
+        ClientTickEvents.START_WORLD_TICK.register(FogWeatherMediator::executeFogWeather);
 
     }
 
