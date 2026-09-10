@@ -7,7 +7,6 @@ import com.equilibrium.entity.goal.BreakBlockGoal;
 import com.equilibrium.item.*;
 import com.equilibrium.block.UseBlockActionUtil;
 import com.equilibrium.network.*;
-import com.equilibrium.server_and_client.client.fog_weather_event.C2SUpdateFogWeather;
 import com.equilibrium.server_and_client.server.event.CropIllnessEvent;
 import com.equilibrium.server_and_client.server.event.UpdateArmorEvent;
 import com.equilibrium.server_and_client.server.command.ServerCommands;
@@ -341,7 +340,9 @@ public class OnServerInitialize implements ModInitializer {
         //C->S,发包、接收
         C2SClickTimesPacket.registerOnServer();
         C2STriggerContentChangePacket.registerOnServer();
-        C2SUpdateFogWeather.registerOnServer();
+        //客户端请求重发全部游戏规则(换世界实例后补同步)
+        C2SRequestGameRuleResyncPacket.registerOnServer();
+
 
         //合成金属镐监听器
         CraftingMetalPickAxeCallback.EVENT.register(OnCraftingMetalPickAxe::onCraftingMetalPickAxe);

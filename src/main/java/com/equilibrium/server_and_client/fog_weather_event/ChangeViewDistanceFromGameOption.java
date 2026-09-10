@@ -1,4 +1,4 @@
-package com.equilibrium.server_and_client.client.fog_weather_event;
+package com.equilibrium.server_and_client.fog_weather_event;
 
 
 import net.minecraft.client.MinecraftClient;
@@ -25,4 +25,9 @@ public class ChangeViewDistanceFromGameOption {
     public static void changeViewDistance(int distance) {
         getGameOption().getViewDistance().setValue(distance);
     }
+
+    public static int getSimulationDistance(){
+        return getGameOption().getSimulationDistance().getValue();
+    }
+
 }

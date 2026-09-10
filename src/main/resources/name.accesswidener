@@ -120,3 +120,6 @@ accessible method net/minecraft/structure/StrongholdGenerator pickPiece (Lnet/mi
 
 accessible method net/minecraft/client/gui/hud/DebugHud drawText (Lnet/minecraft/client/gui/DrawContext;Ljava/util/List;Z)V
 accessible method net/minecraft/client/gui/hud/DebugHud getLeftText ()Ljava/util/List;
+
+# 雾天事件: 允许 Mixin 访问 GameOptions 的 Visitor 接口, 以便注册自定义 option
+accessible class net/minecraft/client/option/GameOptions$Visitor

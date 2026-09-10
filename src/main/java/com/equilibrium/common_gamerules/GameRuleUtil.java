@@ -25,15 +25,15 @@ public class GameRuleUtil {
         }
         OnServerInitialize.LOGGER.info("GameRule changed callback: "+ruleId);
     }
-    //PlayerManagerMixin中进行了调用
-    public static void onPlayerConnectSynchronizingGameRulesForBoolean(ServerPlayerEntity serverPlayerEntity){
-        // 仅在服务端执行，为这名登录的玩家发送所有规则的同步包
+
+    public static void synchronizeAllBooleanGameRulesTo(ServerPlayerEntity serverPlayerEntity){
+        // 仅在服务端执行，为这名玩家发送所有规则的同步包
         // 构造一个game_rule->value的键值对
         for(String ruleId : GET_ALL_RULES.keySet()){
-
+            //普通游戏规则同步:
             S2CGameRuleBooleanSimplePacket.S2CGameRuleSyncPayload payload = new S2CGameRuleBooleanSimplePacket.S2CGameRuleSyncPayload(ruleId,serverPlayerEntity.getWorld().getGameRules().get(GET_ALL_RULES.get(ruleId)).get());
             ServerPlayNetworking.send(serverPlayerEntity, payload);
         }
-        OnServerInitialize.LOGGER.info("A player is connecting, synchronizing all game rules.");
+        OnServerInitialize.LOGGER.info("Synchronizing all game rules to: " + serverPlayerEntity.getName().getString());
     }
 }

@@ -65,7 +65,7 @@ public abstract class PlayerManagerMixin {
 
         //游戏规则同步,将服务器上的数据拷贝一份到客户端供使用
         DifficultyEntryUtil.onPlayerConnectSynchronizingGameRulesForBoolean(player);
-        GameRuleUtil.onPlayerConnectSynchronizingGameRulesForBoolean(player);
+        GameRuleUtil.synchronizeAllBooleanGameRulesTo(player);
 
 
         if (player.getHealth() <= 1) {

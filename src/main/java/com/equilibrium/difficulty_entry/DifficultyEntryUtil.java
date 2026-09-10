@@ -1,12 +1,14 @@
 package com.equilibrium.difficulty_entry;
 
 import com.equilibrium.OnServerInitialize;
+import com.equilibrium.network.S2CGameRuleBooleanSimplePacket;
 import com.equilibrium.network.S2CGameRuleDifficultyEntrySyncPayloadForBooleanPacket;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.GameRules;
 
+import static com.equilibrium.common_gamerules.GameRuleSynMap.GET_ALL_RULES;
 import static com.equilibrium.difficulty_entry.DifficultyEntryRegister.GET_ALL_ENTRY_KEY;
 
 public class DifficultyEntryUtil {
@@ -31,8 +33,6 @@ public class DifficultyEntryUtil {
 
 
 
-
-
     //PlayerManagerMixin中进行了调用
     public static void onPlayerConnectSynchronizingGameRulesForBoolean(ServerPlayerEntity serverPlayerEntity){
         // 仅在服务端执行，为这名登录的玩家发送所有规则的同步包
@@ -42,6 +42,6 @@ public class DifficultyEntryUtil {
             S2CGameRuleDifficultyEntrySyncPayloadForBooleanPacket.S2CGameRuleSyncPayload payload = new S2CGameRuleDifficultyEntrySyncPayloadForBooleanPacket.S2CGameRuleSyncPayload(ruleId,serverPlayerEntity.getWorld().getGameRules().get(GET_ALL_ENTRY_KEY.get(ruleId)).get());
             ServerPlayNetworking.send(serverPlayerEntity, payload);
         }
-        OnServerInitialize.LOGGER.info("A player is connecting, synchronizing all game rules.");
+        OnServerInitialize.LOGGER.info("A player is connecting, synchronizing all difficulty entry game rules.");
     }
 }

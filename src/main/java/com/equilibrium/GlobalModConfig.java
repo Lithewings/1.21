@@ -20,6 +20,9 @@ public class  GlobalModConfig {
 
     public boolean enableShowDamage = false;
 
+
+    public int fogDissipatedViewDistance = -1;
+
     // 静态实例，全局唯一
     private static GlobalModConfig INSTANCE;
     // 总配置文件路径：
@@ -78,5 +81,8 @@ public class  GlobalModConfig {
     }
     public static boolean isShowDamageEnabled() {
         return getInstance().enableShowDamage;
+    }
+    public static int getFogDissipatedViewDistance() {
+        return getInstance().fogDissipatedViewDistance;
     }
 }
